@@ -1,0 +1,14 @@
+.carousel .carousel-indicators button {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.carousel .carousel-control-next-icon.changed {
+  background-image: url("https://cdn-icons-png.flaticon.com/128/11488/11488622.png");
+}
+
+.carousel .carousel-control-prev-icon.changed {
+  background-image: url("https://cdn-icons-png.flaticon.com/128/11488/11488614.png");
+}
+

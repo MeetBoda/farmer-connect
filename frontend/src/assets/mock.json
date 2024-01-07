@@ -1,0 +1,20 @@
+[
+    {
+        "image" : "https://img.freepik.com/free-photo/herd-cows-grazing-pasture-during-daytime_181624-24132.jpg?size=626&ext=jpg&ga=GA1.2.875555201.1663485851&semt=ais",
+        "title" : "First Slide",
+        "subtitle" : "First Slide subtitle",
+        "interval": 1500
+    },
+    {
+        "image" : "https://img.freepik.com/free-photo/strawberry-field_1203-7581.jpg?size=626&ext=jpg&ga=GA1.2.875555201.1663485851&semt=ais",
+        "title" : "Second Slide",
+        "subtitle" : "Second Slide subtitle",
+        "interval": 500
+    },
+    {
+        "image" : "https://img.freepik.com/free-photo/hay-landscape_1308-4854.jpg?size=626&ext=jpg&ga=GA1.1.875555201.1663485851&semt=ais",
+        "title" : "Third Slide",
+        "subtitle" : "Third Slide subtitle",
+        "interval": 2500
+    }
+]
