@@ -33,7 +33,10 @@ export default function UserSignup() {
 
         const json = await response.json()//body se response mila hai
 
-        if (!json.success) {//value is false
+        if(json == "Email Already Registered"){
+            alert("Email already registered")
+        }
+        else if (!json.success) {//value is false
             console.log(json);
             alert("enter valid credentials")
         }

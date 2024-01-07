@@ -2,6 +2,8 @@ import React from 'react'
 import '../assets/css/style.css'
 import yourImage from '../assets/images/3456178.jpg'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function UserLogin() {
     const backgroundStyle = {
@@ -10,6 +12,38 @@ export default function UserLogin() {
         backgroundPosition: 'center', // Adjust as needed
         backgroundRepeat: 'no-repeat' // Adjust as needed
       };
+
+    const [credentials, setcredentials] = useState({ email: "", password: "" })
+    let navigate = useNavigate()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const response = await fetch("/api/loginuser", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: credentials.email,
+                password: credentials.password
+            })
+        });
+
+        const json = await response.json()
+
+        if (!json.success) {//value is false
+            console.log(json);
+            alert("Enter Valid credentials")
+        }
+        // document.location.reload();
+        else{
+            navigate('/')
+        }   
+    }
+
+    const onChange = (event) => {
+        setcredentials({ ...credentials, [event.target.name]: event.target.value })
+    }
     return (
         <>
             {/*
@@ -55,16 +89,16 @@ export default function UserLogin() {
 
                                             <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Log in</p>
 
-                                            <form className="mx-1 mx-md-4" style={{ width: '100%' }}>
+                                            <form onSubmit={handleSubmit} className="mx-1 mx-md-4" style={{ width: '100%' }}>
 
                                                 <div className="d-flex flex-row align-items-center mb-4" >
                                                     <div className="form-outline flex-fill mb-0">
-                                                        <input type="text" id="form3Example1c" className="form-control" name="username" placeholder="Username" />
+                                                        <input type="email" id="form3Example1c" className="form-control" name="email" placeholder="Email" value={credentials.email} onChange={onChange} />
                                                     </div>
                                                 </div>
                                                 <div className="d-flex flex-row align-items-center mb-4">
                                                     <div className="form-outline flex-fill mb-0">
-                                                        <input type="password" id="form3Example4c" className="form-control" name="password" placeholder="Password" />
+                                                        <input type="password" id="form3Example4c" className="form-control" name="password" placeholder="Password" value={credentials.password} onChange={onChange} />
                                                     </div>
                                                 </div>
                                                 <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
