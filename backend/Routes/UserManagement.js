@@ -42,18 +42,19 @@ router.post("/createuser", [
                 user_type: req.body.user_type
             })
             res.json({ success: true });
+            const usercounter = await UserCounter.findOneAndUpdate({counter:"id"},{"$inc":{"curr_id":1}});
         } catch (error) {
             console.log(error);
             res.json({ success: false });
         }
 
-        const usercounter = await UserCounter.findOneAndUpdate({counter:"id"},{"$inc":{"curr_id":1}});
+        
     })
 
-router.post("/loginuser", [
+router.post("/loginuser", 
     //validation
-    body("email", "Incorrect Email").isEmail(),
-    body("password", "Incorrect Password").isLength({ min: 5 })],
+    // body("email", "Incorrect Email").isEmail(),
+    // body("password", "Incorrect Password").isLength({ min: 5 })],
 
     async (req, res) => {                         //endpoint
         const errors = validationResult(req);
@@ -63,7 +64,7 @@ router.post("/loginuser", [
         }
         let email = req.body.email;                       //endpoint
         try {
-            let userData = await User.findOne({ email });
+            let userData = await User.findOne({ email:email });
             if (!userData) {
                 return res.status(400).json({ errors: "try logging with correct credentials" });
             }
@@ -91,6 +92,7 @@ router.post("/loginuser", [
             console.log(error);
             res.json({ success: false });
         }
-    })
+    }
+)
 
 module.exports = router;

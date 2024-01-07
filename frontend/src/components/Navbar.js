@@ -47,6 +47,12 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="nav-item">
+            <Link className="nav-link text-info" style={linkStyle}
+              activeStyle={hoverStyle} to="/signup">
+              Login/SignUp
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link className="nav-link text-danger" style={linkStyle}
               activeStyle={hoverStyle} to="/logout">
               Logout
