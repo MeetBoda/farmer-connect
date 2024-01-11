@@ -8,7 +8,7 @@ import React from 'react';
 import Home from './screens/Home'
 import UserLogin from './screens/UserLogin'
 import UserSignup from './screens/UserSignup';
-import UserProfile from './components/UserProfile';
+import Profile from './screens/Profile';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
       <Route exact path="/" element={<Home />} />
       <Route exact path="/login" element={<UserLogin />} />
       <Route exact path="/signup" element={<UserSignup />} />
-      <Route exact path='/profile' element={<UserProfile/>}/>
+      <Route exact path='/profile' element={<Profile/>}/>
       </Routes>
     </Router>
   );
