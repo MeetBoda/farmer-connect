@@ -39,7 +39,13 @@
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "last 1 edge version"
     ]
+  },
+  "devDependencies": {
+    "css-loader": "^6.8.1",
+    "postcss-loader": "^7.3.4",
+    "style-loader": "^3.3.3"
   }
 }
