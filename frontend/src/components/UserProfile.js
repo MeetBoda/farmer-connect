@@ -1,5 +1,4 @@
 import React from 'react'
-import userimg from '../assets/images/signin-image.jpg'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/profile.css'
 
