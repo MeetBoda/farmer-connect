@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Assuming you are using React Router for navigation
+import { Link, useNavigate } from 'react-router-dom'; // Assuming you are using React Router for navigation
 import logo from '../assets/images/logo.png'; // Replace with your actual logo path
 
 const Navbar = () => {
@@ -19,6 +19,12 @@ const Navbar = () => {
       const hoverStyle = {
         color: 'red',              // Color on hover
       };
+      const navigate = useNavigate();
+      const handleLogout = ()=>{
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("username");
+        navigate('/');
+      }
     
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark" style={navbarStyle}>
@@ -46,17 +52,16 @@ const Navbar = () => {
               Contact
             </Link>
           </li>
+          {localStorage.getItem("authToken") && 
+            <li className="nav-item">
+              <Link className="nav-link text-info" style={linkStyle} activeStyle={hoverStyle} to="/profile">👋 {localStorage.getItem("username")}</Link>
+            </li>
+          }
           <li className="nav-item">
-            <Link className="nav-link text-info" style={linkStyle}
-              activeStyle={hoverStyle} to="/signup">
-              Login/SignUp
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link text-danger" style={linkStyle}
-              activeStyle={hoverStyle} to="/logout">
-              Logout
-            </Link>
+            {(!localStorage.getItem("authToken")) ?  
+            <Link className="nav-link text-info" style={linkStyle} activeStyle={hoverStyle} to="/signup">Login/SignUp</Link> :
+             <Link className="nav-link text-info" style={linkStyle} activeStyle={hoverStyle} onClick={handleLogout}>Logout</Link>
+            }
           </li>
         </ul>
       </div>
