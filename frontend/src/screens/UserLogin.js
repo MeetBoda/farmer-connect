@@ -37,6 +37,8 @@ export default function UserLogin() {
         }
         // document.location.reload();
         else{
+            localStorage.setItem("authToken", json.authToken);
+            localStorage.setItem("username", json.username);
             navigate('/')
         }   
     }
