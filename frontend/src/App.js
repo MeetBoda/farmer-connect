@@ -9,6 +9,8 @@ import Home from './screens/Home'
 import UserLogin from './screens/UserLogin'
 import UserSignup from './screens/UserSignup';
 import Profile from './screens/Profile';
+import Content from './components/Content';
+import ImageUpload from './components/ImageUpload';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
       <Route exact path="/login" element={<UserLogin />} />
       <Route exact path="/signup" element={<UserSignup />} />
       <Route exact path='/profile' element={<Profile/>}/>
+      <Route exact path='/img' element={<ImageUpload/>}/>
+      <Route exact path='/content' element={<Content/>}/>
       </Routes>
     </Router>
   );

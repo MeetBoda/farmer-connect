@@ -85,7 +85,8 @@ router.post("/loginuser",
             //jab tak user cache clear nahi karega tab tak ye data nahi jayega(we can also add expirydate here)
             const authToken = jwt.sign(data, jwtSecret)
             const username = userData.user_name;
-            return res.json({ success: true, authToken: authToken, username:username });
+            const userid = userData.user_id;
+            return res.json({ success: true, authToken: authToken, username:username, userid : userid });
 
         }
         catch (error) {

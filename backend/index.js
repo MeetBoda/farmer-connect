@@ -2,6 +2,7 @@ const User = require('./models/User')
 const UserCounter = require('./models/UserCounter')
 const express = require('express');
 const app = express();
+const path = require('path');
 const port = 5000;
 const mongoDB = require('./db')
 
@@ -16,8 +17,13 @@ app.use((req, res, next)=>{
 })
 
 app.use(express.json());
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 //as we have to make multiple use for login signup and many more
 app.use('/api', require('./Routes/UserManagement'));
+app.use('/api', require('./Routes/DiseaseManagement'));
 
 app.post("/createuser", 
 

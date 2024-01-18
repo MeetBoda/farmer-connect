@@ -39,6 +39,7 @@ export default function UserLogin() {
         else{
             localStorage.setItem("authToken", json.authToken);
             localStorage.setItem("username", json.username);
+            localStorage.setItem("userid", json.userid);
             navigate('/')
         }   
     }
