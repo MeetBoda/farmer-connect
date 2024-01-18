@@ -46,9 +46,35 @@ const ImageUpload = () => {
     }
   };
 
+  const handleUploadml = async (e) => {
+    e.preventDefault();
+    const imageUrl = "backend/uploads/Common-corn-rust.jpeg";
+    try {
+        const response = await fetch('http://127.0.0.1:8080/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ imageUrl }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Predicted Class:', result.predictedClass);
+            // Update your UI to display the predicted class
+        } else {
+            const errorText = await response.text();
+            throw new Error(`Error predicting class: ${errorText}`);
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
+};
+
+
   return (
     <div>
-      <form onSubmit={handleUpload} method='post' encType='multipart/form-data'>
+      <form onSubmit={handleUploadml} method='post' encType='multipart/form-data'>
         <div>
           <h2>Image Upload</h2>
           <input type="file" name="image" accept="image/*" onChange={handleImageChange} />
