@@ -31,3 +31,5 @@ __pycache__/
 
 
 ml_model/venv/Lib/site-packages/tensorflow/
+bfg-*.jar
+
