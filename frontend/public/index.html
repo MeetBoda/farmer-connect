@@ -49,6 +49,13 @@
     <title>React App</title>
   </head>
   <body>
+    <div id="google_element"></div>
     <div id="root"></div>
+    <script>
+      function loadGoogleTranslate(){
+          new google.translate.TranslateElement("google_element");
+      }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>
   </body>
 </html>
