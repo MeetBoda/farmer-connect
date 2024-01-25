@@ -11,6 +11,8 @@ import UserSignup from './screens/UserSignup';
 import Profile from './screens/Profile';
 import Content from './components/Content';
 import ImageUpload from './components/ImageUpload';
+import Weather from './components/Weather';
+import WeatherDetail from './screens/weather/WeatherDetail';
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
       <Route exact path='/profile' element={<Profile/>}/>
       <Route exact path='/img' element={<ImageUpload/>}/>
       <Route exact path='/content' element={<Content/>}/>
+      <Route exact path='/giveweather' element={<WeatherDetail/>}/>
       </Routes>
     </Router>
   );
