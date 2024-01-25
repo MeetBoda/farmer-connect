@@ -24,6 +24,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 //as we have to make multiple use for login signup and many more
 app.use('/api', require('./Routes/UserManagement'));
 app.use('/api', require('./Routes/DiseaseManagement'));
+app.use('/api', require('./Routes/QuestionManagement'));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
