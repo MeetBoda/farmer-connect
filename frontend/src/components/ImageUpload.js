@@ -74,7 +74,7 @@ const ImageUpload = () => {
 
   return (
     <div>
-      <form onSubmit={handleUploadml} method='post' encType='multipart/form-data'>
+      <form onSubmit={handleUpload} method='post' encType='multipart/form-data'>
         <div>
           <h2>Image Upload</h2>
           <input type="file" name="image" accept="image/*" onChange={handleImageChange} />
