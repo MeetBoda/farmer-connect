@@ -1,18 +1,22 @@
 import React, {useState} from 'react';
 import '../assets/css/style.css'
 import yourImage from '../assets/images/question.png'
+import { useNavigate } from 'react-router-dom';
 
 const AskQue = () => {
+    const navigate = useNavigate();
+
     const backgroundStyle = {
         backgroundImage: `url(https://t3.ftcdn.net/jpg/05/77/91/88/240_F_577918823_Du0k5gFpLtUROvvJKRrZmK7hdnyhl6en.jpg)`, // Replace 'your-image-url.jpg' with the actual URL of your image
-        backgroundSize: 'cover', // Adjust as needed
-        backgroundPosition: 'center', // Adjust as needed
-        backgroundRepeat: 'no-repeat' // Adjust as needed
+        backgroundSize: 'cover',
+        backgroundPosition: 'center', 
+        backgroundRepeat: 'no-repeat'
     };
 
     const [details, setdetails] = useState({ 
         question_title : "",
         question : "",
+        posted_by : localStorage.getItem('username'),
         posted_by_id : localStorage.getItem('userid')
      })
 
@@ -36,14 +40,16 @@ const AskQue = () => {
             setdetails({
                 question_title : "",
                 question : "",
+                posted_by : localStorage.getItem('username'),
                 posted_by_id : localStorage.getItem('userid')
             })
             msg = json;
             if(msg !== ''){
                 msg = "Question has been Added Successfully"
+                navigate('/question')
             }
         }
-        alert(msg);
+        // alert(msg);
     }
 
     const onChange = (event) => {
@@ -76,7 +82,7 @@ const AskQue = () => {
                                                     </div>
                                                 </div>
                                                 <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                                    <input type="submit" class="btn btn-secondary btn-lg" value="Upload" />
+                                                    <input type="submit" className="btn btn-secondary btn-lg" value="Upload" />
                                                 </div>
                                             </form>
                                             {/* <Link to="/" className="text-secondary">Login as Admin</Link> */}

@@ -80,10 +80,10 @@ const Navbar = () => {
           <div className="offcanvas-body">
             <ul className="navbar-nav justify-content-center flex-grow-1 pe-3">
               <li className="nav-item">
-                <Link className="nav-link active mx-lg-2" aria-current="page" to='/'>Home</Link>
+                <Link className="nav-link mx-lg-2" aria-current="page" to='/'>Home</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link mx-lg-2" to='/'>Details</Link>
+                <Link className="nav-link mx-lg-2" to='/question'>Question</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link mx-lg-2" to='/'>Contact</Link>
