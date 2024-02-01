@@ -14,6 +14,10 @@ const questionSchema = new Schema({
         type:String,
         required:true
     },
+    posted_by : {
+        type : String,
+        required : true
+    },
     posted_by_id : {
         type:Number,
         required:true
@@ -48,6 +52,10 @@ const questionSchema = new Schema({
                 type:String,
                 required:true
             },
+            posted_by : {
+                type : String,
+                required : true
+            },
             posted_by_id : {
                 type:Number,
                 required:true
@@ -67,6 +75,10 @@ const questionSchema = new Schema({
             ans : {
                 type:String,
                 required:true
+            },
+            posted_by : {
+                type : String,
+                required : true
             },
             posted_by_id : {
                 type:Number,
@@ -102,7 +114,11 @@ const questionSchema = new Schema({
                         type:String,
                         required:true
                     },
-                    by_id : {
+                    posted_by : {
+                        type : String,
+                        required : true
+                    },
+                    posted_by_id : {
                         type:Number,
                         required:true
                     },

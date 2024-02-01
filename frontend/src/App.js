@@ -14,6 +14,7 @@ import ImageUpload from './components/ImageUpload';
 import Weather from './components/Weather';
 import WeatherDetail from './screens/weather/WeatherDetail';
 import Question from './screens/Question';
+import AskQue from './components/AskQue';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <Route exact path='/content' element={<Content/>}/>
       <Route exact path='/giveweather' element={<WeatherDetail/>}/>
       <Route exact path='/question' element={<Question/>}/>
+      <Route exact path='/askque' element={<AskQue/>}/>
       </Routes>
     </Router>
   );
