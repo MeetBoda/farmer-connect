@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import AskQue from '../components/AskQue';
 import AllQuestions from '../components/Questions/AllQuestions';
 import Footer from '../components/Footer';
 
 export default function Question() {
+
+    const navigate = useNavigate();
 
     const backgroundStyle = {
         background: 'linear-gradient(to bottom, #e3ffe7, #d9e7ff)', // Replace with your gradient colors
@@ -15,6 +18,10 @@ export default function Question() {
     };
     const [data, setData] = useState([]);
     const [isLoading, setisLoading] = useState(true);
+
+    const handleOnClick = () => {
+        navigate('/askque');
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -51,7 +58,7 @@ export default function Question() {
             <Navbar/>
             <div style={backgroundStyle}>
                 <div className="" style={{ maxWidth: '900px', margin: 'auto' }}>
-                    <h2 className="text-center mt-5">All Questions</h2>
+                    <h2 className="text-center mt-5 pt-5">All Questions</h2>
                     <div className='mt-5'>
                         {data.map(question => (
                             <AllQuestions question={question} key={question.question_id} />
@@ -69,7 +76,7 @@ export default function Question() {
                         borderRadius : '20px',
                         padding : '10px'
                      }}
-                    onClick={() => console.log('Button Clicked')}
+                    onClick={handleOnClick}
                 >
                     Ask a Question
                 </button>

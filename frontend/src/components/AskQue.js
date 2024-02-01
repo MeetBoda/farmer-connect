@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
 import '../assets/css/style.css'
 import yourImage from '../assets/images/question.png'
+import { useNavigate } from 'react-router-dom';
 
 const AskQue = () => {
+    const navigate = useNavigate();
+
     const backgroundStyle = {
         backgroundImage: `url(https://t3.ftcdn.net/jpg/05/77/91/88/240_F_577918823_Du0k5gFpLtUROvvJKRrZmK7hdnyhl6en.jpg)`, // Replace 'your-image-url.jpg' with the actual URL of your image
         backgroundSize: 'cover',
@@ -43,9 +46,10 @@ const AskQue = () => {
             msg = json;
             if(msg !== ''){
                 msg = "Question has been Added Successfully"
+                navigate('/question')
             }
         }
-        alert(msg);
+        // alert(msg);
     }
 
     const onChange = (event) => {
