@@ -4,13 +4,14 @@ import Navbar from '../components/Navbar';
 import AskQue from '../components/AskQue';
 import AllQuestions from '../components/Questions/AllQuestions';
 import Footer from '../components/Footer';
+import backgroundImg from '../../src/assets/images/background.jpeg'
 
 export default function Question() {
 
     const navigate = useNavigate();
 
     const backgroundStyle = {
-        background: 'linear-gradient(to bottom, #e3ffe7, #d9e7ff)', // Replace with your gradient colors
+        background: 'linear-gradient(to top, #c1dfc4 0%, #deecdd 100%)', // Replace with your gradient colors
         minHeight: '100vh',
         alignItems: 'center',
         justifyContent: 'center',
@@ -42,9 +43,10 @@ export default function Question() {
     if (isLoading) {
         return (
             <>
+            <Navbar/>
                 <div className="question-page">
                     <section className="question-list">
-                        <h2 className="text-center mt-5">All Questions</h2>
+                        <h2 className="text-center mt-5" style={{ color : '#4e6f43', fontWeight : '550'}}>All Questions</h2>
                         <div className="text-center mt-3">
                             <p>Loading....</p>
                         </div>
@@ -58,7 +60,7 @@ export default function Question() {
             <Navbar/>
             <div style={backgroundStyle}>
                 <div className="" style={{ maxWidth: '900px', margin: 'auto' }}>
-                    <h2 className="text-center mt-5 pt-5">All Questions</h2>
+                    <h2 className="text-center pt-5" style={{ color : '#4e6f43', fontWeight : '550'}}>All Questions</h2>
                     <div className='mt-5'>
                         {data.map(question => (
                             <AllQuestions question={question} key={question.question_id} />
@@ -71,7 +73,7 @@ export default function Question() {
                         position: 'fixed', 
                         bottom: '50px', 
                         right: '50px', 
-                        backgroundColor: '#638889', 
+                        backgroundColor: '#5c7c52', 
                         color: '#ffffff', 
                         borderRadius : '20px',
                         padding : '10px'

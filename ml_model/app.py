@@ -3,6 +3,7 @@ import tensorflow as tf
 from keras.preprocessing.image import img_to_array, load_img
 from keras.applications.vgg19 import preprocess_input
 import numpy as np
+from PIL import Image
 
 app = Flask(__name__)
 model = tf.keras.models.load_model('base_model.h5')

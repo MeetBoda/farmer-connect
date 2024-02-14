@@ -14,6 +14,7 @@ import WeatherDetail from './screens/weather/WeatherDetail';
 import Question from './screens/Question';
 import AskQue from './components/AskQue';
 import {QuestionItem, fetchquestion} from './components/Questions/QuestionItem';
+import Lorem from './components/Questions/Lorem';
 
 function App() {
   const router = createBrowserRouter([
@@ -68,6 +69,10 @@ function App() {
     {
       path:"/askque",
       element:<AskQue />,
+    },
+    {
+      path:"/lorem",
+      element:<Lorem />,
     }
   ])
 

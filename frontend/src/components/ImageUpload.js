@@ -34,6 +34,28 @@ const ImageUpload = () => {
           const responseData = await response.json();
           console.log('Image uploaded successfully!');
           console.log('Image URL:', responseData.imageUrl);
+
+          try {
+            const response = await fetch('http://127.0.0.1:8080/predict', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify( responseData.imageUrl ),
+            });
+
+            if (response.ok) {
+              const result = await response.json();
+              console.log('Predicted Class:', result.predictedClass);
+              // Update your UI to display the predicted class
+            } else {
+              const errorText = await response.text();
+              throw new Error(`Error predicting class: ${errorText}`);
+            }
+          } catch (error) {
+            console.error(error.message);
+          }
+
         } else {
           const errorText = await response.text();
           throw new Error(`Error uploading image: ${errorText}`);
@@ -50,26 +72,26 @@ const ImageUpload = () => {
     e.preventDefault();
     const imageUrl = "backend/uploads/Common-corn-rust.jpeg";
     try {
-        const response = await fetch('http://127.0.0.1:8080/predict', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ imageUrl }),
-        });
+      const response = await fetch('http://127.0.0.1:8080/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageUrl }),
+      });
 
-        if (response.ok) {
-            const result = await response.json();
-            console.log('Predicted Class:', result.predictedClass);
-            // Update your UI to display the predicted class
-        } else {
-            const errorText = await response.text();
-            throw new Error(`Error predicting class: ${errorText}`);
-        }
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Predicted Class:', result.predictedClass);
+        // Update your UI to display the predicted class
+      } else {
+        const errorText = await response.text();
+        throw new Error(`Error predicting class: ${errorText}`);
+      }
     } catch (error) {
-        console.error(error.message);
+      console.error(error.message);
     }
-};
+  };
 
 
   return (

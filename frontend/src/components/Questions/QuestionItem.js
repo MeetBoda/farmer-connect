@@ -2,8 +2,204 @@ import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { useParams, useLoaderData } from 'react-router-dom';
 import JoditEditor from "jodit-react";
 import DOMPurify from 'dompurify';
+import QuestionComment from './QuestionComment';
+import Navbar from '../Navbar';
+import { Helmet } from 'react-helmet';
 
 const QuestionItem = () => {
+
+    const { question_id } = useParams();
+    console.log(question_id);
+    const [question, setQuestion] = useState(useLoaderData());
+    const [showComments, setShowComments] = useState(false);
+
+    const user_id = localStorage.getItem("userid");
+    const user_name = localStorage.getItem("username");
+
+    const [details, setDetails] = useState({
+        ans: "",
+        question_id: question_id,
+        posted_by: user_name,
+        posted_by_id: user_id
+    });
+
+    const [commentdetails, setcommentDetails] = useState({
+        message: "",
+        question_id: question_id,
+        posted_by: user_name,
+        posted_by_id: user_id
+    });
+
+    const [voteCount, setvoteCount] = useState(question.likes);
+    const [isUpvoted, setIsUpvoted] = useState(false);
+    const [isDownvoted, setIsDownvoted] = useState(false);
+
+    const upvote = async () => {
+        const formData = {
+            question_id: question_id,
+            liked_by_id: user_id
+        };
+        if (isUpvoted === false && isDownvoted === false) {
+            setIsUpvoted(true);
+            const response = await fetch('/api/like-question', {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            response.json().then(data => {
+                if (response.ok) {
+                    setvoteCount(voteCount + 1);
+                } else {
+                    console.log("Error while updating likes");
+                }
+            });
+        }
+        else if (isUpvoted === true && isDownvoted === false) {
+            setIsUpvoted(false);
+            const response = await fetch('/api/remove-like-question', {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            response.json().then(data => {
+                if (response.ok) {
+                    setvoteCount(voteCount - 1);
+                } else {
+                    console.log("Error while updating likes");
+                }
+            });
+        }
+        else if (isUpvoted === false && isDownvoted === true) {
+            setIsUpvoted(true);
+            setIsDownvoted(false);
+            const response = await fetch('/api/convert-dislike-to-like-question', {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            response.json().then(data => {
+                if (response.ok) {
+                    setvoteCount(voteCount + 2);
+                } else {
+                    console.log("Error while updating likes");
+                }
+            });
+        }
+    }
+
+    const downvote = async () => {
+        const formData = {
+            question_id: question_id,
+            liked_by_id: user_id
+        };
+        if (isDownvoted === false && isUpvoted === false) {
+            setIsDownvoted(true);
+            const response = await fetch('/api/dislike-question', {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            response.json().then(data => {
+                if (response.ok) {
+                    setvoteCount(voteCount - 1);
+                } else {
+                    console.log("Error while updating likes");
+                }
+            });
+        }
+        else if (isDownvoted === true && isUpvoted === false) {
+            setIsDownvoted(false);
+            const response = await fetch('/api/remove-dislike-question', {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            response.json().then(data => {
+                if (response.ok) {
+                    setvoteCount(voteCount + 1);
+                } else {
+                    console.log("Error while updating likes");
+                }
+            });
+        }
+        else if (isDownvoted === false && isUpvoted === true) {
+            setIsDownvoted(true);
+            setIsUpvoted(false);
+            const response = await fetch('/api/convert-like-to-dislike-question', {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            response.json().then(data => {
+                if (response.ok) {
+                    setvoteCount(voteCount - 2);
+                } else {
+                    console.log("Error while updating likes");
+                }
+            });
+        }
+    }
+
+    const handelCommentChange = (e) => {
+        setcommentDetails((prevState) => ({ ...prevState, message: e.target.value }));
+        //console.log(details);
+    }
+
+    const handelCommentSubmit = async (e) => {
+        e.preventDefault();
+        if (commentdetails.message.trim() === '') {
+            alert('Please enter your Comment before submitting.'); // Show an error message
+        }
+        else {
+            const response = await fetch('/api/comment-on-question', {
+                method: 'POST',
+                body: JSON.stringify(commentdetails),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            var msg;
+            const json = await response.json();
+            if (!response.ok) {
+                msg = json.error;
+            }
+            else {
+                setcommentDetails({
+                    message: "",
+                    question_id: question_id,
+                    posted_by: user_name,
+                    posted_by_id: user_id
+                });
+                msg = json;
+                if (msg !== '') {
+                    msg = "Comment has been Added Successfully"
+
+                }
+            }
+            alert(msg);
+            const newData = await fetch('/api/specific-question?question_id=' + question_id);
+            // console.log(response);
+            if (!newData.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await newData.json();
+            // console.log(data);           // setTempComment(tempComment + 1);
+            setQuestion(data);
+        }
+    }
+
     const toggleContainerStyle = {
         margin: '0 auto',
         backgroundColor: '#ffffff',
@@ -12,16 +208,17 @@ const QuestionItem = () => {
     };
 
     const toggleButtonStyle = {
-        backgroundColor: '#638889',
-        color: '#ffffff',
+        backgroundColor: '#a5b4a0',
+        color: '#4e6f43',
         border: 'none',
         padding: '10px 20px',
-        fontSize: '16px',
+        fontSize: '20px',
         cursor: 'pointer',
         width: '100%',
         textAlign: 'left',
         borderTopLeftRadius: '5px',
-        borderTopRightRadius: '5px'
+        borderTopRightRadius: '5px',
+        fontWeight: '500'
     };
 
     const answersStyle = {
@@ -33,7 +230,7 @@ const QuestionItem = () => {
     };
 
     const backgroundStyle = {
-        background: 'linear-gradient(to bottom, #e3ffe7, #d9e7ff)',
+        background: 'linear-gradient(to top, #c1dfc4 0%, #deecdd 100%)',
         minHeight: '100vh',
         alignItems: 'center',
         justifyContent: 'center',
@@ -46,18 +243,8 @@ const QuestionItem = () => {
 
     const editor = useRef(null);
 
-    const { question_id } = useParams();
-    console.log(question_id);
-    const [question, setQuestion] = useState(useLoaderData());
-
-    const [details, setDetails] = useState({
-        ans: "",
-        question_id: question_id,
-        posted_by: localStorage.getItem("username"),
-        posted_by_id: localStorage.getItem('userid')
-    });
-
     const [showAnswers, setShowAnswers] = useState(false);
+    const [viewComments, setViewComments] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -80,8 +267,8 @@ const QuestionItem = () => {
                 setDetails({
                     ans: "",
                     question_id: question_id,
-                    posted_by: localStorage.getItem("username"),
-                    posted_by_id: localStorage.getItem('userid')
+                    posted_by: user_name,
+                    posted_by_id: user_id
                 });
                 msg = json;
                 if (msg !== '') {
@@ -102,27 +289,162 @@ const QuestionItem = () => {
         setDetails((prevState) => ({ ...prevState, ans: content }));
     }, []);
 
+    const toggleComments = () => {
+        setShowComments(!showComments);
+    };
+
     return (
         <div style={backgroundStyle}>
-            <div style={{ maxWidth: '900px', margin: 'auto' }}>
-                <li className="list-group-item mb-4" style={{ margin: '10px 0' }}>
+            <Helmet>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+            </Helmet>
+            <Navbar />
+            <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
+                {/* <li className="list-group-item mb-4" style={{ margin: '10px 0' }}>
                     <div className="card">
                         <div className="card-header" style={{ backgroundColor: '#638889', color: '#ffffff', fontSize: '13px' }}>
                             <h5 className="card-title">{question.question_title}</h5>
                         </div>
                         <div className="card-body" style={{ backgroundColor: '#f8f9fa', padding: '20px' }}>
-                            <p className="card-text" style={{ marginBottom: '10px' }}>{question.question}</p>
-                            <div className="meta">
-                                <span className="user">Posted by: {question.posted_by}</span>
+                            <div className="d-flex justify-content-center align-items-center">
+                                <button onClick={upvote} className="btn btn-primary mx-2">
+                                    Like <span className="badge bg-secondary">{voteCount}</span>
+                                </button>
+                                <button onClick={downvote} className="btn btn-danger mx-2">
+                                    Dislike <span className="badge bg-secondary"></span>
+                                </button>
                             </div>
+                            <p className="card-text" style={{ marginBottom: '10px' }}>{question.question}</p>
+                            <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                <div>
+                                    Posted by: {question.posted_by}
+                                </div>
+                                <div>
+                                    {new Date(question.time).toLocaleString()}
+                                </div>
+                            </div>
+                            <button onClick={toggleComments} className='comment-button-question'>View Comments</button>
+                            {showComments && (
+                                <div className="comments-section">
+                                    <h4>Comments:</h4>
+                                    <ul className="comments-list">
+                                        {question.comments.map((comment) => (
+                                            <QuestionComment key={comment.comment_id} comment={comment} />
+                                        ))}
+                                    </ul>
+                                    <br></br>
+                                    <form className="comment-form">
+                                        <input className="comment-input" placeholder="Your Comment" value={commentdetails.message} onChange={handelCommentChange} required />
+                                        <button className="comment-button" type="submit" onClick={handelCommentSubmit}>Add Comment</button>
+                                    </form>
+                                </div>
+                            )}
                         </div>
                     </div>
-                </li>
+                </li> */}
+
+                <div className="card-group-control card-group-control-right">
+                    <div className="card mb-2 w-100">
+                        <div className="card-header" style={{ borderBottom: '1px solid #ccc' }}>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div className="text-muted text-uppercase">
+                                    <h6 className="card-title" style={{ fontSize: '20px', marginBottom: '0' }}>
+                                        <i className="fa fa-question-circle-o mr-2 mt-0-20 pull-left"></i>
+                                        {question.question_title}
+                                    </h6>
+                                </div>
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item">
+                                        <a href="#" className="text-success mr-2" onClick={upvote}>
+                                            <i className="fa fa-thumbs-up" style={{ fontSize: '26px' }}></i>
+                                        </a>
+                                        <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
+                                    </li>
+                                    <li className="list-inline-item">
+                                        <a href="#" className="text-muted mr-2" onClick={downvote}>
+                                            <i className="fa fa-thumbs-down" style={{ fontSize: '26px' }}></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="collapse show">
+                            <div className="card-body">
+                                {question.question}
+                            </div>
+                            <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
+                                <span className="text-muted">Posted By : {question.posted_by}</span>
+                            </div>
+                            <div className="d-flex justify-content-center">
+                                <div className="text-center mb-3">
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={toggleComments}
+                                        style={{
+                                            border: 'none',
+                                            backgroundColor: '#799b6e',
+                                            outline: 'none',
+                                            boxShadow: 'none',
+                                        }}
+                                        tabIndex={0}
+                                    >
+                                        {showComments ? 'Hide Comments' : 'Show Comments'}
+                                    </button>
+
+                                </div>
+                            </div>
+                            {showComments && (
+                                <div>
+                                    <ul>
+                                        {question.comments.map((comment) => (
+                                            <QuestionComment key={comment.comment_id} comment={comment} />
+                                        ))}
+                                    </ul>
+                                    <br></br>
+                                    <form className="m-3">
+                                        <input
+                                            className="form-control"
+                                            style={{ borderBottom: '1px solid #ccc', borderTop: 'none', borderLeft: 'none', borderRight: 'none', flex: '1', borderRadius: '0', boxShadow: 'none' }}
+                                            placeholder="Your Comment"
+                                            value={commentdetails.message}
+                                            onChange={handelCommentChange}
+                                            required
+                                        />
+
+
+                                        <button className="btn btn-primary m-2"
+                                            type="submit"
+                                            onClick={handelCommentSubmit}
+                                            style={{
+                                                border: 'none',
+                                                backgroundColor: '#799b6e',
+                                                outline: 'none',
+                                                boxShadow: 'none',
+                                            }}
+                                            tabIndex={0}
+                                        >Add Comment</button>
+                                    </form>
+                                </div>
+                            )}
+                        </div>
+
+                    </div>
+                </div>
 
                 <div className="text-center m-3">
                     <button
                         className="btn btn-primary"
                         onClick={() => setShowAnswers(!showAnswers)}
+                        style={{
+                            border: 'none',
+                            backgroundColor: '#799b6e',
+                            outline: 'none',
+                            boxShadow: 'none',
+                        }}
+                        tabIndex={0}
                     >
                         {showAnswers ? 'Hide Answers' : 'Show Answers'}
                     </button>
@@ -135,7 +457,7 @@ const QuestionItem = () => {
                             <div className='mt-2'>
                                 {question.answer && question.answer.map((val, index) => (
                                     <div key={index} className="card mb-3">
-                                        <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e3ffe7" }} />
+                                        <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
                                         <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
                                             <div>
                                                 Posted by: {val.posted_by}
@@ -165,11 +487,12 @@ const QuestionItem = () => {
                                 className="btn btn-floating"
                                 type="submit"
                                 style={{
-                                    backgroundColor: '#638889',
+                                    backgroundColor: '#5c7c52',
                                     color: '#ffffff',
-                                    borderRadius: '20px',
+                                    borderRadius: '5px',
                                     placeItems: 'center',
-                                    display: 'grid'
+                                    display: 'grid',
+                                    border: 'none'
                                 }}
                                 onClick={handleSubmit}
                             >
