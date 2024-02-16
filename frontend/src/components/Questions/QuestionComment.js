@@ -2,7 +2,7 @@ import React from 'react';
 
 const QuestionComment = ({ comment }) => {
     return (
-        <div className="card mb-3">
+        <div className="card m-2">
             <div className="card-body">
                 <p className="card-text">{comment.message}</p>
             </div>

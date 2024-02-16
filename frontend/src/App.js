@@ -6,7 +6,7 @@ import React from 'react';
 import Home from './screens/Home'
 import UserLogin from './screens/UserLogin'
 import UserSignup from './screens/UserSignup';
-import Profile from './screens/Profile';
+import {Profile, fetchpersonalinfo} from './screens/Profile';
 import Content from './components/Content';
 import ImageUpload from './components/ImageUpload';
 import Weather from './components/Weather';
@@ -14,7 +14,8 @@ import WeatherDetail from './screens/weather/WeatherDetail';
 import Question from './screens/Question';
 import AskQue from './components/AskQue';
 import {QuestionItem, fetchquestion} from './components/Questions/QuestionItem';
-import Lorem from './components/Questions/Lorem';
+import { MyQuestions, fetchmyquestions} from './components/Questions/MyQuestions';
+import { MyAnswers, fetchmyanswers } from './components/Profiles/MyAnswers';
 
 function App() {
   const router = createBrowserRouter([
@@ -29,10 +30,6 @@ function App() {
     {
       path:"/signup",
       element: <UserSignup />
-    },
-    {
-      path:"/profile",
-      element: <Profile />
     },
     {
       path:"/img",
@@ -71,9 +68,20 @@ function App() {
       element:<AskQue />,
     },
     {
-      path:"/lorem",
-      element:<Lorem />,
-    }
+      path:"/profile",
+      element:<Profile />,
+      loader:fetchpersonalinfo
+    },
+    {
+      path:"/profile/myquestions",
+      element:<MyQuestions />,
+      loader:fetchmyquestions
+    },
+    {
+      path:"/profile/myanswers",
+      element:<MyAnswers />,
+      loader:fetchmyanswers
+    },
   ])
 
   return (

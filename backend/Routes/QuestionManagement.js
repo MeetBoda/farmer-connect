@@ -202,4 +202,18 @@ router.post("/comment-on-question", async(req, res) => {
     return res.status(200).json(checkcomment);
 });
 
+router.post("/edit-question", async(req, res) => {
+    const {question, question_title, question_id} = req.body;
+    try{
+        const questionupdatetitle = await Question.findOneAndUpdate({question_id:question_id},{"$set":{"question_title":question_title}});
+        const questionupdate = await Question.findOneAndUpdate({question_id:question_id},{"$set":{"question":question}});
+        const checkquestion = await Question.findOne({question_id: question_id});
+        console.log(checkquestion);
+        res.status(200).json(checkquestion);
+    }
+    catch(err){
+        res.status(400).json({error:err.message});
+    }
+});
+
 module.exports = router;

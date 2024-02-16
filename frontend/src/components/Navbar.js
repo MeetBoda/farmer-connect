@@ -27,7 +27,7 @@ const Navbar = () => {
             <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div className="offcanvas-body">
-            <ul className="navbar-nav justify-content-center flex-grow-1 pe-3">
+            <ul className="navbar-nav me-auto">
               <li className="nav-item">
                 <Link className="nav-link mx-lg-2" aria-current="page" to='/'>Home</Link>
               </li>
@@ -37,18 +37,19 @@ const Navbar = () => {
               <li className="nav-item">
                 <Link className="nav-link mx-lg-2" to='/'>Contact</Link>
               </li>
-              {localStorage.getItem("authToken") &&
-                <li className="nav-item">
-                  <Link className="nav-link mx-lg-2" to="/profile">👋 {localStorage.getItem("username")}</Link>
-                </li>}
-
+              <li className="nav-item">
+                <Link className="nav-link mx-lg-2" to='/img'>ImageUpload</Link>
+              </li>
             </ul>
           </div>
         </div>
         {!localStorage.getItem("authToken") ? (
           <button className='login-button' onClick={handleLogin}>Login</button>
         ) : (
-          <button className='logout-button' onClick={handleLogout}>Logout</button>
+          <div className="d-flex align-items-center">
+            <Link className="nav-link mx-lg-2" to="/profile">👋 {localStorage.getItem("username")}</Link>
+            <button className='logout-button' onClick={handleLogout}>Logout</button>
+          </div>
         )}
 
         <button className="navbar-toggler pe-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">

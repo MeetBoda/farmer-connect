@@ -5,6 +5,7 @@ import DOMPurify from 'dompurify';
 import QuestionComment from './QuestionComment';
 import Navbar from '../Navbar';
 import { Helmet } from 'react-helmet';
+import Footer from '../Footer';
 
 const QuestionItem = () => {
 
@@ -303,49 +304,6 @@ const QuestionItem = () => {
             </Helmet>
             <Navbar />
             <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
-                {/* <li className="list-group-item mb-4" style={{ margin: '10px 0' }}>
-                    <div className="card">
-                        <div className="card-header" style={{ backgroundColor: '#638889', color: '#ffffff', fontSize: '13px' }}>
-                            <h5 className="card-title">{question.question_title}</h5>
-                        </div>
-                        <div className="card-body" style={{ backgroundColor: '#f8f9fa', padding: '20px' }}>
-                            <div className="d-flex justify-content-center align-items-center">
-                                <button onClick={upvote} className="btn btn-primary mx-2">
-                                    Like <span className="badge bg-secondary">{voteCount}</span>
-                                </button>
-                                <button onClick={downvote} className="btn btn-danger mx-2">
-                                    Dislike <span className="badge bg-secondary"></span>
-                                </button>
-                            </div>
-                            <p className="card-text" style={{ marginBottom: '10px' }}>{question.question}</p>
-                            <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                <div>
-                                    Posted by: {question.posted_by}
-                                </div>
-                                <div>
-                                    {new Date(question.time).toLocaleString()}
-                                </div>
-                            </div>
-                            <button onClick={toggleComments} className='comment-button-question'>View Comments</button>
-                            {showComments && (
-                                <div className="comments-section">
-                                    <h4>Comments:</h4>
-                                    <ul className="comments-list">
-                                        {question.comments.map((comment) => (
-                                            <QuestionComment key={comment.comment_id} comment={comment} />
-                                        ))}
-                                    </ul>
-                                    <br></br>
-                                    <form className="comment-form">
-                                        <input className="comment-input" placeholder="Your Comment" value={commentdetails.message} onChange={handelCommentChange} required />
-                                        <button className="comment-button" type="submit" onClick={handelCommentSubmit}>Add Comment</button>
-                                    </form>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </li> */}
-
                 <div className="card-group-control card-group-control-right">
                     <div className="card mb-2 w-100">
                         <div className="card-header" style={{ borderBottom: '1px solid #ccc' }}>
@@ -413,8 +371,6 @@ const QuestionItem = () => {
                                             onChange={handelCommentChange}
                                             required
                                         />
-
-
                                         <button className="btn btn-primary m-2"
                                             type="submit"
                                             onClick={handelCommentSubmit}
@@ -487,12 +443,13 @@ const QuestionItem = () => {
                                 className="btn btn-floating"
                                 type="submit"
                                 style={{
-                                    backgroundColor: '#5c7c52',
+                                    backgroundColor: '#799b6e',
                                     color: '#ffffff',
                                     borderRadius: '5px',
                                     placeItems: 'center',
                                     display: 'grid',
-                                    border: 'none'
+                                    border: 'none',
+                                    marginBottom : '20px'
                                 }}
                                 onClick={handleSubmit}
                             >
@@ -502,6 +459,7 @@ const QuestionItem = () => {
                     </form>
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 };
