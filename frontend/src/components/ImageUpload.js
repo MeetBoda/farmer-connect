@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
+import Navbar from './Navbar';
 
 const ImageUpload = () => {
+
+  const backgroundStyle = {
+    background: 'linear-gradient(to top, #c1dfc4 0%, #deecdd 100%)',
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#ffffff',
+  };
+
+  const containerStyle = {
+    minHeight: '70vh', 
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#ffffff',
+  };
+
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setSelectedImage(file);
-
-    // You can perform additional actions with the selected image, such as uploading it to a server.
-    // For simplicity, we're just setting it in the state in this example.
   };
 
   const handleUpload = async (e) => {
@@ -34,6 +50,28 @@ const ImageUpload = () => {
           const responseData = await response.json();
           console.log('Image uploaded successfully!');
           console.log('Image URL:', responseData.imageUrl);
+          const url = "D:/DDIT  Meet/SEMESTER 6/SDP/Farmer-Connect/farmer-connect/backend/uploads/image-1707824346594.jpg"
+          try {
+            const response = await fetch('http://127.0.0.1:8080/predict', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ imageUrl: url }),
+            });
+
+            if (response.ok) {
+              const result = await response.json();
+              console.log('Predicted Class:', result.predictedClass);
+              // Update your UI to display the predicted class
+            } else {
+              const errorText = await response.text();
+              throw new Error(`Error predicting class: ${errorText}`);
+            }
+          } catch (error) {
+            console.error(error.message);
+          }
+
         } else {
           const errorText = await response.text();
           throw new Error(`Error uploading image: ${errorText}`);
@@ -46,51 +84,45 @@ const ImageUpload = () => {
     }
   };
 
-  const handleUploadml = async (e) => {
-    e.preventDefault();
-    const imageUrl = "backend/uploads/Common-corn-rust.jpeg";
-    try {
-        const response = await fetch('http://127.0.0.1:8080/predict', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ imageUrl }),
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            console.log('Predicted Class:', result.predictedClass);
-            // Update your UI to display the predicted class
-        } else {
-            const errorText = await response.text();
-            throw new Error(`Error predicting class: ${errorText}`);
-        }
-    } catch (error) {
-        console.error(error.message);
-    }
-};
-
-
   return (
     <div>
-      <form onSubmit={handleUpload} method='post' encType='multipart/form-data'>
-        <div>
-          <h2>Image Upload</h2>
-          <input type="file" name="image" accept="image/*" onChange={handleImageChange} />
-          {selectedImage && (
-            <div>
-              <h4>Selected Image Preview:</h4>
-              <img
-                src={URL.createObjectURL(selectedImage)}
-                alt="Selected"
-                style={{ maxWidth: '100%', maxHeight: '200px', marginTop: '10px' }}
-              />
+      <Navbar />
+      <div style={backgroundStyle}>
+        <div className="container mt-4" style={containerStyle}>
+          <div className="row justify-content-center">
+            <div className="col-md-6">
+              <form onSubmit={handleUpload} encType='multipart/form-data'>
+                <h2 className="text-center mb-4">Image Upload</h2>
+                <div className="form-group">
+                  <input type="file" className="form-control" name="image" accept="image/*" onChange={handleImageChange} />
+                </div>
+                {selectedImage && (
+                  <div className="form-group">
+                    <h4>Selected Image :</h4>
+                    <img
+                      src={URL.createObjectURL(selectedImage)}
+                      alt="Selected"
+                      className="img-fluid"
+                    />
+                  </div>
+                )}
+                <div className="form-group text-center">
+                  <button className="btn btn-primary"
+                    type="submit"
+                    style={{
+                      border: 'none',
+                      backgroundColor: '#799b6e',
+                      outline: 'none',
+                      boxShadow: 'none',
+                    }}
+                    tabIndex={0}
+                  >Upload</button>
+                </div>
+              </form>
             </div>
-          )}
-          <button type="submit">Upload</button>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
