@@ -8,7 +8,7 @@ function Slider({ slides }) {
   const [index, setIndex] = useState(0);
 
   const handleSelect = (selectedIndex, e) => {
-    console.log('selected index: ', selectedIndex)
+    // console.log('selected index: ', selectedIndex)
     setIndex(selectedIndex);
   };
 

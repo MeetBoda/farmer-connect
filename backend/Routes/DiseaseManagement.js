@@ -39,6 +39,6 @@ router.post('/upload', upload.single('image'), async (req, res) => {
         console.log(error);
         res.json({ success: false });
     }
+    
 });
-
 module.exports = router;
