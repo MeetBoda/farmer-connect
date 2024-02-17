@@ -50,7 +50,7 @@ const ImageUpload = () => {
           const responseData = await response.json();
           console.log('Image uploaded successfully!');
           console.log('Image URL:', responseData.imageUrl);
-          const url = "D:/DDIT  Meet/SEMESTER 6/SDP/Farmer-Connect/farmer-connect/backend/uploads/image-1707824346594.jpg"
+          const url = "D:/DDIT  Meet/SEMESTER 6/SDP/Farmer-Connect/farmer-connect/backend/uploads/image-1708079611563.jpeg"
           try {
             const response = await fetch('http://127.0.0.1:8080/predict', {
               method: 'POST',

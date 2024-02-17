@@ -6,30 +6,27 @@ import numpy as np
 from PIL import Image
 from flask_cors import CORS, cross_origin
 
-
 app = Flask(__name__)
 CORS(app)
 model = tf.keras.models.load_model('base_model.h5')
 
-
-ref = {0: 'Apple___Apple_scab', 1: 'Apple___Black_rot', 2: 'Apple___Cedar_apple_rust',
-        3: 'Apple___healthy', 4: 'Blueberry___healthy', 5: 'Cherry_(including_sour)___Powdery_mildew',
-          6: 'Cherry_(including_sour)___healthy', 7: 'Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot', 
-          8: 'Corn_(maize)___Common_rust_', 9: 'Corn_(maize)___Northern_Leaf_Blight', 10: 'Corn_(maize)___healthy',
-            11: 'Grape___Black_rot', 12: 'Grape___Esca_(Black_Measles)', 
-            13: 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 14: 'Grape___healthy', 
-            15: 'Orange___Haunglongbing_(Citrus_greening)', 16: 'Peach___Bacterial_spot', 
-            17: 'Peach___healthy', 18: 'Pepper,_bell___Bacterial_spot', 19: 'Pepper,_bell___healthy', 
-            20: 'Potato___Early_blight', 21: 'Potato___Late_blight', 22: 'Potato___healthy', 
-            23: 'Raspberry___healthy', 24: 'Soybean___healthy', 25: 'Squash___Powdery_mildew',
-              26: 'Strawberry___Leaf_scorch', 27: 'Strawberry___healthy', 28: 'Tomato___Bacterial_spot', 
-              29: 'Tomato___Early_blight', 30: 'Tomato___Late_blight', 31: 'Tomato___Leaf_Mold', 
-              32: 'Tomato___Septoria_leaf_spot', 33: 'Tomato___Spider_mites Two-spotted_spider_mite', 
-              34: 'Tomato___Target_Spot', 35: 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 
-              36: 'Tomato___Tomato_mosaic_virus', 37: 'Tomato___healthy'}
+ref = {0: 'Apple__Apple_scab', 1: 'Apple_Black_rot', 2: 'Apple__Cedar_apple_rust',
+        3: 'Apple__healthy', 4: 'Blueberry_healthy', 5: 'Cherry(including_sour)___Powdery_mildew',
+          6: 'Cherry_(including_sour)__healthy', 7: 'Corn(maize)___Cercospora_leaf_spot Gray_leaf_spot', 
+          8: 'Corn_(maize)__Common_rust', 9: 'Corn_(maize)__Northern_Leaf_Blight', 10: 'Corn(maize)___healthy',
+            11: 'Grape__Black_rot', 12: 'Grape_Esca(Black_Measles)', 
+            13: 'Grape__Leaf_blight(Isariopsis_Leaf_Spot)', 14: 'Grape___healthy', 
+            15: 'Orange__Haunglongbing(Citrus_greening)', 16: 'Peach___Bacterial_spot', 
+            17: 'Peach__healthy', 18: 'Pepper,_bell_Bacterial_spot', 19: 'Pepper,_bell__healthy', 
+            20: 'Potato__Early_blight', 21: 'Potato_Late_blight', 22: 'Potato__healthy', 
+            23: 'Raspberry__healthy', 24: 'Soybean_healthy', 25: 'Squash__Powdery_mildew',
+              26: 'Strawberry__Leaf_scorch', 27: 'Strawberry_healthy', 28: 'Tomato__Bacterial_spot', 
+              29: 'Tomato__Early_blight', 30: 'Tomato_Late_blight', 31: 'Tomato__Leaf_Mold', 
+              32: 'Tomato__Septoria_leaf_spot', 33: 'Tomato__Spider_mites Two-spotted_spider_mite', 
+              34: 'Tomato__Target_Spot', 35: 'Tomato__Tomato_Yellow_Leaf_Curl_Virus', 
+              36: 'Tomato__Tomato_mosaic_virus', 37: 'Tomato__healthy'}
 
 @app.route('/predict', methods=['POST'])
-@cross_origin()
 def predict():
     data = request.json
     print(data)
@@ -40,7 +37,7 @@ def predict():
     img_array = preprocess_input(np.expand_dims(img_array, axis=0))
 
     pred = np.argmax(model.predict(img_array))
-    print(int(pred))
+    print(ref[pred])
     return jsonify({'predictedClass': ref[pred]})
 
 if __name__ == '__main__':

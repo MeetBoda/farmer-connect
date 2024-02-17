@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
 import '../assets/css/style.css'
-import yourImage from '../assets/images/question.png'
+import yourImage from '../assets/images/thinking3.jpg'
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
+import Footer from './Footer';
 
 const AskQue = () => {
     const navigate = useNavigate();
 
     const backgroundStyle = {
-        backgroundImage: `url(https://t3.ftcdn.net/jpg/05/77/91/88/240_F_577918823_Du0k5gFpLtUROvvJKRrZmK7hdnyhl6en.jpg)`, // Replace 'your-image-url.jpg' with the actual URL of your image
-        backgroundSize: 'cover',
-        backgroundPosition: 'center', 
-        backgroundRepeat: 'no-repeat'
+        background: 'linear-gradient(to top, #c1dfc4 0%, #deecdd 100%)',
+        minHeight: '100vh',
     };
 
     const [details, setdetails] = useState({ 
@@ -58,6 +58,7 @@ const AskQue = () => {
 
     return (
         <>
+        <Navbar/>
             <section className="vh-100" style={{ ...backgroundStyle }}>
                 <div className="h-100">
                     <div className="row d-flex justify-content-center align-items-center h-100">
@@ -100,6 +101,7 @@ const AskQue = () => {
                     </div>
                 </div>
             </section>
+            <Footer/>
         </>
     )
 }

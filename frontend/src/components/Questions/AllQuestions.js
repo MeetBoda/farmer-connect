@@ -1,22 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const AllQuestions = ({ question }) => {
     return (
-        <li className="list-group-item mb-4" style={{ margin: '10px 0' }}>
-            <Link to={`/question/${question.question_id}`} key={question.question_id} style={{ textDecoration : 'none'}}>
-                <div className="card">
-                    <div className="card-header" style={{ backgroundColor: '#638889', color: '#ffffff', fontSize: '13px' }}>
-                        <h5 className="card-title">{question.question_title}</h5>
-                    </div>
-                    <div className="card-body" style={{ backgroundColor: '#f8f9fa', padding: '20px' }}>
-                        <p className="card-text" style={{ marginBottom: '10px' }}>{question.question}</p>
-                        <div className="meta">
-                            <span className="user">Posted by: {question.posted_by}</span>
+        <li className="list-group-item mb-3" style={{ margin: '10px 0' }}>
+            <Helmet>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+            </Helmet>
+            <div className="w-100 overflow-auto order-2 order-md-1">
+                <div className="card-group-control card-group-control-right">
+                    <div className="card mb-2 w-100">
+                        <div className="card-header">
+                            <a className="text-muted text-uppercase" data-toggle="collapse" href={`#question${question.question_id}`} >
+                                <h6 className="card-title">
+
+                                    <i className="fa fa-question-circle-o mr-2 mt-0-20 pull-left"></i>
+                                    <Link
+                                        to={`/question/${question.question_id}`}
+                                        key={question.question_id}
+                                        style={{ textDecoration: 'none', color: 'inherit' }} 
+                                    >
+                                        {question.question_title}
+                                    </Link>
+                                    <i className="fa fa-plus mr-2 text-slate pull-right"></i>
+                                </h6>
+                            </a>
+                        </div>
+                        <div id={`question${question.question_id}`} className="collapse hide">
+                            <div className="card-body">
+                                {question.question}
+                            </div>
+                            <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
+                                <span className="text-muted">Posted By : {question.posted_by}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </Link>
+            </div>
         </li>
 
     );
