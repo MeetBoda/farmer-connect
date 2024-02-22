@@ -17,12 +17,12 @@ const MyQuestions = () => {
                 <div style={{ width: '100%', marginTop: '25px', backgroundColor: 'white' }}>
                     {questions && questions.length > 0 ? (
                         <>
-                            <h3 style={{ color : 'grey', fontWeight: '500', textAlign : 'center', paddingTop :'30px', paddingBottom : '10px'}}>Your Questions</h3>
-                            <div className= 'mygrid'>
+                            <h3 style={{ color: 'grey', fontWeight: '500', textAlign: 'center', paddingTop: '30px', paddingBottom: '10px' }}>Your Questions</h3>
+                            <div className='mygrid'>
                                 {questions.map((question) => (
                                     <MyQuestionItem key={question.question_id} question={question} />
                                 ))}
-                                </div>
+                            </div>
                         </>
                     ) : (
                         <h3>No Questions have been asked</h3>

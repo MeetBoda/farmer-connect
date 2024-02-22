@@ -16,7 +16,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg fixed-top">
+    <nav className="navbar navbar-expand-lg">
       <div className="container-fluid">
         <Link className="navbar-brand me-auto" to="/">
           <img src={logo} alt="Logo" className="logo" />
@@ -39,6 +39,9 @@ const Navbar = () => {
               </li>
               <li className="nav-item">
                 <Link className="nav-link mx-lg-2" to='/img'>ImageUpload</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link mx-lg-2" to='/complaint'>Complaint</Link>
               </li>
             </ul>
           </div>

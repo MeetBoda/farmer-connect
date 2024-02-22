@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import '../../assets/css/profile.css'
-import EditForm from '../Profiles/EditForm';
+import EditFormQue from '../Profiles/EditFormQue';
+import { Helmet } from 'react-helmet';
+import Modal from '../../Modal';
 
 const MyQuestionItem = ({ question }) => {
+
+  const [formView, setFormView] = useState(true);
   const [ques, setQuestion] = useState(question);
   const [isEditing, setEditing] = useState(false);
   const [editQuestion, seteditQuestion] = useState({
@@ -55,26 +59,18 @@ const MyQuestionItem = ({ question }) => {
 
   return (
     <>
+      <Helmet>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+      </Helmet>
       {isEditing ? (
-        // <form onSubmit={handleSubmit}>
-        //   <div className="form-group">
-        //     <label>Question Title:</label>
-        //     <input type="text" className="form-control" value={editQuestion.question_title} onChange={handleTitleChange} />
-        //   </div>
-        //   <div className="form-group">
-        //     <label>Question:</label>
-        //     <textarea className="form-control" value={editQuestion.question} onChange={handleQuestionChange} />
-        //   </div>
-        //   <button type="submit" className="btn btn-primary mr-2">Save</button>
-        //   <button type="button" className="btn btn-secondary" onClick={handleToggleEdit}>Cancel</button>
-        // </form>
-        <EditForm 
-        editQuestion={editQuestion}
-        handleTitleChange={handleTitleChange}
-        handleQuestionChange={handleQuestionChange}
-        handleSubmit={handleSubmit}
-        handleCancel={handleToggleEdit}
+        <Modal onClose={handleToggleEdit}>
+          <EditFormQue
+          editQuestion={editQuestion}
+          handleTitleChange={handleTitleChange}
+          handleQuestionChange={handleQuestionChange}
+          handleSubmit={handleSubmit}
         />
+        </Modal>
       ) : (
         <div className="m-3 content-card">
           <div className="card-big-shadow">
@@ -84,10 +80,14 @@ const MyQuestionItem = ({ question }) => {
                 <h6 className="category" style={{ color: 'grey' }}>{ques.question_title}</h6>
                 <p className="description" style={{ color: 'grey' }}>{ques.question}</p>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <button className="btn btn-secondary mb-3" style={{ width : '100px'}} onClick={handleToggleEdit}>Edit</button>
-              </div>
+
             </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <button className="edit-icon" onClick={handleToggleEdit} style={{border: 'none', backgroundColor: '#D8D8D8', borderRadius: '3px', padding: '2px 10px'}}>
+              <i className="fa fa-pencil-square-o fa-lg"></i>
+              <span style={{ marginLeft: '10px', verticalAlign: 'middle', fontSize : '16px', fontWeight: '500' }}>EDIT</span>
+            </button>
           </div>
         </div>
       )}

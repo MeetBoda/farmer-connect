@@ -16,6 +16,7 @@ import AskQue from './components/AskQue';
 import {QuestionItem, fetchquestion} from './components/Questions/QuestionItem';
 import { MyQuestions, fetchmyquestions} from './components/Questions/MyQuestions';
 import { MyAnswers, fetchmyanswers } from './components/Profiles/MyAnswers';
+import ComplaintUpload from './components/Complaint/ComplaintUpload';
 
 function App() {
   const router = createBrowserRouter([
@@ -82,6 +83,10 @@ function App() {
       element:<MyAnswers />,
       loader:fetchmyanswers
     },
+    {
+      path :"/complaint",
+      element : <ComplaintUpload />
+    }
   ])
 
   return (

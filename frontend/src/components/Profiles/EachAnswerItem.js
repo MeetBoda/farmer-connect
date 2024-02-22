@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
 import '../../assets/css/profile.css'
+import Modal from '../../Modal';
+import { Helmet } from 'react-helmet';
+import EditFormAns from './EditFormAns';
 
 const EachAnswerItem = ({ question, answer }) => {
   const [answ, setAns] = useState(answer);
@@ -60,40 +63,48 @@ const EachAnswerItem = ({ question, answer }) => {
 
   return (
     <>
+      <Helmet>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+      </Helmet>
       {valid &&
         <div className="question-item" value={question.question_id}>
           {isEditing ? (
-            <form onSubmit={handleSubmit}>
-              <label>
-                New Answer:
-                <textarea value={editAnswer.ans} onChange={handleAnswerChange} />
-              </label>
-              <button Style="margin-left:0px" type="submit">Save</button>
-            </form>
+            // <form onSubmit={handleSubmit}>
+            //   <label>
+            //     New Answer:
+            //     <textarea value={editAnswer.ans} onChange={handleAnswerChange} />
+            //   </label>
+            //   <button Style="margin-left:0px" type="submit">Save</button>
+            // </form>
+            <Modal onClose={handleToggleEdit}>
+              <EditFormAns
+                editAnswer={editAnswer}
+                handleQuestionChange={handleAnswerChange}
+                handleSubmit={handleSubmit}
+              />
+            </Modal>
           ) : (
             <>
-              {/* <h3 className="question-title">{question.question_title}</h3>
-            <div className="question-content"></div>
-            <p>Your Answer :</p> 
-            <p className='myanswer-item' dangerouslySetInnerHTML={{ __html: answ.ans }}></p> */}
               <div className="m-3 content-card">
                 <div className="card-big-shadow">
                   <div className="card card-just-text" data-background="color" data-color="grey" data-radius="none">
                     <div style={{ backgroundColor: 'rgba(133, 162, 125, 0.4)', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
                     <div className="content" style={{ position: 'relative', zIndex: 1 }}>
-                      <h6 className="category" style={{ color: 'grey' }}>{question.question_title}</h6>
+                      <h6 className="category" style={{ color: 'grey' }}>{question.question}</h6>
                       <p className="description" dangerouslySetInnerHTML={{ __html: answ.ans }} style={{ color: 'grey' }}></p>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                      <button className="btn btn-secondary mb-3" style={{ width: '100px' }} onClick={handleToggleEdit}>{isEditing ? 'Cancel' : 'Edit'}</button>
-                    </div>
                   </div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <button className="edit-icon" onClick={handleToggleEdit} style={{ border: 'none', backgroundColor: '#D8D8D8', borderRadius: '3px', padding: '2px 10px' }}>
+                    <i className="fa fa-pencil-square-o fa-lg"></i>
+                    <span style={{ marginLeft: '10px', verticalAlign: 'middle', fontSize: '16px', fontWeight: '500' }}>EDIT</span>
+                  </button>
                 </div>
               </div>
             </>
           )}
-          {/* <button Style="width: 100px;margin-left: 1100px;" onClick={handleToggleEdit}>{isEditing ? 'Cancel' : 'Edit'}</button> */}
-        </div>
+          </div>
       }
     </>
   );
