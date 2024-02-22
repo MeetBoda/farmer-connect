@@ -1,6 +1,5 @@
 import React from 'react';
 import ProfileSidebar from '../components/Profiles/ProfileSidebar';
-import ProfileHeader from '../components/Profiles/ProfileHeader';
 import Navbar from '../components/Navbar';
 import { useEffect } from 'react';
 import { useLoaderData } from 'react-router-dom';
@@ -57,7 +56,7 @@ const Profile = () => {
                 <section className="py-5 d-flex justify-content-center align-items-center" style={{ flex: '1' }}>
                     <div className="col-lg-6">
                     <div style={{ position: 'relative', height: '25vh', overflow: 'hidden'}}>
-                                <img src={img} alt="Profile Image" style={{ width: '100%' }} />
+                                <img src={img} alt="" style={{ width: '100%' }} />
                             </div>
                         {/* CUSTOM BLOCKQUOTE */}
                         <blockquote className="blockquote blockquote-custom bg-white p-5 shadow rounded" style={blockquoteCustom}>

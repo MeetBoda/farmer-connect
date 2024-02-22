@@ -17,6 +17,7 @@ import {QuestionItem, fetchquestion} from './components/Questions/QuestionItem';
 import { MyQuestions, fetchmyquestions} from './components/Questions/MyQuestions';
 import { MyAnswers, fetchmyanswers } from './components/Profiles/MyAnswers';
 import ComplaintUpload from './components/Complaint/ComplaintUpload';
+import MyComplaints from './components/Complaint/MyComplaints';
 
 function App() {
   const router = createBrowserRouter([
@@ -82,6 +83,10 @@ function App() {
       path:"/profile/myanswers",
       element:<MyAnswers />,
       loader:fetchmyanswers
+    },
+    {
+      path:"/profile/mycomplaints",
+      element: <MyComplaints/>
     },
     {
       path :"/complaint",

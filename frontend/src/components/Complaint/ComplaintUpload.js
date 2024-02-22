@@ -66,13 +66,13 @@ const ComplaintUpload = () => {
                                     <div className="row justify-content-center">
                                         <div className="col-md-10 col-lg-5 col-xl-4 order-2 order-lg-1">
 
-                                            <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">File Your Complaint</p>
+                                            <p className="text-center h3 fw-bold mb-3 mx-1 mt-5">File Your Complaint</p>
 
                                             <form onSubmit={handleSubmit} className="mx-1 mx-md-4" style={{ width: '100%' }}>
 
                                                 <div className="d-flex flex-row align-items-center mb-4" >
                                                     <div className="form-outline flex-fill mb-0">
-                                                        <input type="textarea" id="form3Example1c" className="form-control" name="message" placeholder="Enter Complaint" value={details.message} onChange={onChange} />
+                                                        <textarea id="form3Example1c" className="form-control" name="message" placeholder="Enter Complaint" value={details.message} onChange={onChange} />
                                                     </div>
                                                 </div>
                                                 <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
@@ -82,7 +82,7 @@ const ComplaintUpload = () => {
                                             {/* <Link to="/" className="text-secondary">Login as Admin</Link> */}
 
                                         </div>
-                                        <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2" style={{ width: '80%', maxWidth: '500px' }}>
+                                        <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2" style={{ width: '80%', maxWidth: '400px' }}>
 
                                             <img src={yourImage} alt="" />
 

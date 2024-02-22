@@ -18,4 +18,14 @@ router.post("/file-complaint", async(req, res) => {
     }
 });
 
+router.get("/all-complaints", async(req, res) => {
+    try {
+        const complaints = await Complaint.find();
+        res.status(200).json(complaints);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+
 module.exports = router;
