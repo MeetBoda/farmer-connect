@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
+import '../assets/css/cropinfo.css';
 
 const ImageUpload = () => {
+  const [result, setResult] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const backgroundStyle = {
     background: 'linear-gradient(to top, #c1dfc4 0%, #deecdd 100%)',
@@ -11,16 +14,6 @@ const ImageUpload = () => {
     justifyContent: 'center',
     color: '#ffffff',
   };
-
-  const containerStyle = {
-    minHeight: '70vh', 
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#ffffff',
-  };
-
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -39,6 +32,7 @@ const ImageUpload = () => {
     if (selectedImage) {
       const formData = new FormData();
       formData.append('image', selectedImage);
+      formData.append('posted_by_id', userId);
 
       try {
         const response = await fetch('/api/upload', {
@@ -50,7 +44,9 @@ const ImageUpload = () => {
           const responseData = await response.json();
           console.log('Image uploaded successfully!');
           console.log('Image URL:', responseData.imageUrl);
-          const url = `C:/Users/SHRUTI/OneDrive/Desktop/KrushiMitr/farmer-connect/backend/uploads/${responseData.imageUrl}`
+          const image_id = responseData.image_id;
+          const url = `C:/Users/SHRUTI/OneDrive/Desktop/KrushiMitr/farmer-connect/backend/uploads/${responseData.imageUrl}`;
+
           try {
             const response = await fetch('http://127.0.0.1:8080/predict', {
               method: 'POST',
@@ -61,9 +57,21 @@ const ImageUpload = () => {
             });
 
             if (response.ok) {
-              const result = await response.json();
-              console.log('Predicted Class:', result.predictedClass);
-              // Update your UI to display the predicted class
+              const result = await response.text();
+              console.log("result : ", result);
+              setResult(result);
+
+              try {
+                const response = await fetch('/api/addsolution', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ image_id, solution: result }),
+                });
+              } catch (error) {
+                console.error(error.message);
+              }
             } else {
               const errorText = await response.text();
               throw new Error(`Error predicting class: ${errorText}`);
@@ -71,7 +79,6 @@ const ImageUpload = () => {
           } catch (error) {
             console.error(error.message);
           }
-
         } else {
           const errorText = await response.text();
           throw new Error(`Error uploading image: ${errorText}`);
@@ -87,42 +94,40 @@ const ImageUpload = () => {
   return (
     <div>
       <Navbar />
-      <div style={backgroundStyle}>
-        <div className="container mt-4" style={containerStyle}>
-          <div className="row justify-content-center">
-            <div className="col-md-6">
-              <form onSubmit={handleUpload} encType='multipart/form-data'>
-                <h2 className="text-center mb-4">Image Upload</h2>
-                <div className="form-group">
-                  <input type="file" className="form-control" name="image" accept="image/*" onChange={handleImageChange} />
-                </div>
-                {selectedImage && (
-                  <div className="form-group">
-                    <h4>Selected Image :</h4>
-                    <img
-                      src={URL.createObjectURL(selectedImage)}
-                      alt="Selected"
-                      className="img-fluid"
-                    />
-                  </div>
-                )}
-                <div className="form-group text-center">
-                  <button className="btn btn-primary"
-                    type="submit"
-                    style={{
-                      border: 'none',
-                      backgroundColor: '#799b6e',
-                      outline: 'none',
-                      boxShadow: 'none',
-                    }}
-                    tabIndex={0}
-                  >Upload</button>
-                </div>
-              </form>
+      <section className="py-2 py-md-5">
+        <div className="container-fluid">
+          <form onSubmit={handleUpload} encType='multipart/form-data'>
+            <h3 className="text-center mb-4">Image Upload</h3>
+            <div className="form-group">
+              <input type="file" className="form-control" name="image" accept="image/*" onChange={handleImageChange} />
             </div>
-          </div>
+            {selectedImage && (
+              <div className="d-flex justify-content-center">
+                <img className="img-fluid rounded mt-4" loading="lazy" src={URL.createObjectURL(selectedImage)} alt="About 1" />
+              </div>
+            )}
+            {result && (
+              <div>
+                <h2 className="m-3">Solution</h2>
+                <p className="m-3" style={{ fontSize: '1.2rem' }}>{result}</p>
+              </div>
+            )}
+              <div className="form-group text-center">
+                <button className="btn btn-primary"
+                  type="submit"
+                  style={{
+                    border: 'none',
+                    backgroundColor: '#799b6e',
+                    outline: 'none',
+                    boxShadow: 'none',
+                    marginTop: '10px'
+                  }}
+                  tabIndex={0}
+                >Upload</button>
+              </div>
+          </form>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

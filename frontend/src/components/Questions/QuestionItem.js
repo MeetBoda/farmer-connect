@@ -6,6 +6,7 @@ import QuestionComment from './QuestionComment';
 import Navbar from '../Navbar';
 import { Helmet } from 'react-helmet';
 import Footer from '../Footer';
+import { useToast } from '@chakra-ui/react'
 
 const QuestionItem = () => {
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ const QuestionItem = () => {
     console.log(question_id);
     const [question, setQuestion] = useState(useLoaderData());
     const [showComments, setShowComments] = useState(false);
+    const toast = useToast()
 
     const user_id = localStorage.getItem("userid");
     const user_name = localStorage.getItem("username");
@@ -20,44 +22,51 @@ const QuestionItem = () => {
     const [isLogin, setisLogin] = useState(false);
 
     const pleaselogin = () => {
-        alert("Please Login first");
-        navigate("/login", {replace : true});
-    }
+        toast({
+            title: 'Please Login first to vote',
+            // description: 'This is a notification using Chakra-UI.',
+            status: 'warning',
+            duration: 5000,
+            isClosable: true,
+            position : 'top-right',
+        })
+        // navigate("/login", { replace: true });
+    };
 
     useEffect(() => {
         // const question = useLoaderData();
-        if(user_id === null){
+        if (user_id === null) {
             setisLogin(false);
         }
-        else{
+        else {
             var value;
             var isvoted = false;
-            for(var i of question.likes_by){
-                if(i.liked_by_id == user_id){
+            for (var i of question.likes_by) {
+                if (i.liked_by_id == user_id) {
                     value = i.value;
                     isvoted = true;
                 }
             }
             console.log(isvoted);
-            if(isvoted){
-                if(value === 1){
+            if (isvoted) {
+                if (value === 1) {
                     setIsUpvoted(true);
                 }
-                else{
+                else {
                     setIsDownvoted(true);
                 }
             }
         }
-    },[])
+    }, [])
 
     const [voteCount, setvoteCount] = useState(question.likes);
     const [isUpvoted, setIsUpvoted] = useState(false);
     const [isDownvoted, setIsDownvoted] = useState(false);
     const [details, setDetails] = useState({
-        ans : "",
-        question_id : question_id,
-        posted_by : localStorage.getItem("username"),
-        posted_by_id : localStorage.getItem('userid')
+        ans: "",
+        question_id: question_id,
+        posted_by: localStorage.getItem("username"),
+        posted_by_id: localStorage.getItem('userid')
     });
 
     const [commentdetails, setcommentDetails] = useState({
@@ -330,7 +339,7 @@ const QuestionItem = () => {
         setShowComments(!showComments);
     };
 
-    if(isLogin){
+    if (isLogin) {
         return (
             <div style={backgroundStyle}>
                 <Helmet>
@@ -388,7 +397,7 @@ const QuestionItem = () => {
                                         >
                                             {showComments ? 'Hide Comments' : 'Show Comments'}
                                         </button>
-    
+
                                     </div>
                                 </div>
                                 {showComments && (
@@ -423,10 +432,10 @@ const QuestionItem = () => {
                                     </div>
                                 )}
                             </div>
-    
+
                         </div>
                     </div>
-    
+
                     <div className="text-center m-3">
                         <button
                             className="btn btn-primary"
@@ -442,7 +451,7 @@ const QuestionItem = () => {
                             {showAnswers ? 'Hide Answers' : 'Show Answers'}
                         </button>
                     </div>
-    
+
                     {showAnswers && (
                         <div className="toggle-container" style={toggleContainerStyle}>
                             <button className="toggle-button" style={toggleButtonStyle}>Answers</button>
@@ -465,7 +474,7 @@ const QuestionItem = () => {
                             </div>
                         </div>
                     )}
-    
+
                     <div className="jodit-editor-container mt-5">
                         <form>
                             <JoditEditor
@@ -474,7 +483,7 @@ const QuestionItem = () => {
                                 ref={editor}
                                 onChange={handelAnswerChange}
                             />
-    
+
                             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                                 <button
                                     className="btn btn-floating"
@@ -500,7 +509,7 @@ const QuestionItem = () => {
             </div>
         );
     }
-    else{
+    else {
         return (
             <div style={backgroundStyle}>
                 <Helmet>
@@ -523,13 +532,13 @@ const QuestionItem = () => {
                                     </div>
                                     <ul className="list-inline mb-0">
                                         <li className="list-inline-item">
-                                            <a href="#" className="text-success mr-2" onClick={pleaselogin}>
+                                            <a href="#" className="text-success mr-2" onClick={() => pleaselogin()}>
                                                 <i className="fa fa-thumbs-up" style={{ fontSize: '26px' }}></i>
                                             </a>
                                             <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
                                         </li>
                                         <li className="list-inline-item">
-                                            <a href="#" className="text-muted mr-2" onClick={pleaselogin}>
+                                            <a href="#" className="text-muted mr-2" onClick={() => pleaselogin()}>
                                                 <i className="fa fa-thumbs-down" style={{ fontSize: '26px' }}></i>
                                             </a>
                                         </li>
@@ -558,7 +567,7 @@ const QuestionItem = () => {
                                         >
                                             {showComments ? 'Hide Comments' : 'Show Comments'}
                                         </button>
-    
+
                                     </div>
                                 </div>
                                 {showComments && (
@@ -593,10 +602,10 @@ const QuestionItem = () => {
                                     </div>
                                 )}
                             </div>
-    
+
                         </div>
                     </div>
-    
+
                     <div className="text-center m-3">
                         <button
                             className="btn btn-primary"
@@ -612,7 +621,7 @@ const QuestionItem = () => {
                             {showAnswers ? 'Hide Answers' : 'Show Answers'}
                         </button>
                     </div>
-    
+
                     {showAnswers && (
                         <div className="toggle-container" style={toggleContainerStyle}>
                             <button className="toggle-button" style={toggleButtonStyle}>Answers</button>
@@ -635,7 +644,7 @@ const QuestionItem = () => {
                             </div>
                         </div>
                     )}
-    
+
                     <div className="jodit-editor-container mt-5">
                         <form>
                             <JoditEditor
@@ -644,7 +653,7 @@ const QuestionItem = () => {
                                 ref={editor}
                                 onChange={handelAnswerChange}
                             />
-    
+
                             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                                 <button
                                     className="btn btn-floating"

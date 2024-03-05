@@ -18,6 +18,8 @@ import { MyQuestions, fetchmyquestions} from './components/Questions/MyQuestions
 import { MyAnswers, fetchmyanswers } from './components/Profiles/MyAnswers';
 import ComplaintUpload from './components/Complaint/ComplaintUpload';
 import MyComplaints from './components/Complaint/MyComplaints';
+import CommentsSection from './screens/CommentsSection';
+import CropInfo from './components/CropInfo';
 
 function App() {
   const router = createBrowserRouter([
@@ -91,6 +93,14 @@ function App() {
     {
       path :"/complaint",
       element : <ComplaintUpload />
+    },
+    {
+      path : '/comments',
+      element : <CommentsSection/>
+    },
+    {
+      path : '/my/:stateName',
+      element : <CropInfo/>
     }
   ])
 
