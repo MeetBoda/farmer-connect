@@ -16,7 +16,7 @@ export default function ProfileSidebar() {
                         <NavLink className="nav-link" to="/profile/mycomplaints" style={{ fontFamily: 'Arial', fontWeight: 'bold', fontSize: '18px' }}>Complaints</NavLink>
                     </div>
                     <div className="sidebar-option mb-3">
-                        <NavLink className="nav-link" to="/profile/mycomplaints" style={{ fontFamily: 'Arial', fontWeight: 'bold', fontSize: '18px' }}>Crop Disease</NavLink>
+                        <NavLink className="nav-link" to="/profile/myimages" style={{ fontFamily: 'Arial', fontWeight: 'bold', fontSize: '18px' }}>Crop Disease</NavLink>
                     </div>
                 </div>
             </div>

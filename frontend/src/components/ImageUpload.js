@@ -45,7 +45,8 @@ const ImageUpload = () => {
           console.log('Image uploaded successfully!');
           console.log('Image URL:', responseData.imageUrl);
           const image_id = responseData.image_id;
-          const url = `C:/Users/SHRUTI/OneDrive/Desktop/KrushiMitr/farmer-connect/backend/uploads/${responseData.imageUrl}`;
+          // const url = `C:/Users/SHRUTI/OneDrive/Desktop/KrushiMitr/farmer-connect/backend/uploads/${responseData.imageUrl}`;
+          const url = `D:/DDIT Meet/SEMESTER 6/SDP/Farmer-Connect/farmer-connect/backend/uploads/${responseData.imageUrl}`;
 
           try {
             const response = await fetch('http://127.0.0.1:8080/predict', {

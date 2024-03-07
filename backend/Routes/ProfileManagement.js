@@ -5,7 +5,8 @@ const QuestionCounter = require("../models/QuestionCounter");
 const User = require("../models/User");
 const AnswerCounter = require("../models/AnswerCounter")
 const DOMPurify = require('isomorphic-dompurify');
-const QuestionCommentCounter = require('../models/QuestionCommentCounter')
+const QuestionCommentCounter = require('../models/QuestionCommentCounter');
+const CropDisease = require('../models/CropDisease');
 
 router.get("/profile/myques", async(req, res) => {
     const user_id = req.query.user_id;
@@ -24,6 +25,12 @@ router.get("/profile/myanswers", async(req, res) => {
     const user_id = req.query.user_id;
     const answers = await Question.find({"answer": {$elemMatch: {"posted_by_id": user_id}}});
     res.status(200).json(answers);
+})
+
+router.get("/profile/myimages", async(req, res) => {
+    const user_id = req.query.user_id;
+    const images = await CropDisease.find({"posted_by_id": user_id});
+    res.status(200).json(images);
 })
 
 router.post("/edit-answer", async(req, res) => {
