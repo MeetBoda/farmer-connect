@@ -10,7 +10,7 @@ import requests
 import json
 
 app = Flask(__name__)
-# CORS(app)
+CORS(app)
 model = tf.keras.models.load_model('base_model.h5')
 
 ref = {0: 'Apple__Apple_scab', 1: 'Apple_Black_rot', 2: 'Apple__Cedar_apple_rust',
