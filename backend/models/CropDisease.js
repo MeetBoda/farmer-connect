@@ -16,6 +16,9 @@ const CropDisease = new Schema({
     },
     solution : {
         type : String
+    },
+    disease : {
+        type: String
     }
     // contentType: {
     //     type: String, // MIME type of the image (e.g., 'image/jpeg')

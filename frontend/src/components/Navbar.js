@@ -76,7 +76,8 @@ const Navbar = () => {
                 role="button"
                 aria-expanded="false"
               >
-                <i className="fa fa-user"></i>
+                <i className="fa fa-user"></i>&nbsp;
+                {localStorage.getItem("username")}
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li>
@@ -87,11 +88,11 @@ const Navbar = () => {
                 </li> */}
                 <li><hr className="dropdown-divider" /></li>
                 <li>
-                  <a className="dropdown-item" href="#">Something else here</a>
+                  <a className="dropdown-item" href="/" onClick={handleLogout}>Logout</a>
                 </li>
               </ul>
             </li>
-            <button className='logout-button' style={{ marginRight: '10px' }} onClick={handleLogout}>Logout</button>
+            {/* <button className='logout-button' style={{ marginRight: '10px' }} onClick={handleLogout}>Logout</button> */}
           </ul>
         )}
 

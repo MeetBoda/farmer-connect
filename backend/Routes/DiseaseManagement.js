@@ -47,10 +47,10 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 
 router.post('/addsolution', async (req, res) => {
     
-    const {image_id, solution} = req.body;
+    const {image_id, solution, disease} = req.body;
 
     try {
-        const addsolution = await CropDisease.updateOne({image_id:image_id}, {$set: {solution : solution}});
+        const addsolution = await CropDisease.updateOne({image_id:image_id}, {$set: {solution : solution, disease:disease}});
         res.json({ success: true});
     } 
     catch (error) {
@@ -58,5 +58,11 @@ router.post('/addsolution', async (req, res) => {
         res.json({ success: false });
     }
 });
+
+router.get("/profile/myimages", async(req, res) => {
+    const user_id = req.query.user_id;
+    const images = await CropDisease.find({"posted_by_id": user_id});
+    res.status(200).json(images);
+})
 
 module.exports = router;
