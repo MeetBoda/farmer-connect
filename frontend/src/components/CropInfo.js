@@ -1,40 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
-import '../assets/css/cropinfo.css'
-import { State, City } from 'country-state-city';
+import '../assets/css/cropinfo.css';
+import jsonData from '../assets/district_names.json';
 
 function CropInfo() {
   const [data, setData] = useState(null);
   const { stateName } = useParams();
   const [cityData, setCityData] = useState();
   const [city, setCity] = useState('');
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (stateName) {
-  //       const apiKey = '579b464db66ec23bdd0000010d1f7b00c91e424e7924cf7159fd5e61';
-  //       const format = 'json';
-
-  //       try {
-  //         const response = await fetch(`https://api.data.gov.in/resource/35be999b-0208-4354-b557-f6ca9a5355de?api-key=${apiKey}&format=${format}&filters[state_name]=${stateName}`);
-  //         const responseData = await response.json();
-  //         setData(responseData);
-  //         console.log(responseData.records);
-  //       } catch (error) {
-  //         console.error('Error:', error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [stateName]);
+  const [districts, setDistricts] = useState([]);
 
   const handleCitySelect = async () => {
     if (city) {
       const apiKey = '579b464db66ec23bdd0000010d1f7b00c91e424e7924cf7159fd5e61';
       const format = 'json';
-      const cityName = encodeURIComponent(city.name.toUpperCase());
+      const cityName = encodeURIComponent(city.toUpperCase());
       console.log(cityName)
 
       try {
@@ -49,15 +30,16 @@ function CropInfo() {
   };
 
   useEffect(() => {
-    const selectedState = State.getStatesOfCountry('IN').find(state => state.name === stateName);
-    if (selectedState) {
-      setCityData(City.getCitiesOfState('IN', selectedState.isoCode));
+    // Get districts from imported JSON data
+    const state = jsonData.states.find(state => state.state === stateName);
+    if (state) {
+      setDistricts(state.districts);
     }
   }, [stateName]);
 
   useEffect(() => {
     cityData && setCity(cityData[0]);
-  }, [cityData])
+  }, [cityData]);
 
   const cropNames = [
     "wheat",
@@ -79,10 +61,10 @@ function CropInfo() {
         <div className=" py-2">
           <div className="h1 text-center text-dark" id="pageHeaderTitle">{stateName}</div>
 
-          <select id="city-dropdown" value={city?.name} onChange={(e) => setCity(cityData.find(s => s.name === e.target.value))}>
-            {cityData?.map(city => (
-              <option key={city.isoCode} value={city.name}>
-                {city.name}
+          <select id="city-dropdown" value={city} onChange={(e) => setCity(e.target.value)}>
+            {districts.map((district, index) => (
+              <option key={index} value={district}>
+                {district}
               </option>
             ))}
           </select>
@@ -108,13 +90,6 @@ function CropInfo() {
                   <p>Production: {record.production_}</p>
                 </div>
                 <div className="postcard__bar"></div>
-                {/* <ul className="postcard__tagbox">
-                  <li className="tag__item"><i className="fas fa-tag mr-2"></i>Podcast</li>
-                  <li className="tag__item"><i className="fas fa-clock mr-2"></i>55 mins.</li>
-                  <li className={`tag__item play ${index % 4 === 0 ? 'blue' : index % 4 === 1 ? 'green' : index % 4 === 2 ? 'red' : 'yellow'}`}>
-                    <a href="#"><i className="fas fa-play mr-2"></i>Play Episode</a>
-                  </li>
-                </ul> */}
               </div>
             </article>
           ))}
