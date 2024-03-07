@@ -8,6 +8,10 @@ from flask_cors import CORS, cross_origin
 import openai
 import requests
 import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
@@ -30,7 +34,7 @@ ref = {0: 'Apple__Apple_scab', 1: 'Apple_Black_rot', 2: 'Apple__Cedar_apple_rust
               36: 'Tomato__Tomato_mosaic_virus', 37: 'Tomato__healthy'}
 
 
-
+openai.api_key = os.getenv("OPEN_API_KEY")
 URL = "https://api.openai.com/v1/chat/completions"
 
 @app.route('/predict', methods=['POST'])
