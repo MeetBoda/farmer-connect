@@ -29,7 +29,7 @@ ref = {0: 'Apple__Apple_scab', 1: 'Apple_Black_rot', 2: 'Apple__Cedar_apple_rust
               34: 'Tomato__Target_Spot', 35: 'Tomato__Tomato_Yellow_Leaf_Curl_Virus', 
               36: 'Tomato__Tomato_mosaic_virus', 37: 'Tomato__healthy'}
 
-# openai.api_key = "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"
+
 
 URL = "https://api.openai.com/v1/chat/completions"
 
