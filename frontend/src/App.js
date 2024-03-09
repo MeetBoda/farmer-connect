@@ -16,6 +16,12 @@ import AskQue from './components/AskQue';
 import {QuestionItem, fetchquestion} from './components/Questions/QuestionItem';
 import { MyQuestions, fetchmyquestions} from './components/Questions/MyQuestions';
 import { MyAnswers, fetchmyanswers } from './components/Profiles/MyAnswers';
+import ComplaintUpload from './components/Complaint/ComplaintUpload';
+import MyComplaints from './components/Complaint/MyComplaints';
+import CommentsSection from './screens/CommentsSection';
+import CropInfo from './components/CropInfo';
+import { MyImage, fetchmyimages } from './components/Profiles/MyImage';
+import {ViewComplaints} from './components/Complaint/ViewComplaints';
 
 function App() {
   const router = createBrowserRouter([
@@ -82,6 +88,32 @@ function App() {
       element:<MyAnswers />,
       loader:fetchmyanswers
     },
+    {
+      path:"/profile/mycomplaints",
+      element: <MyComplaints/>
+    },
+    {
+      path :"/complaint",
+      element : <ComplaintUpload />
+    },
+    {
+      path : '/comments',
+      element : <CommentsSection/>
+    },
+    {
+      path : '/my/:stateName',
+      element : <CropInfo/>
+    },
+    {
+      path:"/profile/myimages",
+      element:<MyImage />,
+      loader:fetchmyimages
+    },
+    {
+      path:"/viewcomplaint",
+      element:<ViewComplaints/>
+      // loader:fetchallcomplaints
+    }
   ])
 
   return (

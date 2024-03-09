@@ -18,6 +18,7 @@ export default function Question() {
     };
     const [data, setData] = useState([]);
     const [isLoading, setisLoading] = useState(true);
+    const role = localStorage.getItem("role");
 
     const handleOnClick = () => {
         navigate('/askque');
@@ -67,24 +68,27 @@ export default function Question() {
                         </div>
                     </div>
                 </div>
-                <div style={{ position: 'relative' }}>
-                    <button
-                        className="btn btn-floating"
-                        style={{
-                            position: 'absolute',
-                            bottom: '50px',
-                            right: '50px',
-                            backgroundColor: '#5c7c52',
-                            color: '#ffffff',
-                            borderRadius: '5px',
-                            padding: '10px',
-                            outline: 'none'
-                        }}
-                        onClick={handleOnClick}
-                    >
-                        Ask a Question
-                    </button>
-                </div>
+                
+                {role == "Farmer" &&
+                    <div style={{ position: 'relative' }}>
+                        <button
+                            className="btn btn-floating"
+                            style={{
+                                position: 'absolute',
+                                bottom: '50px',
+                                right: '50px',
+                                backgroundColor: '#5c7c52',
+                                color: '#ffffff',
+                                borderRadius: '5px',
+                                padding: '10px',
+                                outline: 'none'
+                            }}
+                            onClick={handleOnClick}
+                        >
+                            Ask a Question
+                        </button>
+                    </div>
+                }
                 <Footer />
             </>
         );

@@ -5,6 +5,13 @@ from keras.applications.vgg19 import preprocess_input
 import numpy as np
 from PIL import Image
 from flask_cors import CORS, cross_origin
+import openai
+import requests
+import json
+from dotenv import load_dotenv
+import os
+
+load_dotenv
 
 app = Flask(__name__)
 CORS(app)
@@ -26,6 +33,9 @@ ref = {0: 'Apple__Apple_scab', 1: 'Apple_Black_rot', 2: 'Apple__Cedar_apple_rust
               34: 'Tomato__Target_Spot', 35: 'Tomato__Tomato_Yellow_Leaf_Curl_Virus', 
               36: 'Tomato__Tomato_mosaic_virus', 37: 'Tomato__healthy'}
 
+openai.api_key = os.getenv("OPEN_API_KEY")
+URL = "https://api.openai.com/v1/chat/completions"
+
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
@@ -38,7 +48,31 @@ def predict():
 
     pred = np.argmax(model.predict(img_array))
     print(ref[pred])
-    return jsonify({'predictedClass': ref[pred]})
+    predicted_class = ref[pred]
+    
+    payload = {
+      "model" : "gpt-3.5-turbo",
+      "messages" : [{"role" : "user", "content": f"What is {predicted_class} ? and how can someone overcome it ?"}],
+      "temperature":1.0,
+      "top_p" : 1.0,
+      "n":1,
+      "stream":False,
+      "presence_penalty":0,
+      "frequency_penalty":0,
+    }
+
+    headers = {
+        "Content-Type":"application/json",
+        "Authorization": f"Bearer {openai.api_key}"
+    }
+
+    response = requests.post(URL, headers=headers, json=payload)
+    data = response.json()  # Parse JSON response
+
+    content = data['choices'][0]['message']['content']
+    dictionary = {"solution" : content, "disease":predicted_class}
+    # print(content)
+    return dictionary
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

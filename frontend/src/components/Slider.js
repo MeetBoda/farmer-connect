@@ -24,8 +24,9 @@ function Slider({ slides }) {
             className="d-block w-100"
             src={slide.image}
             alt="First slide"
+            style={{ maxHeight: "665px" }}
           />
-          <Carousel.Caption>
+          <Carousel.Caption className="carousel-caption">
             <h3>{slide.title}</h3>
             <p>{slide.subtitle}</p>
           </Carousel.Caption>

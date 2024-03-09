@@ -1,27 +1,72 @@
-import React, { useState, useMemo, useRef, useCallback } from 'react';
-import { useParams, useLoaderData } from 'react-router-dom';
+import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+import { useParams, useLoaderData, useNavigate } from 'react-router-dom';
 import JoditEditor from "jodit-react";
 import DOMPurify from 'dompurify';
 import QuestionComment from './QuestionComment';
 import Navbar from '../Navbar';
 import { Helmet } from 'react-helmet';
 import Footer from '../Footer';
+import { useToast } from '@chakra-ui/react'
 
 const QuestionItem = () => {
-
+    const navigate = useNavigate();
     const { question_id } = useParams();
     console.log(question_id);
     const [question, setQuestion] = useState(useLoaderData());
     const [showComments, setShowComments] = useState(false);
+    const toast = useToast()
 
     const user_id = localStorage.getItem("userid");
     const user_name = localStorage.getItem("username");
 
+    const [isLogin, setisLogin] = useState(false);
+
+    const pleaselogin = () => {
+        toast({
+            title: 'Please Login first to vote',
+            // description: 'This is a notification using Chakra-UI.',
+            status: 'warning',
+            duration: 5000,
+            isClosable: true,
+            position : 'top-right',
+        })
+        // navigate("/login", { replace: true });
+    };
+
+    useEffect(() => {
+        // const question = useLoaderData();
+        if (user_id === null) {
+            setisLogin(false);
+        }
+        else {
+            var value;
+            var isvoted = false;
+            for (var i of question.likes_by) {
+                if (i.liked_by_id == user_id) {
+                    value = i.value;
+                    isvoted = true;
+                }
+            }
+            console.log(isvoted);
+            if (isvoted) {
+                if (value === 1) {
+                    setIsUpvoted(true);
+                }
+                else {
+                    setIsDownvoted(true);
+                }
+            }
+        }
+    }, [])
+
+    const [voteCount, setvoteCount] = useState(question.likes);
+    const [isUpvoted, setIsUpvoted] = useState(false);
+    const [isDownvoted, setIsDownvoted] = useState(false);
     const [details, setDetails] = useState({
         ans: "",
         question_id: question_id,
-        posted_by: user_name,
-        posted_by_id: user_id
+        posted_by: localStorage.getItem("username"),
+        posted_by_id: localStorage.getItem('userid')
     });
 
     const [commentdetails, setcommentDetails] = useState({
@@ -31,9 +76,9 @@ const QuestionItem = () => {
         posted_by_id: user_id
     });
 
-    const [voteCount, setvoteCount] = useState(question.likes);
-    const [isUpvoted, setIsUpvoted] = useState(false);
-    const [isDownvoted, setIsDownvoted] = useState(false);
+    // const [voteCount, setvoteCount] = useState(question.likes);
+    // const [isUpvoted, setIsUpvoted] = useState(false);
+    // const [isDownvoted, setIsDownvoted] = useState(false);
 
     const upvote = async () => {
         const formData = {
@@ -294,86 +339,54 @@ const QuestionItem = () => {
         setShowComments(!showComments);
     };
 
-    return (
-        <div style={backgroundStyle}>
-            <Helmet>
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" />
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-            </Helmet>
-            <Navbar />
-            <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
-                <div className="card-group-control card-group-control-right">
-                    <div className="card mb-2 w-100">
-                        <div className="card-header" style={{ borderBottom: '1px solid #ccc' }}>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <div className="text-muted text-uppercase">
-                                    <h6 className="card-title" style={{ fontSize: '20px', marginBottom: '0' }}>
-                                        <i className="fa fa-question-circle-o mr-2 mt-0-20 pull-left"></i>
-                                        {question.question_title}
-                                    </h6>
-                                </div>
-                                <ul className="list-inline mb-0">
-                                    <li className="list-inline-item">
-                                        <a href="#" className="text-success mr-2" onClick={upvote}>
-                                            <i className="fa fa-thumbs-up" style={{ fontSize: '26px' }}></i>
-                                        </a>
-                                        <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
-                                    </li>
-                                    <li className="list-inline-item">
-                                        <a href="#" className="text-muted mr-2" onClick={downvote}>
-                                            <i className="fa fa-thumbs-down" style={{ fontSize: '26px' }}></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="collapse show">
-                            <div className="card-body">
-                                {question.question}
-                            </div>
-                            <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
-                                <span className="text-muted">Posted By : {question.posted_by}</span>
-                            </div>
-                            <div className="d-flex justify-content-center">
-                                <div className="text-center mb-3">
-                                    <button
-                                        className="btn btn-primary"
-                                        onClick={toggleComments}
-                                        style={{
-                                            border: 'none',
-                                            backgroundColor: '#799b6e',
-                                            outline: 'none',
-                                            boxShadow: 'none',
-                                        }}
-                                        tabIndex={0}
-                                    >
-                                        {showComments ? 'Hide Comments' : 'Show Comments'}
-                                    </button>
-
-                                </div>
-                            </div>
-                            {showComments && (
-                                <div>
-                                    <ul>
-                                        {question.comments.map((comment) => (
-                                            <QuestionComment key={comment.comment_id} comment={comment} />
-                                        ))}
+    if (isLogin) {
+        return (
+            <div style={backgroundStyle}>
+                <Helmet>
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+                </Helmet>
+                <Navbar />
+                <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
+                    <div className="card-group-control card-group-control-right">
+                        <div className="card mb-2 w-100">
+                            <div className="card-header" style={{ borderBottom: '1px solid #ccc' }}>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div className="text-muted text-uppercase">
+                                        <h6 className="card-title" style={{ fontSize: '20px', marginBottom: '0' }}>
+                                            <i className="fa fa-question-circle-o mr-2 mt-0-20 pull-left"></i>
+                                            {question.question_title}
+                                        </h6>
+                                    </div>
+                                    <ul className="list-inline mb-0">
+                                        <li className="list-inline-item">
+                                            <a href="#" className="text-success mr-2" onClick={upvote}>
+                                                <i className="fa fa-thumbs-up" style={{ fontSize: '26px' }}></i>
+                                            </a>
+                                            <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
+                                        </li>
+                                        <li className="list-inline-item">
+                                            <a href="#" className="text-muted mr-2" onClick={downvote}>
+                                                <i className="fa fa-thumbs-down" style={{ fontSize: '26px' }}></i>
+                                            </a>
+                                        </li>
                                     </ul>
-                                    <br></br>
-                                    <form className="m-3">
-                                        <input
-                                            className="form-control"
-                                            style={{ borderBottom: '1px solid #ccc', borderTop: 'none', borderLeft: 'none', borderRight: 'none', flex: '1', borderRadius: '0', boxShadow: 'none' }}
-                                            placeholder="Your Comment"
-                                            value={commentdetails.message}
-                                            onChange={handelCommentChange}
-                                            required
-                                        />
-                                        <button className="btn btn-primary m-2"
-                                            type="submit"
-                                            onClick={handelCommentSubmit}
+                                </div>
+                            </div>
+                            <div className="collapse show">
+                                <div className="card-body">
+                                    {question.question}
+                                </div>
+                                <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
+                                    <span className="text-muted">Posted By : {question.posted_by}</span>
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    <div className="text-center mb-3">
+                                        <button
+                                            className="btn btn-primary"
+                                            onClick={toggleComments}
                                             style={{
                                                 border: 'none',
                                                 backgroundColor: '#799b6e',
@@ -381,87 +394,291 @@ const QuestionItem = () => {
                                                 boxShadow: 'none',
                                             }}
                                             tabIndex={0}
-                                        >Add Comment</button>
-                                    </form>
+                                        >
+                                            {showComments ? 'Hide Comments' : 'Show Comments'}
+                                        </button>
+
+                                    </div>
                                 </div>
-                            )}
+                                {showComments && (
+                                    <div>
+                                        <ul>
+                                            {question.comments.map((comment) => (
+                                                <QuestionComment key={comment.comment_id} comment={comment} />
+                                            ))}
+                                        </ul>
+                                        <br></br>
+                                        <form className="m-3">
+                                            <input
+                                                className="form-control"
+                                                style={{ borderBottom: '1px solid #ccc', borderTop: 'none', borderLeft: 'none', borderRight: 'none', flex: '1', borderRadius: '0', boxShadow: 'none' }}
+                                                placeholder="Your Comment"
+                                                value={commentdetails.message}
+                                                onChange={handelCommentChange}
+                                                required
+                                            />
+                                            <button className="btn btn-primary m-2"
+                                                type="submit"
+                                                onClick={handelCommentSubmit}
+                                                style={{
+                                                    border: 'none',
+                                                    backgroundColor: '#799b6e',
+                                                    outline: 'none',
+                                                    boxShadow: 'none',
+                                                }}
+                                                tabIndex={0}
+                                            >Add Comment</button>
+                                        </form>
+                                    </div>
+                                )}
+                            </div>
+
                         </div>
-
                     </div>
-                </div>
 
-                <div className="text-center m-3">
-                    <button
-                        className="btn btn-primary"
-                        onClick={() => setShowAnswers(!showAnswers)}
-                        style={{
-                            border: 'none',
-                            backgroundColor: '#799b6e',
-                            outline: 'none',
-                            boxShadow: 'none',
-                        }}
-                        tabIndex={0}
-                    >
-                        {showAnswers ? 'Hide Answers' : 'Show Answers'}
-                    </button>
-                </div>
+                    <div className="text-center m-3">
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => setShowAnswers(!showAnswers)}
+                            style={{
+                                border: 'none',
+                                backgroundColor: '#799b6e',
+                                outline: 'none',
+                                boxShadow: 'none',
+                            }}
+                            tabIndex={0}
+                        >
+                            {showAnswers ? 'Hide Answers' : 'Show Answers'}
+                        </button>
+                    </div>
 
-                {showAnswers && (
-                    <div className="toggle-container" style={toggleContainerStyle}>
-                        <button className="toggle-button" style={toggleButtonStyle}>Answers</button>
-                        <div className="answers" style={answersStyle}>
-                            <div className='mt-2'>
-                                {question.answer && question.answer.map((val, index) => (
-                                    <div key={index} className="card mb-3">
-                                        <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
-                                        <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                            <div>
-                                                Posted by: {val.posted_by}
-                                            </div>
-                                            <div>
-                                                {new Date(val.time).toLocaleString()}
+                    {showAnswers && (
+                        <div className="toggle-container" style={toggleContainerStyle}>
+                            <button className="toggle-button" style={toggleButtonStyle}>Answers</button>
+                            <div className="answers" style={answersStyle}>
+                                <div className='mt-2'>
+                                    {question.answer && question.answer.map((val, index) => (
+                                        <div key={index} className="card mb-3">
+                                            <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
+                                            <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                                <div>
+                                                    Posted by: {val.posted_by}
+                                                </div>
+                                                <div>
+                                                    {new Date(val.time).toLocaleString()}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         </div>
+                    )}
+
+                    <div className="jodit-editor-container mt-5">
+                        <form>
+                            <JoditEditor
+                                value={details.ans}
+                                config={config}
+                                ref={editor}
+                                onChange={handelAnswerChange}
+                            />
+
+                            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                                <button
+                                    className="btn btn-floating"
+                                    type="submit"
+                                    style={{
+                                        backgroundColor: '#799b6e',
+                                        color: '#ffffff',
+                                        borderRadius: '5px',
+                                        placeItems: 'center',
+                                        display: 'grid',
+                                        border: 'none',
+                                        marginBottom: '20px'
+                                    }}
+                                    onClick={handleSubmit}
+                                >
+                                    Submit Answer
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                )}
-
-                <div className="jodit-editor-container mt-5">
-                    <form>
-                        <JoditEditor
-                            value={details.ans}
-                            config={config}
-                            ref={editor}
-                            onChange={handelAnswerChange}
-                        />
-
-                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                            <button
-                                className="btn btn-floating"
-                                type="submit"
-                                style={{
-                                    backgroundColor: '#799b6e',
-                                    color: '#ffffff',
-                                    borderRadius: '5px',
-                                    placeItems: 'center',
-                                    display: 'grid',
-                                    border: 'none',
-                                    marginBottom : '20px'
-                                }}
-                                onClick={handleSubmit}
-                            >
-                                Submit Answer
-                            </button>
-                        </div>
-                    </form>
                 </div>
+                <Footer />
             </div>
-            <Footer/>
-        </div>
-    );
+        );
+    }
+    else {
+        return (
+            <div style={backgroundStyle}>
+                <Helmet>
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+                </Helmet>
+                <Navbar />
+                <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
+                    <div className="card-group-control card-group-control-right">
+                        <div className="card mb-2 w-100">
+                            <div className="card-header" style={{ borderBottom: '1px solid #ccc' }}>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div className="text-muted text-uppercase">
+                                        <h6 className="card-title" style={{ fontSize: '20px', marginBottom: '0' }}>
+                                            <i className="fa fa-question-circle-o mr-2 mt-0-20 pull-left"></i>
+                                            {question.question_title}
+                                        </h6>
+                                    </div>
+                                    <ul className="list-inline mb-0">
+                                        <li className="list-inline-item">
+                                            <a href="#" className="text-success mr-2" onClick={() => pleaselogin()}>
+                                                <i className="fa fa-thumbs-up" style={{ fontSize: '26px' }}></i>
+                                            </a>
+                                            <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
+                                        </li>
+                                        <li className="list-inline-item">
+                                            <a href="#" className="text-muted mr-2" onClick={() => pleaselogin()}>
+                                                <i className="fa fa-thumbs-down" style={{ fontSize: '26px' }}></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="collapse show">
+                                <div className="card-body">
+                                    {question.question}
+                                </div>
+                                <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
+                                    <span className="text-muted">Posted By : {question.posted_by}</span>
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    <div className="text-center mb-3">
+                                        <button
+                                            className="btn btn-primary"
+                                            onClick={toggleComments}
+                                            style={{
+                                                border: 'none',
+                                                backgroundColor: '#799b6e',
+                                                outline: 'none',
+                                                boxShadow: 'none',
+                                            }}
+                                            tabIndex={0}
+                                        >
+                                            {showComments ? 'Hide Comments' : 'Show Comments'}
+                                        </button>
+
+                                    </div>
+                                </div>
+                                {showComments && (
+                                    <div>
+                                        <ul>
+                                            {question.comments.map((comment) => (
+                                                <QuestionComment key={comment.comment_id} comment={comment} />
+                                            ))}
+                                        </ul>
+                                        <br></br>
+                                        <form className="m-3">
+                                            <input
+                                                className="form-control"
+                                                style={{ borderBottom: '1px solid #ccc', borderTop: 'none', borderLeft: 'none', borderRight: 'none', flex: '1', borderRadius: '0', boxShadow: 'none' }}
+                                                placeholder="Your Comment"
+                                                value={commentdetails.message}
+                                                onChange={handelCommentChange}
+                                                required
+                                            />
+                                            <button className="btn btn-primary m-2"
+                                                type="submit"
+                                                onClick={pleaselogin}
+                                                style={{
+                                                    border: 'none',
+                                                    backgroundColor: '#799b6e',
+                                                    outline: 'none',
+                                                    boxShadow: 'none',
+                                                }}
+                                                tabIndex={0}
+                                            >Add Comment</button>
+                                        </form>
+                                    </div>
+                                )}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div className="text-center m-3">
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => setShowAnswers(!showAnswers)}
+                            style={{
+                                border: 'none',
+                                backgroundColor: '#799b6e',
+                                outline: 'none',
+                                boxShadow: 'none',
+                            }}
+                            tabIndex={0}
+                        >
+                            {showAnswers ? 'Hide Answers' : 'Show Answers'}
+                        </button>
+                    </div>
+
+                    {showAnswers && (
+                        <div className="toggle-container" style={toggleContainerStyle}>
+                            <button className="toggle-button" style={toggleButtonStyle}>Answers</button>
+                            <div className="answers" style={answersStyle}>
+                                <div className='mt-2'>
+                                    {question.answer && question.answer.map((val, index) => (
+                                        <div key={index} className="card mb-3">
+                                            <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
+                                            <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                                <div>
+                                                    Posted by: {val.posted_by}
+                                                </div>
+                                                <div>
+                                                    {new Date(val.time).toLocaleString()}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="jodit-editor-container mt-5">
+                        <form>
+                            <JoditEditor
+                                value={details.ans}
+                                config={config}
+                                ref={editor}
+                                onChange={handelAnswerChange}
+                            />
+
+                            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                                <button
+                                    className="btn btn-floating"
+                                    type="submit"
+                                    style={{
+                                        backgroundColor: '#799b6e',
+                                        color: '#ffffff',
+                                        borderRadius: '5px',
+                                        placeItems: 'center',
+                                        display: 'grid',
+                                        border: 'none',
+                                        marginBottom: '20px'
+                                    }}
+                                    onClick={pleaselogin}
+                                >
+                                    Submit Answer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <Footer />
+            </div>
+        );
+    }
 };
 
 const fetchquestion = async ({ params }) => {

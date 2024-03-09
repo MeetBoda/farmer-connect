@@ -26,6 +26,7 @@ app.use('/api', require('./Routes/UserManagement'));
 app.use('/api', require('./Routes/DiseaseManagement'));
 app.use('/api', require('./Routes/QuestionManagement'));
 app.use('/api', require('./Routes/ProfileManagement'));
+app.use('/api', require('./Routes/ComplaintManagement'));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
