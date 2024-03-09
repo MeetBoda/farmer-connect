@@ -7,11 +7,11 @@ import { Helmet } from 'react-helmet';
 const MyComplaints = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [complaints, setComplaints] = useState([]);
-
+    const user_id = localStorage.getItem("userid");
     useEffect(() => {
         const fetchComplaints = async () => {
             try {
-                const response = await fetch('/api/all-complaints'); 
+                const response = await fetch('/api/all-complaints?user_id=' + user_id); 
                 if (!response.ok) {
                     throw new Error('Failed to fetch complaints');
                 }

@@ -3,6 +3,15 @@ const router = express.Router();
 const User = require("../models/User");
 const ComplaintCounter = require("../models/ComplaintCounter");
 const Complaint = require("../models/Complaint");
+const nodemailer = require('nodemailer');
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'krushimitra1123@gmail.com',
+        pass: 'nedd bpar xdfn pmkb'
+    }
+});
 
 router.post("/file-complaint", async(req, res) => {
     const { curr_id } = await ComplaintCounter.findOne({ counter: "id" });
@@ -19,13 +28,52 @@ router.post("/file-complaint", async(req, res) => {
 });
 
 router.get("/all-complaints", async(req, res) => {
+    const user_id = req.query.user_id;
     try {
-        const complaints = await Complaint.find();
+        const complaints = await Complaint.find({posted_by_id:user_id});
         res.status(200).json(complaints);
-    } catch (err) {
+    } 
+    catch (err) {
         res.status(400).json({ error: err.message });
     }
 });
+
+router.get("/fetch-all-complaints" , async(req, res) => {
+    try{
+        const complaints = await Complaint.find({status:"Pending"});
+        res.status(200).json(complaints);
+    }
+    catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+router.post("/update-status", async(req, res) => {
+    const {complaint_id} = req.body;
+    
+    try{
+        const resolve = await Complaint.findOneAndUpdate({complaint_id:complaint_id}, {$set : {"status" : "Resolved"}});
+        const {email} = await User.findOne({user_id:resolve.posted_by_id});
+        let mailOptions = {
+            from: 'krushimitra1123@gmail.com',
+            to: email,
+            subject: 'Regarding Complaint Resolving',
+            text: 'The Complaint Registered by you on our portal with the following content ' + resolve.message + ', has been Resolved Successfully. '
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error occurred:', error);
+            } else {
+                console.log('Email sent:', info.response);
+            }
+        });
+        const complaints = await Complaint.find({status:"Pending"}); 
+        return res.status(200).json({complaints:complaints, message:"Complaint Resolved"});
+    }
+    catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+})
 
 
 module.exports = router;

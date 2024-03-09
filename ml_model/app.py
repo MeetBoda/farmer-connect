@@ -8,10 +8,10 @@ from flask_cors import CORS, cross_origin
 import openai
 import requests
 import json
-import os
 from dotenv import load_dotenv
+import os
 
-load_dotenv()
+load_dotenv
 
 app = Flask(__name__)
 CORS(app)
@@ -32,7 +32,6 @@ ref = {0: 'Apple__Apple_scab', 1: 'Apple_Black_rot', 2: 'Apple__Cedar_apple_rust
               32: 'Tomato__Septoria_leaf_spot', 33: 'Tomato__Spider_mites Two-spotted_spider_mite', 
               34: 'Tomato__Target_Spot', 35: 'Tomato__Tomato_Yellow_Leaf_Curl_Virus', 
               36: 'Tomato__Tomato_mosaic_virus', 37: 'Tomato__healthy'}
-
 
 openai.api_key = os.getenv("OPEN_API_KEY")
 URL = "https://api.openai.com/v1/chat/completions"
@@ -71,8 +70,9 @@ def predict():
     data = response.json()  # Parse JSON response
 
     content = data['choices'][0]['message']['content']
+    dictionary = {"solution" : content, "disease":predicted_class}
     # print(content)
-    return content
+    return dictionary
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

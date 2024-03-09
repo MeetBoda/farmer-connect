@@ -11,6 +11,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("username");
+    localStorage.removeItem("role");
     navigate('/');
   }
 
@@ -23,6 +24,8 @@ const Navbar = () => {
   const handleLogin = () => {
     navigate('/login')
   }
+
+  const role = localStorage.getItem("role");
 
   return (
     <nav className="navbar navbar-expand-lg">
@@ -49,12 +52,21 @@ const Navbar = () => {
               {/* <li className="nav-item">
                 <Link className="nav-link mx-lg-2" to='/'>Contact</Link>
               </li> */}
-              <li className="nav-item">
-                <Link className="nav-link mx-lg-2" to='/img'>ImageUpload</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link mx-lg-2" to='/complaint'>Complaint</Link>
-              </li>
+              {role == "Farmer" &&
+                <li className="nav-item">
+                  <Link className="nav-link mx-lg-2" to='/img'>ImageUpload</Link>
+                </li>
+              }
+              {role == "Farmer" && 
+                <li className="nav-item">
+                  <Link className="nav-link mx-lg-2" to='/complaint'>Complaint</Link>
+                </li>
+              }
+              {role == "Expert" && 
+                <li className="nav-item">
+                  <Link className="nav-link mx-lg-2" to='/viewcomplaint'>View Complaints</Link>
+                </li>
+              }
             </ul>
           </div>
         </div>
@@ -76,7 +88,8 @@ const Navbar = () => {
                 role="button"
                 aria-expanded="false"
               >
-                <i className="fa fa-user"></i>
+                <i className="fa fa-user"></i>&nbsp;
+                {localStorage.getItem("username")}
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li>
@@ -87,11 +100,11 @@ const Navbar = () => {
                 </li> */}
                 <li><hr className="dropdown-divider" /></li>
                 <li>
-                  <a className="dropdown-item" href="#">Something else here</a>
+                  <a className="dropdown-item" href="/" onClick={handleLogout}>Logout</a>
                 </li>
               </ul>
             </li>
-            <button className='logout-button' style={{ marginRight: '10px' }} onClick={handleLogout}>Logout</button>
+            {/* <button className='logout-button' style={{ marginRight: '10px' }} onClick={handleLogout}>Logout</button> */}
           </ul>
         )}
 

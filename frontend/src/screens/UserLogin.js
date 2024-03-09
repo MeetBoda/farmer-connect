@@ -40,6 +40,7 @@ export default function UserLogin() {
             localStorage.setItem("authToken", json.authToken);
             localStorage.setItem("username", json.username);
             localStorage.setItem("userid", json.userid);
+            localStorage.setItem("role", json.role);
             navigate('/')
         }   
     }

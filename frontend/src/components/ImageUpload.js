@@ -4,6 +4,7 @@ import '../assets/css/cropinfo.css';
 
 const ImageUpload = () => {
   const [result, setResult] = useState(null);
+  const [disease, setDisease] = useState(null)
   const [selectedImage, setSelectedImage] = useState(null);
 
   const backgroundStyle = {
@@ -45,7 +46,7 @@ const ImageUpload = () => {
           console.log('Image uploaded successfully!');
           console.log('Image URL:', responseData.imageUrl);
           const image_id = responseData.image_id;
-          const url = `C:/Users/SHRUTI/OneDrive/Desktop/KrushiMitr/farmer-connect/backend/uploads/${responseData.imageUrl}`;
+          const url = `../backend/uploads/${responseData.imageUrl}`;
 
           try {
             const response = await fetch('http://127.0.0.1:8080/predict', {
@@ -57,9 +58,10 @@ const ImageUpload = () => {
             });
 
             if (response.ok) {
-              const result = await response.text();
-              console.log("result : ", result);
-              setResult(result);
+              const result = await response.json();
+              console.log("result : ", result.solution);
+              setResult(result.solution);
+              setDisease(result.disease)
 
               try {
                 const response = await fetch('/api/addsolution', {
@@ -67,7 +69,7 @@ const ImageUpload = () => {
                   headers: {
                     'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ image_id, solution: result }),
+                  body: JSON.stringify({ image_id, solution: result.solution, disease:result.disease }),
                 });
               } catch (error) {
                 console.error(error.message);
@@ -103,12 +105,13 @@ const ImageUpload = () => {
             </div>
             {selectedImage && (
               <div className="d-flex justify-content-center">
-                <img className="img-fluid rounded mt-4" loading="lazy" src={URL.createObjectURL(selectedImage)} alt="About 1" />
+                <img className="img-fluid rounded mt-4" loading="lazy" src={URL.createObjectURL(selectedImage)} alt="Image" />
               </div>
             )}
             {result && (
               <div>
-                <h2 className="m-3">Solution</h2>
+                <h4 className="mt-5 text-center"><b>Disease</b> : {disease}</h4>
+                <h3 className="m-3">Solution</h3>
                 <p className="m-3" style={{ fontSize: '1.2rem' }}>{result}</p>
               </div>
             )}

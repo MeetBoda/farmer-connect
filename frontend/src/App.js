@@ -20,6 +20,8 @@ import ComplaintUpload from './components/Complaint/ComplaintUpload';
 import MyComplaints from './components/Complaint/MyComplaints';
 import CommentsSection from './screens/CommentsSection';
 import CropInfo from './components/CropInfo';
+import { MyImage, fetchmyimages } from './components/Profiles/MyImage';
+import {ViewComplaints} from './components/Complaint/ViewComplaints';
 
 function App() {
   const router = createBrowserRouter([
@@ -101,6 +103,16 @@ function App() {
     {
       path : '/my/:stateName',
       element : <CropInfo/>
+    },
+    {
+      path:"/profile/myimages",
+      element:<MyImage />,
+      loader:fetchmyimages
+    },
+    {
+      path:"/viewcomplaint",
+      element:<ViewComplaints/>
+      // loader:fetchallcomplaints
     }
   ])
 
