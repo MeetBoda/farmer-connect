@@ -32,7 +32,7 @@ const EachAnswerItem = ({ question, answer }) => {
       headers: {
         'Content-Type': 'application/json'
       }
-    })
+    });
     console.log("Shru");
     var msg;
     const json = await response.json();
@@ -59,6 +59,7 @@ const EachAnswerItem = ({ question, answer }) => {
         break;
       }
     }
+    setEditing(!isEditing);
   };
 
   return (

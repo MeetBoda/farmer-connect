@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import { useLoaderData } from 'react-router-dom';
-import { background } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react'
+import Modal from '../../Modal';
+import ResolveComplaintForm from './ResolveComplaintForm';
 
 const ViewComplaints = () => {
     
     // const complaints = useLoaderData();
 
     const [complaints, setComplaints] = useState([]);
+    const [solveComplaint, setSolveComplaint] = useState({
+        complaint_id:0,
+        message:"",
+        steps_taken:""
+    });
+    const [isComplaintSolving, setComplaintSolving] = useState(false);
     // const user_id = localStorage.getItem("userid");
     const toast = useToast()
 
@@ -31,11 +37,30 @@ const ViewComplaints = () => {
         fetchComplaints();
     }, []); 
 
-    const HandleResolve = async(e) => {
+    const HandleResolve = async(e, complaint) => {
+        e.preventDefault();
+        console.log(complaint);
+        console.log(complaint.complaint_id);
+        console.log(complaint.message);
+        setSolveComplaint({complaint_id:complaint.complaint_id, message:complaint.message})
+        setComplaintSolving(!isComplaintSolving);
+    }
+
+    const handleToggleEdit = () => {
+        console.log("Edit button clicked");
+        setComplaintSolving(!isComplaintSolving);
+      };
+    
+
+    const HandleSteps = (e) => {
+        setSolveComplaint((prevState) => {return {...prevState, steps_taken:e.target.value}})
+    }
+
+    const HandleSubmit = async(e) => {
         e.preventDefault();
         const response = await fetch('/api/update-status', {
             method:'POST',
-            body: JSON.stringify({complaint_id:e.target.value}),
+            body: JSON.stringify(solveComplaint),
             headers: {
                 'Content-Type' : 'application/json'
             }
@@ -45,7 +70,7 @@ const ViewComplaints = () => {
             toast({
                 title: 'Complaint Resolved',
                 // description: 'This is a notification using Chakra-UI.',
-                status: 'warning',
+                status: 'success',
                 duration: 5000,
                 isClosable: true,
                 position : 'top-right',
@@ -62,11 +87,21 @@ const ViewComplaints = () => {
             })
         }
         setComplaints(json.complaints);
+        setComplaintSolving(!isComplaintSolving);
     }
 
     return (
         <>
         <Navbar />
+        {isComplaintSolving && 
+            <Modal onClose={handleToggleEdit}>
+            <ResolveComplaintForm
+            complaints={solveComplaint}
+            handleSteps={HandleSteps}
+            handleSubmit={HandleSubmit}
+          />
+          </Modal>
+        }
         <div className="container-fluid mt-4">
                     <h3 style={{ color: 'grey', fontWeight: '500', textAlign: 'center', paddingTop: '30px', paddingBottom: '10px' }}>All Complaints</h3>
                     <div className="card mb-4" style={{ border: 'none' }}>
@@ -81,7 +116,7 @@ const ViewComplaints = () => {
                                             <th className="col-md-3 col-xs-4">Message</th>
                                             <th className="col-md-3 col-xs-4">Uploaded By</th>
                                             <th className="col-md-3 col-xs-3">Status</th>
-                                            <th className="col-md-3 col-xs-3">Resolve</th>
+                                            <th className="col-md-3 col-xs-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -91,7 +126,7 @@ const ViewComplaints = () => {
                                                 <td>{complaint.message}</td>
                                                 <td>{complaint.posted_by}</td>
                                                 <td>{complaint.status}</td>
-                                                <td><button onClick={HandleResolve} value={complaint.complaint_id}>Resolved</button></td>
+                                                <td><button className='btn btn-sm' onClick={(e) => HandleResolve(e, complaint)} complaint={complaint}>Resolve</button></td>
                                             </tr>
                                         ))}
                                         {complaints.length === 0 && (

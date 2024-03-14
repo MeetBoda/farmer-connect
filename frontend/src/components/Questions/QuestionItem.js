@@ -18,8 +18,16 @@ const QuestionItem = () => {
 
     const user_id = localStorage.getItem("userid");
     const user_name = localStorage.getItem("username");
+    // const nanswers = question.length;
+    // const likes_on_answers = [];
+    // for(let i = 0; i < nanswers; i++){
+    //     likes_on_answers[i] = false;
+    // }
 
-    const [isLogin, setisLogin] = useState(false);
+    // const []
+
+
+    const [isLogin, setisLogin] = useState(true);
 
     const pleaselogin = () => {
         toast({
@@ -461,6 +469,23 @@ const QuestionItem = () => {
                                         <div key={index} className="card mb-3">
                                             <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
                                             <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <ul className="list-inline mb-0">
+                                                        <li className="list-inline-item">
+                                                            <a href="#" className="text-success mr-2" onClick={upvote}>
+                                                                <i className="fa fa-thumbs-up" style={{ fontSize: '26px' }}></i>
+                                                            </a>
+                                                            <span style={{ fontSize: '22px', fontWeight: '400' }}>{val.likes}</span>
+                                                        </li>
+                                                        <li className="list-inline-item">
+                                                            <a href="#" className="text-muted mr-2" onClick={downvote}>
+                                                                <i className="fa fa-thumbs-down" style={{ fontSize: '26px' }}></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
                                                 <div>
                                                     Posted by: {val.posted_by}
                                                 </div>
@@ -468,6 +493,9 @@ const QuestionItem = () => {
                                                     {new Date(val.time).toLocaleString()}
                                                 </div>
                                             </div>
+                                            {/* <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
+                                                
+                                            </div> */}
                                         </div>
                                     ))}
                                 </div>
