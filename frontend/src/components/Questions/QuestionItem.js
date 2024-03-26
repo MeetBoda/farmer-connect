@@ -10,7 +10,7 @@ import { useToast } from '@chakra-ui/react'
 import CommentInput from './CommentInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faComment } from '@fortawesome/free-solid-svg-icons';
-
+import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter, useDisclosure} from '@chakra-ui/react';
 
 const QuestionItem = () => {
     const navigate = useNavigate();
@@ -25,26 +25,17 @@ const QuestionItem = () => {
 
     const user_id = localStorage.getItem("userid");
     const user_name = localStorage.getItem("username");
-    // const nanswers = question.length;
-    // const likes_on_answers = [];
-    // for(let i = 0; i < nanswers; i++){
-    //     likes_on_answers[i] = false;
-    // }
 
-    // const []
-
+    const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclosure();
+    const handleClose = () => {
+        onClose();
+    }
 
     const [isLogin, setisLogin] = useState(true);
+    const cancelRef = useRef()
 
     const pleaselogin = () => {
-        toast({
-            title: 'Please Login first to vote',
-            // description: 'This is a notification using Chakra-UI.',
-            status: 'warning',
-            duration: 5000,
-            isClosable: true,
-            position: 'top-right',
-        })
+        onOpen();
         // navigate("/login", { replace: true });
     };
 
@@ -223,6 +214,9 @@ const QuestionItem = () => {
         e.preventDefault();
         if (commentdetails.message.trim() === '') {
             alert('Please enter your Comment before submitting.'); // Show an error message
+        }
+        else if(user_id === null){
+            alert('Please login before adding a comment.');
         }
         else {
             const response = await fetch('/api/comment-on-question', {
@@ -418,7 +412,7 @@ const QuestionItem = () => {
                                         </a> &nbsp; &nbsp;
                                         <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)}>
                                             <i className="fa fa-reply-all" style={{ fontSize: '23px' }} aria-hidden="true"></i>&nbsp;
-                                            <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span> 
+                                            <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span>
                                         </a>
                                     </div>
                                 </div>
@@ -428,7 +422,7 @@ const QuestionItem = () => {
 
                     {showComments && (
                         <div className="toggle-container" style={toggleContainerStyle} >
-                            <br/>
+                            <br />
                             <CommentInput
                                 onSubmit={handelCommentSubmit}
                                 value={commentdetails.message}
@@ -441,7 +435,7 @@ const QuestionItem = () => {
                             <br></br>
                         </div>
                     )}
-                    <br/>
+                    <br />
                     {showAnswers && (
                         <div className="toggle-container" style={toggleContainerStyle}>
                             <button className="toggle-button" style={toggleButtonStyle}>
@@ -685,6 +679,23 @@ const QuestionItem = () => {
                     </div>
                 </div>
                 <Footer />
+                <AlertDialog
+                    isOpen={isOpen}
+                    leastDestructiveRef={cancelRef}
+                    onClose={onClose}
+                >
+                    <AlertDialogOverlay />
+                    <AlertDialogContent>
+                        <AlertDialogHeader>Error</AlertDialogHeader>
+                        <AlertDialogCloseButton />
+                        <AlertDialogBody>
+                            Please login first.
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <Button colorScheme="green" onClick={handleClose}>OK</Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         );
     }

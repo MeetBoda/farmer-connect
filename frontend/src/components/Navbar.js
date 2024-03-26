@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import '../assets/css/navbar.css'
@@ -7,14 +7,18 @@ import { Helmet } from 'react-helmet';
 import Modal_login from '../Modal_login';
 import Login from './Login';
 import UserSignup from '../screens/UserSignup';
+import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter, useDisclosure, useToast } from '@chakra-ui/react';
 
 const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showLogin, setShowLogin] = useState(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef()
 
   const [credentials, setCredentials] = useState({ email: "", password: "" })
   let navigate = useNavigate()
+  const toast = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,13 +37,22 @@ const Navbar = () => {
 
     if (!json.success) {
       console.log(json);
-      alert("Enter Valid credentials")
+      // alert("Enter Valid credentials")
+      onOpen()
     }
     else {
       localStorage.setItem("authToken", json.authToken);
       localStorage.setItem("username", json.username);
       localStorage.setItem("userid", json.userid);
       localStorage.setItem("role", json.role)
+      toast({
+        title: 'SuccessFully Logged in',
+        // description: 'This is a notification using Chakra-UI.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position : 'top-right',
+    })
       setIsLogin(false);
       navigate('/')
     }
@@ -54,6 +67,11 @@ const Navbar = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("role");
     navigate('/');
+  }
+
+  const handleClose = () => {
+    onClose(); // Close the alert dialog
+    setCredentials({ email: "", password: "" });
   }
 
   useEffect(() => {
@@ -74,6 +92,19 @@ const Navbar = () => {
 
   const [credentialsSignup, setCredentialsSignup] = useState({ user_name: "", email: "", password: "", user_type: "" })
 
+  const { isOpen: isOpenValidCredentials, onOpen: onOpenValidCredentials, onClose: onCloseValidCredentials} = useDisclosure();
+  const { isOpen: isOpenEmail, onOpen: onOpenEmail, onClose: onCloseEmail} = useDisclosure();
+
+  const handleCloseValidCredentials = () => {
+    onCloseValidCredentials();
+    setCredentialsSignup({ ...credentialsSignup, user_name: "", email: "",  password: "", user_type: "" }); 
+  }
+
+  const handleCloseEmail = () => {
+    onCloseEmail();
+    setCredentialsSignup({ ...credentialsSignup, email: "" }); 
+  }
+
   const handleSubmitSignup = async (e) => {
     e.preventDefault();
     const response = await fetch("/api/createuser", {
@@ -92,11 +123,13 @@ const Navbar = () => {
     const json = await response.json()
 
     if (json === "Email Already Registered") {
-      alert("Email already registered")
+      // alert("Email already registered")
+      onOpenEmail();
     }
     else if (!json.success) {
-      console.log(json);
-      alert("Enter valid credentials")
+      // console.log(json);
+      // alert("Enter valid credentials")
+      onOpenValidCredentials();
     }
     else {
       setShowSignup(false);
@@ -205,6 +238,59 @@ const Navbar = () => {
           </button>
         </div>
       )}
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay />
+        <AlertDialogContent>
+          <AlertDialogHeader>Error</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>
+            Invalid credentials. Please try again.
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <Button colorScheme="green" onClick={handleClose}>OK</Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={isOpenValidCredentials}
+        leastDestructiveRef={cancelRef}
+        onClose={onCloseValidCredentials}
+      >
+        <AlertDialogOverlay />
+        <AlertDialogContent>
+          <AlertDialogHeader>Error</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>
+            Please enter valid credentials.
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <Button colorScheme="green" onClick={handleCloseValidCredentials}>OK</Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={isOpenEmail}
+        leastDestructiveRef={cancelRef}
+        onClose={onCloseEmail}
+      >
+        <AlertDialogOverlay />
+        <AlertDialogContent>
+          <AlertDialogHeader>Error</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>
+            Email is already registered. Please use different email.
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <Button colorScheme="green" onClick={handleCloseEmail}>OK</Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </nav>
   );
 };

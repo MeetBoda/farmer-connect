@@ -1,37 +1,69 @@
 import React from 'react';
+import {Helmet} from 'react-helmet';
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-center text-white">
-      <div className="p-4">
-        <section className="">
-          <form className="form" action="">
-            <div className="row d-flex justify-content-center">
-              <div className="col-auto">
-                <p className="pt-2">
-                  <strong>Sign up for our newsletter</strong>
-                </p>
-              </div>
-              <div className="col-md-5 col-12">
-                <div className="form-group">
-                  <input type="email" id="form5Example2" className="form-control" />
-                  <label className="form-label" htmlFor="form5Example2" style={{ marginLeft: '10px' }}>
-                    Email address
-                  </label>
-                </div>
-              </div>
-              <div className="col-auto">
-                <button type="submit" className="btn btn-outline-light mb-4">
-                  Subscribe
-                </button>
-              </div>
-            </div>
-          </form>
-        </section>
+    <footer className="text-center text-white align-items-center mb-3 mt-4" style={{ backgroundColor: '#f1f1f1', height: '148px' }}>
+      <Helmet>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+      </Helmet>
+      {/* Section: Social media */}
+      <section className="d-flex justify-content-center pt-3">
+        {/* Facebook */}
+        <a
+          className="text-dark m-3"
+          href="#!"
+          role="button"
+          data-mdb-ripple-color="dark"
+        ><i className="fa fa-facebook-f" style={{ fontSize: '25px', marginRight: '20px' }}></i></a>
+
+        {/* Twitter */}
+        <a
+          className="text-dark m-3"
+          href="#!"
+          role="button"
+          data-mdb-ripple-color="dark"
+        ><i className="fa fa-twitter" style={{ fontSize: '25px', marginRight: '20px' }}></i></a>
+
+        {/* Google */}
+        <a
+          className="text-dark m-3"
+          href="#!"
+          role="button"
+          data-mdb-ripple-color="dark"
+        ><i className="fa fa-google" style={{ fontSize: '25px', marginRight: '20px' }}></i></a>
+
+        {/* Instagram */}
+        <a
+          className="text-dark m-3"
+          href="#!"
+          role="button"
+          data-mdb-ripple-color="dark"
+        ><i className="fa fa-instagram" style={{ fontSize: '25px', marginRight: '20px' }}></i></a>
+
+        {/* Linkedin */}
+        <a
+          className="text-dark m-3"
+          href="#!"
+          role="button"
+          data-mdb-ripple-color="dark"
+        ><i className="fa fa-linkedin" style={{ fontSize: '25px', marginRight: '20px' }}></i></a>
+
+        {/* Github */}
+        <a
+          className="text-dark m-3"
+          href="#!"
+          role="button"
+          data-mdb-ripple-color="dark"
+        ><i className="fa fa-github" style={{ fontSize: '25px', marginRight: '20px' }}></i></a>
+      </section>
+
+      {/* Copyright */}
+      <div className="text-dark p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', width: '100%' }}>
+        © 2024 Copyright:
+        <a className="text-dark" href="https://mdbootstrap.com/">KrushiMitr.com</a>
       </div>
-      <div className="text-center p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
-        © 2020 Copyright: <a className="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
-      </div>
+      {/* Copyright */}
     </footer>
   );
 };

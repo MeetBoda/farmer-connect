@@ -69,7 +69,6 @@ const ViewComplaints = () => {
         if(json.message == "Complaint Resolved"){
             toast({
                 title: 'Complaint Resolved',
-                // description: 'This is a notification using Chakra-UI.',
                 status: 'success',
                 duration: 5000,
                 isClosable: true,
@@ -79,7 +78,6 @@ const ViewComplaints = () => {
         else{
             toast({
                 title: 'Error Occured while Resolving Complaint',
-                // description: 'This is a notification using Chakra-UI.',
                 status: 'warning',
                 duration: 5000,
                 isClosable: true,
