@@ -92,6 +92,10 @@ const questionSchema = new Schema({
                 type:Number,
                 default:0
             },
+            is_expert : {
+                type:Number,
+                default:0
+            },
             likes_by : [
                 {
                     liked_by_id : {

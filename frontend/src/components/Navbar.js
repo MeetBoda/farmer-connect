@@ -66,6 +66,7 @@ const Navbar = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("username");
     localStorage.removeItem("role");
+    localStorage.removeItem("userid");
     navigate('/');
   }
 

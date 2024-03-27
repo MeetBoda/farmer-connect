@@ -11,6 +11,7 @@ import CommentInput from './CommentInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faComment } from '@fortawesome/free-solid-svg-icons';
 import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter, useDisclosure} from '@chakra-ui/react';
+import AnswerItem from './AnswerItem';
 
 const QuestionItem = () => {
     const navigate = useNavigate();
@@ -42,7 +43,7 @@ const QuestionItem = () => {
     useEffect(() => {
         // const question = useLoaderData();
         setTotalComments(question.comments.length);
-        if (user_id === null) {
+        if (user_id == null) {
             setisLogin(false);
         }
         else {
@@ -82,10 +83,6 @@ const QuestionItem = () => {
         posted_by: user_name,
         posted_by_id: user_id
     });
-
-    // const [voteCount, setvoteCount] = useState(question.likes);
-    // const [isUpvoted, setIsUpvoted] = useState(false);
-    // const [isDownvoted, setIsDownvoted] = useState(false);
 
     const upvote = async () => {
         const formData = {
@@ -216,7 +213,8 @@ const QuestionItem = () => {
             alert('Please enter your Comment before submitting.'); // Show an error message
         }
         else if(user_id === null){
-            alert('Please login before adding a comment.');
+            // alert('Please login before adding a comment.');
+            onOpen();
         }
         else {
             const response = await fetch('/api/comment-on-question', {
@@ -300,7 +298,6 @@ const QuestionItem = () => {
     const editor = useRef(null);
 
     const [showAnswers, setShowAnswers] = useState(false);
-    const [viewComments, setViewComments] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -345,10 +342,6 @@ const QuestionItem = () => {
     const handelAnswerChange = useCallback((content) => {
         setDetails((prevState) => ({ ...prevState, ans: content }));
     }, []);
-
-    const toggleComments = () => {
-        setShowComments(!showComments);
-    };
 
     const formatDate = (timestamp) => {
         return new Date(timestamp).toLocaleDateString('en-GB', {
@@ -443,36 +436,36 @@ const QuestionItem = () => {
                             </button>
                             <div className="answers" style={answersStyle}>
                                 <div className='mt-2'>
-                                    {question.answer && question.answer.map((val, index) => (
-                                        <div key={index} className="card mb-3">
-                                            <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
-                                            <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <ul className="list-inline mb-0">
-                                                        <li className="list-inline-item">
-                                                            <a href="#" className="text-success mr-2" onClick={upvote}>
-                                                                <FontAwesomeIcon icon={faThumbsUp} />
-                                                            </a>
-                                                            <span style={{ fontSize: '22px', fontWeight: '400' }}>{val.likes}</span>
-                                                        </li>
-                                                        <li className="list-inline-item">
-                                                            <a href="#" className="text-secondary mr-2" onClick={downvote}>
-                                                                <FontAwesomeIcon icon={faThumbsDown} />
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                                <div>
-                                                    Posted by: {val.posted_by}
-                                                </div>
-                                                <div>
-                                                    {new Date(val.time).toLocaleString()}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
+                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={true} user_id={user_id} user_name={user_name} question_id={question.question_id}/>
+                                        // <div key={index} className="card mb-3">
+                                        //     <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
+                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                        //         <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        //             <ul className="list-inline mb-0">
+                                        //                 <li className="list-inline-item">
+                                        //                     <a href="#" className="text-success mr-2" onClick={upvote}>
+                                        //                         <FontAwesomeIcon icon={faThumbsUp} />
+                                        //                     </a>
+                                        //                     <span style={{ fontSize: '22px', fontWeight: '400' }}>{val.likes}</span>
+                                        //                 </li>
+                                        //                 <li className="list-inline-item">
+                                        //                     <a href="#" className="text-secondary mr-2" onClick={downvote}>
+                                        //                         <FontAwesomeIcon icon={faThumbsDown} />
+                                        //                     </a>
+                                        //                 </li>
+                                        //             </ul>
+                                        //         </div>
+                                        //     </div>
+                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                        //         <div>
+                                        //             Posted by: {val.posted_by}
+                                        //         </div>
+                                        //         <div>
+                                        //             {new Date(val.time).toLocaleString()}
+                                        //         </div>
+                                        //     </div>
+                                        // </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -555,94 +548,80 @@ const QuestionItem = () => {
                                 <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
                                     <span className="text-muted">Posted By : {question.posted_by}</span>
                                 </div>
-                                <div className="d-flex justify-content-center">
-                                    <div className="text-center mb-3">
-                                        <button
-                                            className="btn btn-primary"
-                                            onClick={toggleComments}
-                                            style={{
-                                                border: 'none',
-                                                backgroundColor: '#799b6e',
-                                                outline: 'none',
-                                                boxShadow: 'none',
-                                            }}
-                                            tabIndex={0}
-                                        >
-                                            {showComments ? 'Hide Comments' : 'Show Comments'}
-                                        </button>
-
+                                <div className="card-footer mt-3" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                    <span className='text-muted'>
+                                        Last Updated : {formatDate(question?.updatedAt)}
+                                    </span>
+                                    <div>
+                                        <a className="text-secondary" onClick={() => setShowComments(!showComments)}>
+                                            <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
+                                            <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
+                                        </a> &nbsp; &nbsp;
+                                        <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)}>
+                                            <i className="fa fa-reply-all" style={{ fontSize: '23px' }} aria-hidden="true"></i>&nbsp;
+                                            <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span>
+                                        </a>
                                     </div>
                                 </div>
-                                {showComments && (
-                                    <div>
-                                        <ul>
-                                            {question.comments.map((comment) => (
-                                                <QuestionComment key={comment.comment_id} comment={comment} />
-                                            ))}
-                                        </ul>
-                                        <br></br>
-                                        <form className="m-3">
-                                            <input
-                                                className="form-control"
-                                                style={{ borderBottom: '1px solid #ccc', borderTop: 'none', borderLeft: 'none', borderRight: 'none', flex: '1', borderRadius: '0', boxShadow: 'none' }}
-                                                placeholder="Your Comment"
-                                                value={commentdetails.message}
-                                                onChange={handelCommentChange}
-                                                required
-                                            />
-                                            <button className="btn btn-primary m-2"
-                                                type="submit"
-                                                onClick={pleaselogin}
-                                                style={{
-                                                    border: 'none',
-                                                    backgroundColor: '#799b6e',
-                                                    outline: 'none',
-                                                    boxShadow: 'none',
-                                                }}
-                                                tabIndex={0}
-                                            >Add Comment</button>
-                                        </form>
-                                    </div>
-                                )}
                             </div>
 
                         </div>
                     </div>
 
-                    <div className="text-center m-3">
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => setShowAnswers(!showAnswers)}
-                            style={{
-                                border: 'none',
-                                backgroundColor: '#799b6e',
-                                outline: 'none',
-                                boxShadow: 'none',
-                            }}
-                            tabIndex={0}
-                        >
-                            {showAnswers ? 'Hide Answers' : 'Show Answers'}
-                        </button>
-                    </div>
+                    {showComments && (
+                        <div className="toggle-container" style={toggleContainerStyle} >
+                            <br />
+                            <CommentInput
+                                onSubmit={handelCommentSubmit}
+                                value={commentdetails.message}
+                                onChange={handelCommentChange}
+                                className="flex-grow-2 mr-1"
+                            ></CommentInput>
+                            {question.comments.map((comment) => (
+                                <QuestionComment key={comment.comment_id} comment={comment} />
+                            ))}
+                            <br></br>
+                        </div>
+                    )}
+                    <br/>
 
                     {showAnswers && (
                         <div className="toggle-container" style={toggleContainerStyle}>
-                            <button className="toggle-button" style={toggleButtonStyle}>Answers</button>
+                            <button className="toggle-button" style={toggleButtonStyle}>
+                                Answers
+                            </button>
                             <div className="answers" style={answersStyle}>
                                 <div className='mt-2'>
-                                    {question.answer && question.answer.map((val, index) => (
-                                        <div key={index} className="card mb-3">
-                                            <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
-                                            <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                                <div>
-                                                    Posted by: {val.posted_by}
-                                                </div>
-                                                <div>
-                                                    {new Date(val.time).toLocaleString()}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
+                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} answer={val} islogin={false} pleaselogin={pleaselogin} question_id={question.question_id}/>
+                                        // <div key={index} className="card mb-3">
+                                        //     <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
+                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                        //         <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        //             <ul className="list-inline mb-0">
+                                        //                 <li className="list-inline-item">
+                                        //                     <a href="#" className="text-success mr-2" onClick={pleaselogin}>
+                                        //                         <FontAwesomeIcon icon={faThumbsUp} />
+                                        //                     </a>
+                                        //                     <span style={{ fontSize: '22px', fontWeight: '400' }}>{val.likes}</span>
+                                        //                 </li>
+                                        //                 <li className="list-inline-item">
+                                        //                     <a href="#" className="text-secondary mr-2" onClick={pleaselogin}>
+                                        //                         <FontAwesomeIcon icon={faThumbsDown} />
+                                        //                     </a>
+                                        //                 </li>
+                                        //             </ul>
+                                        //         </div>
+                                        //     </div>
+                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                        //         <div>
+                                        //             Posted by: {val.posted_by}
+                                        //         </div>
+                                        //         <div>
+                                        //             {new Date(val.time).toLocaleString()}
+                                        //         </div>
+                                        //     </div>
+                                        // </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
