@@ -44,7 +44,7 @@ router.get("/specific-question", async (req, res) => {
 router.post("/upload-answer", async (req, res) => {
     const { curr_id } = await AnswerCounter.findOne({ counter: "id" });
     const answer_id = curr_id;
-    const { ans, question_id, posted_by, posted_by_id } = req.body;
+    const { ans, question_id, posted_by, posted_by_id, is_expert } = req.body;
 
     // Sanitize the answer content
     const sanitizedContent = DOMPurify.sanitize(ans);
@@ -65,6 +65,7 @@ router.post("/upload-answer", async (req, res) => {
                 "answer": {
                     answer_id,
                     ans : sanitizedContent,
+                    is_expert,
                     posted_by,
                     posted_by_id,
                     time

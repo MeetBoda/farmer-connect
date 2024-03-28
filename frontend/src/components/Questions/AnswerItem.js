@@ -1,9 +1,11 @@
-import React, { useEffect, useState  } from "react";
+import React, { useEffect, useState, useRef  } from "react";
 import { faThumbsUp, faThumbsDown, faComment } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CommentInput from './CommentInput';
 import AnswerComment from "./AnswerComment";
 import { useDisclosure } from "@chakra-ui/react";
+import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter} from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 
 const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_name}) => {
 
@@ -11,21 +13,29 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
     const [isUpvoted, setIsUpvoted] = useState(false);
     const [isDownvoted, setIsDownvoted] = useState(false);
     const [answer, setAnswer] = useState(ans);
-    const [totalComments, setTotalComments] = useState(answer.comments.length);
-    const [voteCount, setvoteCount] = useState(answer.likes);
+    const [totalComments, setTotalComments] = useState(0);
+    const [voteCount, setvoteCount] = useState(0);
     
     const [commentdetails, setcommentDetails] = useState({
         message: "",
         question_id: question_id,
-        answer_id : answer.answer_id,
+        answer_id : 0,
         posted_by: user_name,
         posted_by_id: user_id
     });
+    const toast = useToast()
 
     const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclosure();
+    const handleClose = () => {
+        onClose();
+    }
+    const cancelRef = useRef()
 
     useEffect(() => {
         setTotalComments(answer.comments.length);
+        setvoteCount(answer.likes);
+        setcommentDetails((prevState) => {return {...prevState, answer_id : answer.answer_id}});
+        setAnswer(ans);
         if(islogin){
             var value;
             var isvoted = false;
@@ -221,7 +231,7 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
         if (commentdetails.message.trim() === '') {
             alert('Please enter your Comment before submitting.'); // Show an error message
         }
-        else if(user_id === null){
+        else if(user_id == null){
             // alert('Please login before adding a comment.');
             onOpen();
         }
@@ -236,7 +246,13 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
             var msg;
             const json = await response.json();
             if (!response.ok) {
-                msg = json.error;
+                toast({
+                    title: 'Error Occured while Uploading Comment',
+                    status: 'warning',
+                    duration: 3000,
+                    isClosable: true,
+                    position : 'top-right',
+                })
             }
             else {
                 setcommentDetails({
@@ -255,10 +271,15 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                 }
                 msg = json;
                 if (msg !== '') {
-                    msg = "Comment has been Added Successfully"
+                    toast({
+                        title: 'Comment Uploaded',
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                        position : 'top-right',
+                    })
                 }
             }
-            alert(msg);
             setTotalComments(totalComments + 1);
         }
     }
@@ -315,7 +336,7 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                             onChange={handelCommentChange}
                             className="flex-grow-2 mr-1"
                         ></CommentInput>
-                        {answer.comments.map((comment) => (
+                        {answer.comments.length > 0 && answer.comments.map((comment) => (
                             <AnswerComment key={comment.comment_id} comment={comment} />
                         ))}
                         <br></br>
@@ -348,7 +369,7 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                 </div>
                 <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
                     <div>
-                        Posted by: {answer.posted_by} {answer.is_expert == 1 && "  (Expert)"}
+                        Posted by: {answer.posted_by} {answer.is_expert == 1 &&  <strong>(Expert)</strong>}
                     </div>
                     <div>
                         <a className="text-secondary" onClick={() => setShowComments(!showComments)}>
@@ -370,12 +391,29 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                             onChange={handelCommentChange}
                             className="flex-grow-2 mr-1"
                         ></CommentInput>
-                        {answer.comments.map((comment) => (
+                        {totalComments > 0 && answer.comments.map((comment) => (
                             <AnswerComment key={comment.comment_id} comment={comment} />
                         ))}
                         <br></br>
                     </div>
                 )}
+                <AlertDialog
+                    isOpen={isOpen}
+                    leastDestructiveRef={cancelRef}
+                    onClose={onClose}
+                >
+                    <AlertDialogOverlay />
+                    <AlertDialogContent>
+                        <AlertDialogHeader>Error</AlertDialogHeader>
+                        <AlertDialogCloseButton />
+                        <AlertDialogBody>
+                            Please login first.
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <Button colorScheme="green" onClick={handleClose}>OK</Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         );
     }

@@ -53,7 +53,7 @@ const ComplaintUpload = () => {
                 isClosable: true,
                 position : 'top-right',
             })
-            navigate('/profile')
+            // navigate('/profile')
         }
     }
 

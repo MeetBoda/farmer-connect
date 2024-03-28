@@ -26,6 +26,7 @@ const QuestionItem = () => {
 
     const user_id = localStorage.getItem("userid");
     const user_name = localStorage.getItem("username");
+    const role = localStorage.getItem("role");
 
     const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclosure();
     const handleClose = () => {
@@ -227,7 +228,13 @@ const QuestionItem = () => {
             var msg;
             const json = await response.json();
             if (!response.ok) {
-                msg = json.error;
+                toast({
+                    title: 'Error Occured while Uploading Comment',
+                    status: 'warning',
+                    duration: 3000,
+                    isClosable: true,
+                    position : 'top-right',
+                })
             }
             else {
                 setcommentDetails({
@@ -238,11 +245,16 @@ const QuestionItem = () => {
                 });
                 msg = json;
                 if (msg !== '') {
-                    msg = "Comment has been Added Successfully"
-
+                    toast({
+                        title: 'Comment Uploaded',
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                        position : 'top-right',
+                    })
                 }
             }
-            alert(msg);
+            // alert(msg);
             const newData = await fetch('/api/specific-question?question_id=' + question_id);
             // console.log(response);
             if (!newData.ok) {
@@ -301,13 +313,17 @@ const QuestionItem = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        var is_expt = 0;
+        if(role == "Expert"){
+            is_expt = 1;
+        }
         if (details.ans.trim() === '') {
             alert('Please enter your answer before submitting.');
         } else {
             const sanitizedContent = DOMPurify.sanitize(details.ans);
             const response = await fetch('/api/upload-answer', {
                 method: 'POST',
-                body: JSON.stringify({ ...details, ans: sanitizedContent }),
+                body: JSON.stringify({ ...details, ans: sanitizedContent, is_expert : is_expt }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -315,8 +331,15 @@ const QuestionItem = () => {
             var msg;
             const json = await response.json();
             if (!response.ok) {
-                msg = json.error;
-            } else {
+                toast({
+                    title: 'Error Occured while Uploading Answer',
+                    status: 'warning',
+                    duration: 3000,
+                    isClosable: true,
+                    position : 'top-right',
+                })
+            } 
+            else {
                 setDetails({
                     ans: "",
                     question_id: question_id,
@@ -325,10 +348,15 @@ const QuestionItem = () => {
                 });
                 msg = json;
                 if (msg !== '') {
-                    msg = "Answer has been Added Successfully";
+                    toast({
+                        title: 'Answer Uploaded',
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                        position : 'top-right',
+                    })
                 }
             }
-            alert(msg);
             const newData = await fetch('/api/specific-question?question_id=' + question_id);
             if (!newData.ok) {
                 throw new Error('Network response was not ok');
@@ -477,6 +505,7 @@ const QuestionItem = () => {
                                 value={details.ans}
                                 config={config}
                                 ref={editor}
+                                id="jdt-editor"
                                 onChange={handelAnswerChange}
                             />
 
@@ -484,6 +513,7 @@ const QuestionItem = () => {
                                 <button
                                     className="btn btn-floating"
                                     type="submit"
+                                    id="submit"
                                     style={{
                                         backgroundColor: '#799b6e',
                                         color: '#ffffff',
@@ -592,7 +622,7 @@ const QuestionItem = () => {
                             </button>
                             <div className="answers" style={answersStyle}>
                                 <div className='mt-2'>
-                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} answer={val} islogin={false} pleaselogin={pleaselogin} question_id={question.question_id}/>
+                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={false} pleaselogin={pleaselogin} question_id={question.question_id}/>
                                         // <div key={index} className="card mb-3">
                                         //     <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
                                         //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
@@ -633,6 +663,7 @@ const QuestionItem = () => {
                                 value={details.ans}
                                 config={config}
                                 ref={editor}
+                                id='jdt-editor'
                                 onChange={handelAnswerChange}
                             />
 
@@ -640,6 +671,7 @@ const QuestionItem = () => {
                                 <button
                                     className="btn btn-floating"
                                     type="submit"
+                                    id='submit'
                                     style={{
                                         backgroundColor: '#799b6e',
                                         color: '#ffffff',

@@ -118,6 +118,7 @@ const ImageUpload = () => {
               <div className="form-group text-center">
                 <button className="btn btn-primary"
                   type="submit"
+                  id="submit"
                   style={{
                     border: 'none',
                     backgroundColor: '#799b6e',

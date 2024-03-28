@@ -28,10 +28,10 @@ const Login = ({ handleSubmit, credentials, onChange, onSignupClick }) => {
                             </div>
                           </div>
                           <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                            <button type="submit" className="btn btn-secondary btn-lg">Login </button>
+                            <button type="submit" id="submit" className="btn btn-secondary btn-lg">Login </button>
                           </div>
                           <p className="text-center mb-0">
-                            Don't have an account? <span className="text-primary" style={{ cursor: 'pointer' }} onClick={onSignupClick}>Create an account</span>
+                            Don't have an account? <span className="text-primary" name="create-account" style={{ cursor: 'pointer' }} onClick={onSignupClick}>Create an account</span>
                           </p>
                         </form>
                       </div>
