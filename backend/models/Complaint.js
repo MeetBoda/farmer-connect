@@ -22,7 +22,10 @@ const Complaint = new Schema({
         type : String,
         enum : ['Pending', 'Resolved'],
         default : 'Pending'
+    },
+    steps_taken : {
+        type : String,
     }
 }, {timestamps : true});
 
-module.exports = mongoose.model('complaint', Complaint);//model - Schema ko insert kaise karana hai 
+module.exports = mongoose.model('complaint', Complaint);

@@ -22,6 +22,7 @@ const AllQuestions = ({ question }) => {
                                     <Link
                                         to={`/question/${question.question_id}`}
                                         key={question.question_id}
+                                        id={`ques${question.question_id}`}
                                         style={{ textDecoration: 'none', color: 'inherit' }} 
                                     >
                                         {question.question_title}

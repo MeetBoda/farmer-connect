@@ -32,33 +32,24 @@ const EachAnswerItem = ({ question, answer }) => {
       headers: {
         'Content-Type': 'application/json'
       }
-    })
+    });
     console.log("Shru");
-    var msg;
     const json = await response.json();
 
     if (!response.ok) {
-      msg = json.error;
+      console.log(json.error);
     }
     else {
-      msg = json;
-      if (msg !== '') {
-        msg = "Answer has been Updated Successfully"
+      for (var a of json) {
+        if (a.answer_id == answ.answer_id) {
+          console.log(a);
+          setAns(a);
+          break;
+        }
       }
     }
-    alert(msg);
-    const newData = await fetch('/api/specific-answer?answer_id=' + answ.answer_id + '&question_id=' + question.question_id);
-    if (!newData.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await newData.json();
-    for (var a of data) {
-      if (a.answer_id == answ.answer_id) {
-        console.log(a);
-        setAns(a);
-        break;
-      }
-    }
+    // alert(msg);
+    setEditing(!isEditing);
   };
 
   return (

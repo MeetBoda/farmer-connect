@@ -48,13 +48,14 @@ const MyQuestionItem = ({ question }) => {
         msg = "Question has been Updated Successfully"
       }
     }
-    alert(msg);
+    // alert(msg);
     const newData = await fetch('/api/specific-question?question_id=' + ques.question_id);
     if (!newData.ok) {
       throw new Error('Network response was not ok');
     }
     const data = await newData.json();
     setQuestion(data);
+    setEditing(!isEditing);
   };
 
   return (

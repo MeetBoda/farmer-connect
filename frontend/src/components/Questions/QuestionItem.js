@@ -7,6 +7,11 @@ import Navbar from '../Navbar';
 import { Helmet } from 'react-helmet';
 import Footer from '../Footer';
 import { useToast } from '@chakra-ui/react'
+import CommentInput from './CommentInput';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faThumbsDown, faComment } from '@fortawesome/free-solid-svg-icons';
+import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter, useDisclosure} from '@chakra-ui/react';
+import AnswerItem from './AnswerItem';
 
 const QuestionItem = () => {
     const navigate = useNavigate();
@@ -14,28 +19,32 @@ const QuestionItem = () => {
     console.log(question_id);
     const [question, setQuestion] = useState(useLoaderData());
     const [showComments, setShowComments] = useState(false);
+    const [totalComments, setTotalComments] = useState(question.comments.length);
+    const [totalAnswers, setTotalAnswers] = useState(question.answer.length);
+
     const toast = useToast()
 
     const user_id = localStorage.getItem("userid");
     const user_name = localStorage.getItem("username");
+    const role = localStorage.getItem("role");
 
-    const [isLogin, setisLogin] = useState(false);
+    const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclosure();
+    const handleClose = () => {
+        onClose();
+    }
+
+    const [isLogin, setisLogin] = useState(true);
+    const cancelRef = useRef()
 
     const pleaselogin = () => {
-        toast({
-            title: 'Please Login first to vote',
-            // description: 'This is a notification using Chakra-UI.',
-            status: 'warning',
-            duration: 5000,
-            isClosable: true,
-            position : 'top-right',
-        })
+        onOpen();
         // navigate("/login", { replace: true });
     };
 
     useEffect(() => {
         // const question = useLoaderData();
-        if (user_id === null) {
+        setTotalComments(question.comments.length);
+        if (user_id == null) {
             setisLogin(false);
         }
         else {
@@ -75,10 +84,6 @@ const QuestionItem = () => {
         posted_by: user_name,
         posted_by_id: user_id
     });
-
-    // const [voteCount, setvoteCount] = useState(question.likes);
-    // const [isUpvoted, setIsUpvoted] = useState(false);
-    // const [isDownvoted, setIsDownvoted] = useState(false);
 
     const upvote = async () => {
         const formData = {
@@ -208,6 +213,10 @@ const QuestionItem = () => {
         if (commentdetails.message.trim() === '') {
             alert('Please enter your Comment before submitting.'); // Show an error message
         }
+        else if(user_id === null){
+            // alert('Please login before adding a comment.');
+            onOpen();
+        }
         else {
             const response = await fetch('/api/comment-on-question', {
                 method: 'POST',
@@ -219,7 +228,13 @@ const QuestionItem = () => {
             var msg;
             const json = await response.json();
             if (!response.ok) {
-                msg = json.error;
+                toast({
+                    title: 'Error Occured while Uploading Comment',
+                    status: 'warning',
+                    duration: 3000,
+                    isClosable: true,
+                    position : 'top-right',
+                })
             }
             else {
                 setcommentDetails({
@@ -230,19 +245,24 @@ const QuestionItem = () => {
                 });
                 msg = json;
                 if (msg !== '') {
-                    msg = "Comment has been Added Successfully"
-
+                    toast({
+                        title: 'Comment Uploaded',
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                        position : 'top-right',
+                    })
                 }
             }
-            alert(msg);
+            // alert(msg);
             const newData = await fetch('/api/specific-question?question_id=' + question_id);
             // console.log(response);
             if (!newData.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await newData.json();
-            // console.log(data);           // setTempComment(tempComment + 1);
             setQuestion(data);
+            setTotalComments(totalComments + 1);
         }
     }
 
@@ -290,17 +310,20 @@ const QuestionItem = () => {
     const editor = useRef(null);
 
     const [showAnswers, setShowAnswers] = useState(false);
-    const [viewComments, setViewComments] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        var is_expt = 0;
+        if(role == "Expert"){
+            is_expt = 1;
+        }
         if (details.ans.trim() === '') {
             alert('Please enter your answer before submitting.');
         } else {
             const sanitizedContent = DOMPurify.sanitize(details.ans);
             const response = await fetch('/api/upload-answer', {
                 method: 'POST',
-                body: JSON.stringify({ ...details, ans: sanitizedContent }),
+                body: JSON.stringify({ ...details, ans: sanitizedContent, is_expert : is_expt }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -308,8 +331,15 @@ const QuestionItem = () => {
             var msg;
             const json = await response.json();
             if (!response.ok) {
-                msg = json.error;
-            } else {
+                toast({
+                    title: 'Error Occured while Uploading Answer',
+                    status: 'warning',
+                    duration: 3000,
+                    isClosable: true,
+                    position : 'top-right',
+                })
+            } 
+            else {
                 setDetails({
                     ans: "",
                     question_id: question_id,
@@ -318,16 +348,22 @@ const QuestionItem = () => {
                 });
                 msg = json;
                 if (msg !== '') {
-                    msg = "Answer has been Added Successfully";
+                    toast({
+                        title: 'Answer Uploaded',
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                        position : 'top-right',
+                    })
                 }
             }
-            alert(msg);
             const newData = await fetch('/api/specific-question?question_id=' + question_id);
             if (!newData.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await newData.json();
             setQuestion(data);
+            setTotalAnswers(totalAnswers + 1);
         }
     };
 
@@ -335,9 +371,13 @@ const QuestionItem = () => {
         setDetails((prevState) => ({ ...prevState, ans: content }));
     }, []);
 
-    const toggleComments = () => {
-        setShowComments(!showComments);
-    };
+    const formatDate = (timestamp) => {
+        return new Date(timestamp).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    }
 
     if (isLogin) {
         return (
@@ -382,94 +422,78 @@ const QuestionItem = () => {
                                 <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
                                     <span className="text-muted">Posted By : {question.posted_by}</span>
                                 </div>
-                                <div className="d-flex justify-content-center">
-                                    <div className="text-center mb-3">
-                                        <button
-                                            className="btn btn-primary"
-                                            onClick={toggleComments}
-                                            style={{
-                                                border: 'none',
-                                                backgroundColor: '#799b6e',
-                                                outline: 'none',
-                                                boxShadow: 'none',
-                                            }}
-                                            tabIndex={0}
-                                        >
-                                            {showComments ? 'Hide Comments' : 'Show Comments'}
-                                        </button>
-
+                                <div className="card-footer mt-3" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                    <span className='text-muted'>
+                                        Last Updated : {formatDate(question?.updatedAt)}
+                                    </span>
+                                    <div>
+                                        <a className="text-secondary" onClick={() => setShowComments(!showComments)}>
+                                            <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
+                                            <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
+                                        </a> &nbsp; &nbsp;
+                                        <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)}>
+                                            <i className="fa fa-reply-all" style={{ fontSize: '23px' }} aria-hidden="true"></i>&nbsp;
+                                            <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span>
+                                        </a>
                                     </div>
                                 </div>
-                                {showComments && (
-                                    <div>
-                                        <ul>
-                                            {question.comments.map((comment) => (
-                                                <QuestionComment key={comment.comment_id} comment={comment} />
-                                            ))}
-                                        </ul>
-                                        <br></br>
-                                        <form className="m-3">
-                                            <input
-                                                className="form-control"
-                                                style={{ borderBottom: '1px solid #ccc', borderTop: 'none', borderLeft: 'none', borderRight: 'none', flex: '1', borderRadius: '0', boxShadow: 'none' }}
-                                                placeholder="Your Comment"
-                                                value={commentdetails.message}
-                                                onChange={handelCommentChange}
-                                                required
-                                            />
-                                            <button className="btn btn-primary m-2"
-                                                type="submit"
-                                                onClick={handelCommentSubmit}
-                                                style={{
-                                                    border: 'none',
-                                                    backgroundColor: '#799b6e',
-                                                    outline: 'none',
-                                                    boxShadow: 'none',
-                                                }}
-                                                tabIndex={0}
-                                            >Add Comment</button>
-                                        </form>
-                                    </div>
-                                )}
                             </div>
-
                         </div>
                     </div>
 
-                    <div className="text-center m-3">
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => setShowAnswers(!showAnswers)}
-                            style={{
-                                border: 'none',
-                                backgroundColor: '#799b6e',
-                                outline: 'none',
-                                boxShadow: 'none',
-                            }}
-                            tabIndex={0}
-                        >
-                            {showAnswers ? 'Hide Answers' : 'Show Answers'}
-                        </button>
-                    </div>
-
+                    {showComments && (
+                        <div className="toggle-container" style={toggleContainerStyle} >
+                            <br />
+                            <CommentInput
+                                onSubmit={handelCommentSubmit}
+                                value={commentdetails.message}
+                                onChange={handelCommentChange}
+                                className="flex-grow-2 mr-1"
+                            ></CommentInput>
+                            {question.comments.map((comment) => (
+                                <QuestionComment key={comment.comment_id} comment={comment} />
+                            ))}
+                            <br></br>
+                        </div>
+                    )}
+                    <br />
                     {showAnswers && (
                         <div className="toggle-container" style={toggleContainerStyle}>
-                            <button className="toggle-button" style={toggleButtonStyle}>Answers</button>
+                            <button className="toggle-button" style={toggleButtonStyle}>
+                                Answers
+                            </button>
                             <div className="answers" style={answersStyle}>
                                 <div className='mt-2'>
-                                    {question.answer && question.answer.map((val, index) => (
-                                        <div key={index} className="card mb-3">
-                                            <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
-                                            <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                                <div>
-                                                    Posted by: {val.posted_by}
-                                                </div>
-                                                <div>
-                                                    {new Date(val.time).toLocaleString()}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
+                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={true} user_id={user_id} user_name={user_name} question_id={question.question_id}/>
+                                        // <div key={index} className="card mb-3">
+                                        //     <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
+                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                        //         <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        //             <ul className="list-inline mb-0">
+                                        //                 <li className="list-inline-item">
+                                        //                     <a href="#" className="text-success mr-2" onClick={upvote}>
+                                        //                         <FontAwesomeIcon icon={faThumbsUp} />
+                                        //                     </a>
+                                        //                     <span style={{ fontSize: '22px', fontWeight: '400' }}>{val.likes}</span>
+                                        //                 </li>
+                                        //                 <li className="list-inline-item">
+                                        //                     <a href="#" className="text-secondary mr-2" onClick={downvote}>
+                                        //                         <FontAwesomeIcon icon={faThumbsDown} />
+                                        //                     </a>
+                                        //                 </li>
+                                        //             </ul>
+                                        //         </div>
+                                        //     </div>
+                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                        //         <div>
+                                        //             Posted by: {val.posted_by}
+                                        //         </div>
+                                        //         <div>
+                                        //             {new Date(val.time).toLocaleString()}
+                                        //         </div>
+                                        //     </div>
+                                        // </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -481,6 +505,7 @@ const QuestionItem = () => {
                                 value={details.ans}
                                 config={config}
                                 ref={editor}
+                                id="jdt-editor"
                                 onChange={handelAnswerChange}
                             />
 
@@ -488,6 +513,7 @@ const QuestionItem = () => {
                                 <button
                                     className="btn btn-floating"
                                     type="submit"
+                                    id="submit"
                                     style={{
                                         backgroundColor: '#799b6e',
                                         color: '#ffffff',
@@ -552,94 +578,80 @@ const QuestionItem = () => {
                                 <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
                                     <span className="text-muted">Posted By : {question.posted_by}</span>
                                 </div>
-                                <div className="d-flex justify-content-center">
-                                    <div className="text-center mb-3">
-                                        <button
-                                            className="btn btn-primary"
-                                            onClick={toggleComments}
-                                            style={{
-                                                border: 'none',
-                                                backgroundColor: '#799b6e',
-                                                outline: 'none',
-                                                boxShadow: 'none',
-                                            }}
-                                            tabIndex={0}
-                                        >
-                                            {showComments ? 'Hide Comments' : 'Show Comments'}
-                                        </button>
-
+                                <div className="card-footer mt-3" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                    <span className='text-muted'>
+                                        Last Updated : {formatDate(question?.updatedAt)}
+                                    </span>
+                                    <div>
+                                        <a className="text-secondary" onClick={() => setShowComments(!showComments)}>
+                                            <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
+                                            <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
+                                        </a> &nbsp; &nbsp;
+                                        <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)}>
+                                            <i className="fa fa-reply-all" style={{ fontSize: '23px' }} aria-hidden="true"></i>&nbsp;
+                                            <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span>
+                                        </a>
                                     </div>
                                 </div>
-                                {showComments && (
-                                    <div>
-                                        <ul>
-                                            {question.comments.map((comment) => (
-                                                <QuestionComment key={comment.comment_id} comment={comment} />
-                                            ))}
-                                        </ul>
-                                        <br></br>
-                                        <form className="m-3">
-                                            <input
-                                                className="form-control"
-                                                style={{ borderBottom: '1px solid #ccc', borderTop: 'none', borderLeft: 'none', borderRight: 'none', flex: '1', borderRadius: '0', boxShadow: 'none' }}
-                                                placeholder="Your Comment"
-                                                value={commentdetails.message}
-                                                onChange={handelCommentChange}
-                                                required
-                                            />
-                                            <button className="btn btn-primary m-2"
-                                                type="submit"
-                                                onClick={pleaselogin}
-                                                style={{
-                                                    border: 'none',
-                                                    backgroundColor: '#799b6e',
-                                                    outline: 'none',
-                                                    boxShadow: 'none',
-                                                }}
-                                                tabIndex={0}
-                                            >Add Comment</button>
-                                        </form>
-                                    </div>
-                                )}
                             </div>
 
                         </div>
                     </div>
 
-                    <div className="text-center m-3">
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => setShowAnswers(!showAnswers)}
-                            style={{
-                                border: 'none',
-                                backgroundColor: '#799b6e',
-                                outline: 'none',
-                                boxShadow: 'none',
-                            }}
-                            tabIndex={0}
-                        >
-                            {showAnswers ? 'Hide Answers' : 'Show Answers'}
-                        </button>
-                    </div>
+                    {showComments && (
+                        <div className="toggle-container" style={toggleContainerStyle} >
+                            <br />
+                            <CommentInput
+                                onSubmit={handelCommentSubmit}
+                                value={commentdetails.message}
+                                onChange={handelCommentChange}
+                                className="flex-grow-2 mr-1"
+                            ></CommentInput>
+                            {question.comments.map((comment) => (
+                                <QuestionComment key={comment.comment_id} comment={comment} />
+                            ))}
+                            <br></br>
+                        </div>
+                    )}
+                    <br/>
 
                     {showAnswers && (
                         <div className="toggle-container" style={toggleContainerStyle}>
-                            <button className="toggle-button" style={toggleButtonStyle}>Answers</button>
+                            <button className="toggle-button" style={toggleButtonStyle}>
+                                Answers
+                            </button>
                             <div className="answers" style={answersStyle}>
                                 <div className='mt-2'>
-                                    {question.answer && question.answer.map((val, index) => (
-                                        <div key={index} className="card mb-3">
-                                            <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
-                                            <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                                <div>
-                                                    Posted by: {val.posted_by}
-                                                </div>
-                                                <div>
-                                                    {new Date(val.time).toLocaleString()}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
+                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={false} pleaselogin={pleaselogin} question_id={question.question_id}/>
+                                        // <div key={index} className="card mb-3">
+                                        //     <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
+                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                        //         <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        //             <ul className="list-inline mb-0">
+                                        //                 <li className="list-inline-item">
+                                        //                     <a href="#" className="text-success mr-2" onClick={pleaselogin}>
+                                        //                         <FontAwesomeIcon icon={faThumbsUp} />
+                                        //                     </a>
+                                        //                     <span style={{ fontSize: '22px', fontWeight: '400' }}>{val.likes}</span>
+                                        //                 </li>
+                                        //                 <li className="list-inline-item">
+                                        //                     <a href="#" className="text-secondary mr-2" onClick={pleaselogin}>
+                                        //                         <FontAwesomeIcon icon={faThumbsDown} />
+                                        //                     </a>
+                                        //                 </li>
+                                        //             </ul>
+                                        //         </div>
+                                        //     </div>
+                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                        //         <div>
+                                        //             Posted by: {val.posted_by}
+                                        //         </div>
+                                        //         <div>
+                                        //             {new Date(val.time).toLocaleString()}
+                                        //         </div>
+                                        //     </div>
+                                        // </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -651,6 +663,7 @@ const QuestionItem = () => {
                                 value={details.ans}
                                 config={config}
                                 ref={editor}
+                                id='jdt-editor'
                                 onChange={handelAnswerChange}
                             />
 
@@ -658,6 +671,7 @@ const QuestionItem = () => {
                                 <button
                                     className="btn btn-floating"
                                     type="submit"
+                                    id='submit'
                                     style={{
                                         backgroundColor: '#799b6e',
                                         color: '#ffffff',
@@ -676,6 +690,23 @@ const QuestionItem = () => {
                     </div>
                 </div>
                 <Footer />
+                <AlertDialog
+                    isOpen={isOpen}
+                    leastDestructiveRef={cancelRef}
+                    onClose={onClose}
+                >
+                    <AlertDialogOverlay />
+                    <AlertDialogContent>
+                        <AlertDialogHeader>Error</AlertDialogHeader>
+                        <AlertDialogCloseButton />
+                        <AlertDialogBody>
+                            Please login first.
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <Button colorScheme="green" onClick={handleClose}>OK</Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         );
     }

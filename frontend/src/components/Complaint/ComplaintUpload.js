@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import '../../assets/css/style.css'
 import yourImage from '../../assets/images/thinking3.jpg';
 import { useNavigate } from 'react-router-dom';
+import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useToast } from '@chakra-ui/react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 
@@ -19,7 +20,11 @@ const ComplaintUpload = () => {
         posted_by_id : localStorage.getItem('userid')
      })
 
-    var msg;
+    const [errorMsg, setErrorMsg] = useState('');
+    const [errorOpen, setErrorOpen] = useState(false);
+    const cancelRef = useRef();
+    const toast = useToast()
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const response = await fetch('/api/file-complaint', {
@@ -31,9 +36,9 @@ const ComplaintUpload = () => {
         })
         const json = await response.json();
 
-
         if(!response.ok){
-            msg = json.error;
+            setErrorMsg(json.error);
+            setErrorOpen(true);
         }
         else{
             setdetails({
@@ -41,13 +46,15 @@ const ComplaintUpload = () => {
                 posted_by : localStorage.getItem('username'),
                 posted_by_id : localStorage.getItem('userid')
             })
-            msg = json;
-            if(msg !== ''){
-                msg = "Complaint has been Added Successfully"
-                navigate('/profile')
-            }
+            toast({
+                title: 'Complaint has been added successfully',
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+                position : 'top-right',
+            })
+            // navigate('/profile')
         }
-        // alert(msg);
     }
 
     const onChange = (event) => {
@@ -79,7 +86,6 @@ const ComplaintUpload = () => {
                                                     <input type="submit" className="btn btn-secondary btn-lg" value="Upload" />
                                                 </div>
                                             </form>
-                                            {/* <Link to="/" className="text-secondary">Login as Admin</Link> */}
 
                                         </div>
                                         <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2" style={{ width: '80%', maxWidth: '400px' }}>
@@ -95,6 +101,31 @@ const ComplaintUpload = () => {
                 </div>
             </section>
             <Footer/>
+            {errorOpen && (
+                <AlertDialog
+                  isOpen={errorOpen}
+                  leastDestructiveRef={cancelRef}
+                  onClose={() => setErrorOpen(false)}
+                >
+                  <AlertDialogOverlay>
+                    <AlertDialogContent>
+                      <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                        Error
+                      </AlertDialogHeader>
+
+                      <AlertDialogBody>
+                        {errorMsg}
+                      </AlertDialogBody>
+
+                      <AlertDialogFooter>
+                        <Button onClick={() => setErrorOpen(false)}>
+                          Close
+                        </Button>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialogOverlay>
+                </AlertDialog>
+            )}
         </>
     )
 }

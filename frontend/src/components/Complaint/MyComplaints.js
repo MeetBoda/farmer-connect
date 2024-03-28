@@ -60,6 +60,7 @@ const MyComplaints = () => {
                                             <th>#</th>
                                             <th className="col-md-4 col-xs-4">Message</th>
                                             <th className="col-md-3 col-xs-3">Status</th>
+                                            <th className="col-md-3 col-xs-3">Steps Taken</th>
                                             <th className="col-md-3 col-xs-3">Uploaded At</th>
                                         </tr>
                                     </thead>
@@ -69,6 +70,7 @@ const MyComplaints = () => {
                                                 <td>{index + 1}</td>
                                                 <td>{complaint.message}</td>
                                                 <td>{complaint.status}</td>
+                                                <td>{complaint.steps_taken}</td>
                                                 <td>{formatDate(complaint.createdAt)}</td>
                                             </tr>
                                         ))}

@@ -5,6 +5,8 @@ const ComplaintCounter = require("../models/ComplaintCounter");
 const Complaint = require("../models/Complaint");
 const nodemailer = require('nodemailer');
 
+const complaint_resolved_points = 10;
+
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -49,16 +51,17 @@ router.get("/fetch-all-complaints" , async(req, res) => {
 });
 
 router.post("/update-status", async(req, res) => {
-    const {complaint_id} = req.body;
+    const {complaint_id, steps_taken, user_id} = req.body;
     
     try{
-        const resolve = await Complaint.findOneAndUpdate({complaint_id:complaint_id}, {$set : {"status" : "Resolved"}});
+        const resolve = await Complaint.findOneAndUpdate({complaint_id:complaint_id}, {$set : {"status" : "Resolved", "steps_taken" : steps_taken}});
         const {email} = await User.findOne({user_id:resolve.posted_by_id});
+        const updatepoints = await User.findOneAndUpdate({user_id:user_id}, {$inc : {rating:complaint_resolved_points}});
         let mailOptions = {
             from: 'krushimitra1123@gmail.com',
             to: email,
             subject: 'Regarding Complaint Resolving',
-            text: 'The Complaint Registered by you on our portal with the following content ' + resolve.message + ', has been Resolved Successfully. '
+            text: 'The Complaint Registered by you on our portal with the following content ' + resolve.message + ', has been Resolved Successfully. We have taken the following steps : ' + steps_taken
         };
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {

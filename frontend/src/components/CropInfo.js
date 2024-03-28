@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import '../assets/css/cropinfo.css';
 import jsonData from '../assets/district_names.json';
+// require('dotenv').config();
 
 function CropInfo() {
   const [data, setData] = useState(null);
@@ -13,7 +14,8 @@ function CropInfo() {
 
   const handleCitySelect = async () => {
     if (city) {
-      const apiKey = '579b464db66ec23bdd0000010d1f7b00c91e424e7924cf7159fd5e61';
+      // const apiKey = process.env.API_KEY;
+      const apiKey = '579b464db66ec23bdd0000010d1f7b00c91e424e7924cf7159fd5e61'
       const format = 'json';
       const cityName = encodeURIComponent(city.toUpperCase());
       console.log(cityName)
@@ -61,16 +63,18 @@ function CropInfo() {
         <div className=" py-2">
           <div className="h1 text-center text-dark" id="pageHeaderTitle">{stateName}</div>
 
-          <select id="city-dropdown" value={city} onChange={(e) => setCity(e.target.value)}>
-            {districts.map((district, index) => (
-              <option key={index} value={district}>
-                {district}
-              </option>
-            ))}
-          </select>
-
-          <button onClick={handleCitySelect}>Find</button>
-
+          <div style={{ display: 'flex', margin: '3px'}}>
+            <select id="city-dropdown" className='form-select' value={city} onChange={(e) => setCity(e.target.value)}>
+              {districts.map((district, index) => (
+                <option key={index} value={district}>
+                  {district}
+                </option>
+              ))}
+            </select>
+                &nbsp;
+            <a className = 'text-secondary m-2' style={{ fontSize : '1.25rem', fontWeight : 'bold'}} onClick={handleCitySelect}>Find</a>
+          </div>
+                <br/>
           {data && data.records.map((record, index) => (
             <article className={`postcard light ${index % 4 === 0 ? 'blue' : index % 4 === 1 ? 'green' : index % 4 === 2 ? 'red' : 'yellow'}`} key={index}
               style={{ margin: 'auto', marginBottom: '2rem' }}
@@ -95,7 +99,6 @@ function CropInfo() {
           ))}
         </div>
       </section>
-
     </div>
   );
 }
