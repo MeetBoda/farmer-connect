@@ -7,6 +7,8 @@ import { Helmet } from 'react-helmet';
 import Modal_login from '../Modal_login';
 import Login from './Login';
 import UserSignup from '../screens/UserSignup';
+import myimage from '../assets/images/icons8-stormy-weather-48.png'
+
 import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter, useDisclosure, useToast } from '@chakra-ui/react';
 
 const Navbar = () => {
@@ -51,8 +53,8 @@ const Navbar = () => {
         status: 'success',
         duration: 5000,
         isClosable: true,
-        position : 'top-right',
-    })
+        position: 'top-right',
+      })
       setIsLogin(false);
       navigate('/')
     }
@@ -71,13 +73,14 @@ const Navbar = () => {
   }
 
   const handleClose = () => {
-    onClose(); // Close the alert dialog
+    onClose();
     setCredentials({ email: "", password: "" });
   }
 
   useEffect(() => {
     initMDB({ Dropdown });
   }, []);
+
 
   const handleLogin = () => {
     setIsLogin(!isLogin)
@@ -93,17 +96,17 @@ const Navbar = () => {
 
   const [credentialsSignup, setCredentialsSignup] = useState({ user_name: "", email: "", password: "", user_type: "" })
 
-  const { isOpen: isOpenValidCredentials, onOpen: onOpenValidCredentials, onClose: onCloseValidCredentials} = useDisclosure();
-  const { isOpen: isOpenEmail, onOpen: onOpenEmail, onClose: onCloseEmail} = useDisclosure();
+  const { isOpen: isOpenValidCredentials, onOpen: onOpenValidCredentials, onClose: onCloseValidCredentials } = useDisclosure();
+  const { isOpen: isOpenEmail, onOpen: onOpenEmail, onClose: onCloseEmail } = useDisclosure();
 
   const handleCloseValidCredentials = () => {
     onCloseValidCredentials();
-    setCredentialsSignup({ ...credentialsSignup, user_name: "", email: "",  password: "", user_type: "" }); 
+    setCredentialsSignup({ ...credentialsSignup, user_name: "", email: "", password: "", user_type: "" });
   }
 
   const handleCloseEmail = () => {
     onCloseEmail();
-    setCredentialsSignup({ ...credentialsSignup, email: "" }); 
+    setCredentialsSignup({ ...credentialsSignup, email: "" });
   }
 
   const handleSubmitSignup = async (e) => {
@@ -208,6 +211,9 @@ const Navbar = () => {
             <button className='login-button' id='login' onClick={handleLogin}>Login</button>
           ) : (
             <ul className="navbar-nav d-flex flex-row">
+              <button onClick={() => navigate("/giveweather")} title='Check weather'>
+                <img src={myimage} alt="check weather"></img>
+              </button> &nbsp;
               <li className="nav-item me-3 me-lg-0 dropdown">
                 <a
                   data-mdb-dropdown-init
