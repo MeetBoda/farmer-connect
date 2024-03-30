@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import { useToast } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react';
 import Modal from '../../Modal';
 import ResolveComplaintForm from './ResolveComplaintForm';
 
@@ -13,7 +13,8 @@ const ViewComplaints = () => {
     const [solveComplaint, setSolveComplaint] = useState({
         complaint_id:0,
         message:"",
-        steps_taken:""
+        steps_taken:"", 
+        user_id : localStorage.getItem("userid")
     });
     const [isComplaintSolving, setComplaintSolving] = useState(false);
     // const user_id = localStorage.getItem("userid");

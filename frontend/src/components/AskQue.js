@@ -4,6 +4,7 @@ import yourImage from '../assets/images/thinking3.jpg'
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { useToast } from '@chakra-ui/react';
 
 const AskQue = () => {
     const navigate = useNavigate();
@@ -19,6 +20,7 @@ const AskQue = () => {
         posted_by : localStorage.getItem('username'),
         posted_by_id : localStorage.getItem('userid')
      })
+     const toast = useToast()
 
     var msg;
     const handleSubmit = async (e) => {
@@ -34,7 +36,13 @@ const AskQue = () => {
 
 
         if(!response.ok){
-            msg = json.error;
+            toast({
+                title: 'Error Occured while Uploading Question',
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+                position : 'top-right',
+            })
         }
         else{
             setdetails({
@@ -45,7 +53,13 @@ const AskQue = () => {
             })
             msg = json;
             if(msg !== ''){
-                msg = "Question has been Added Successfully"
+                toast({
+                    title: 'Question Uploaded',
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                    position : 'top-right',
+                })
                 navigate('/question')
             }
         }
@@ -83,7 +97,7 @@ const AskQue = () => {
                                                     </div>
                                                 </div>
                                                 <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                                    <input type="submit" className="btn btn-secondary btn-lg" value="Upload" />
+                                                    <input type="submit" id="submit" className="btn btn-secondary btn-lg" value="Upload" />
                                                 </div>
                                             </form>
                                             {/* <Link to="/" className="text-secondary">Login as Admin</Link> */}

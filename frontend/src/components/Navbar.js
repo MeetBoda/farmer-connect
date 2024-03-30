@@ -187,16 +187,16 @@ const Navbar = () => {
                   <Link className="nav-link mx-lg-2" aria-current="page" to='/'>Home</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link mx-lg-2" to='/question'>Question</Link>
+                  <Link className="nav-link mx-lg-2" to='/question' name="question-link">Question</Link>
                 </li>
                 {role === "Farmer" &&
                   <li className="nav-item">
-                    <Link className="nav-link mx-lg-2" to='/img'>ImageUpload</Link>
+                    <Link className="nav-link mx-lg-2" to='/img' name="image-link">ImageUpload</Link>
                   </li>
                 }
                 {role === "Farmer" &&
                   <li className="nav-item">
-                    <Link className="nav-link mx-lg-2" to='/complaint'>Complaint</Link>
+                    <Link className="nav-link mx-lg-2" to='/complaint' name="complaint-link">Complaint</Link>
                   </li>
                 }
                 {role === "Expert" &&
@@ -208,7 +208,7 @@ const Navbar = () => {
             </div>
           </div>
           {!localStorage.getItem("authToken") ? (
-            <button className='login-button' onClick={handleLogin}>Login</button>
+            <button className='login-button' id='login' onClick={handleLogin}>Login</button>
           ) : (
             <ul className="navbar-nav d-flex flex-row">
               <button onClick={() => navigate("/giveweather")} title='Check weather'>

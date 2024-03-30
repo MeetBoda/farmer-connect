@@ -46,7 +46,7 @@ export default function UserSignup({ handleSubmit, credentials, onChange, onLogi
                                                         </div>
                                                     </div>
                                                     <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                                        <input type="submit" class="btn btn-secondary btn-lg" value="Signup" />
+                                                        <input type="submit" id="submit" class="btn btn-secondary btn-lg" value="Signup" />
                                                     </div>
                                                     {/* <Link to="/login" className="signup-image-link">Already user</Link> */}
                                                     <p className="text-center mb-0">
