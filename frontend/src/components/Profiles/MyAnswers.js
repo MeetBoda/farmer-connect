@@ -4,6 +4,7 @@ import ProfileSidebar from "./ProfileSidebar.js";
 import { useLoaderData } from "react-router-dom";
 import MyAnswerItem from './MyAnswerItem.js'
 import '../../assets/css/profile.css'
+import { Helmet } from "react-helmet";
 
 const MyAnswers = () => {
 
@@ -12,6 +13,9 @@ const MyAnswers = () => {
     return (
         <>
             <Navbar />
+            <Helmet>
+                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+            </Helmet>
             {/* <div className='profile-container' style={{ marginTop:'0vh', zIndex: 1, backgroundColor: 'white' }}>
                 <ProfileSidebar />
                 <div className="header_and_content" Style="width:100%;">

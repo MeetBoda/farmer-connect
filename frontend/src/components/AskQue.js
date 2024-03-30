@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { useToast } from '@chakra-ui/react';
+import { Helmet } from 'react-helmet';
 
 const AskQue = () => {
     const navigate = useNavigate();
@@ -72,6 +73,9 @@ const AskQue = () => {
 
     return (
         <>
+        <Helmet>
+                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+            </Helmet>
         <Navbar/>
             <section className="vh-100" style={{ ...backgroundStyle }}>
                 <div className="h-100">

@@ -7,6 +7,7 @@ const EditFormQue = ({ editAnswer, handleQuestionChange, handleSubmit }) => {
     <form onSubmit={handleSubmit} className='m-auto mt-5'>
       <Helmet>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
       </Helmet>
       <div className="card-front">
         <div className="center-wrap">
@@ -23,7 +24,7 @@ const EditFormQue = ({ editAnswer, handleQuestionChange, handleSubmit }) => {
                 />
                 <i className="fa fa-list-alt icon" style={{ marginLeft : '6px', color: 'black'}}></i>
             </div>
-            <button type='submit' className="btn mt-4">Save</button>
+            <button type='submit' className="btn mt-4" style={{ color : 'black', backgroundColor: '#c4c3ca'}}>Save</button>
           </div>
         </div>
       </div>

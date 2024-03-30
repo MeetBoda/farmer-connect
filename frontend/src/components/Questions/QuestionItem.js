@@ -10,7 +10,7 @@ import { useToast } from '@chakra-ui/react'
 import CommentInput from './CommentInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faComment } from '@fortawesome/free-solid-svg-icons';
-import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter, useDisclosure} from '@chakra-ui/react';
+import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter, useDisclosure } from '@chakra-ui/react';
 import AnswerItem from './AnswerItem';
 
 const QuestionItem = () => {
@@ -213,7 +213,7 @@ const QuestionItem = () => {
         if (commentdetails.message.trim() === '') {
             alert('Please enter your Comment before submitting.'); // Show an error message
         }
-        else if(user_id === null){
+        else if (user_id === null) {
             // alert('Please login before adding a comment.');
             onOpen();
         }
@@ -233,7 +233,7 @@ const QuestionItem = () => {
                     status: 'warning',
                     duration: 3000,
                     isClosable: true,
-                    position : 'top-right',
+                    position: 'top-right',
                 })
             }
             else {
@@ -250,7 +250,7 @@ const QuestionItem = () => {
                         status: 'success',
                         duration: 3000,
                         isClosable: true,
-                        position : 'top-right',
+                        position: 'top-right',
                     })
                 }
             }
@@ -314,7 +314,7 @@ const QuestionItem = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         var is_expt = 0;
-        if(role == "Expert"){
+        if (role == "Expert") {
             is_expt = 1;
         }
         if (details.ans.trim() === '') {
@@ -323,7 +323,7 @@ const QuestionItem = () => {
             const sanitizedContent = DOMPurify.sanitize(details.ans);
             const response = await fetch('/api/upload-answer', {
                 method: 'POST',
-                body: JSON.stringify({ ...details, ans: sanitizedContent, is_expert : is_expt }),
+                body: JSON.stringify({ ...details, ans: sanitizedContent, is_expert: is_expt }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -336,9 +336,9 @@ const QuestionItem = () => {
                     status: 'warning',
                     duration: 3000,
                     isClosable: true,
-                    position : 'top-right',
+                    position: 'top-right',
                 })
-            } 
+            }
             else {
                 setDetails({
                     ans: "",
@@ -353,7 +353,7 @@ const QuestionItem = () => {
                         status: 'success',
                         duration: 3000,
                         isClosable: true,
-                        position : 'top-right',
+                        position: 'top-right',
                     })
                 }
             }
@@ -387,6 +387,7 @@ const QuestionItem = () => {
                     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" />
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+                    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
                 </Helmet>
                 <Navbar />
                 <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
@@ -464,7 +465,7 @@ const QuestionItem = () => {
                             </button>
                             <div className="answers" style={answersStyle}>
                                 <div className='mt-2'>
-                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={true} user_id={user_id} user_name={user_name} question_id={question.question_id}/>
+                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={true} user_id={user_id} user_name={user_name} question_id={question.question_id} />
                                         // <div key={index} className="card mb-3">
                                         //     <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
                                         //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
@@ -543,6 +544,7 @@ const QuestionItem = () => {
                     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" />
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
                 </Helmet>
                 <Navbar />
                 <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
@@ -601,19 +603,13 @@ const QuestionItem = () => {
                     {showComments && (
                         <div className="toggle-container" style={toggleContainerStyle} >
                             <br />
-                            <CommentInput
-                                onSubmit={handelCommentSubmit}
-                                value={commentdetails.message}
-                                onChange={handelCommentChange}
-                                className="flex-grow-2 mr-1"
-                            ></CommentInput>
                             {question.comments.map((comment) => (
                                 <QuestionComment key={comment.comment_id} comment={comment} />
                             ))}
                             <br></br>
                         </div>
                     )}
-                    <br/>
+                    <br />
 
                     {showAnswers && (
                         <div className="toggle-container" style={toggleContainerStyle}>
@@ -622,35 +618,7 @@ const QuestionItem = () => {
                             </button>
                             <div className="answers" style={answersStyle}>
                                 <div className='mt-2'>
-                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={false} pleaselogin={pleaselogin} question_id={question.question_id}/>
-                                        // <div key={index} className="card mb-3">
-                                        //     <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
-                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                        //         <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        //             <ul className="list-inline mb-0">
-                                        //                 <li className="list-inline-item">
-                                        //                     <a href="#" className="text-success mr-2" onClick={pleaselogin}>
-                                        //                         <FontAwesomeIcon icon={faThumbsUp} />
-                                        //                     </a>
-                                        //                     <span style={{ fontSize: '22px', fontWeight: '400' }}>{val.likes}</span>
-                                        //                 </li>
-                                        //                 <li className="list-inline-item">
-                                        //                     <a href="#" className="text-secondary mr-2" onClick={pleaselogin}>
-                                        //                         <FontAwesomeIcon icon={faThumbsDown} />
-                                        //                     </a>
-                                        //                 </li>
-                                        //             </ul>
-                                        //         </div>
-                                        //     </div>
-                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                        //         <div>
-                                        //             Posted by: {val.posted_by}
-                                        //         </div>
-                                        //         <div>
-                                        //             {new Date(val.time).toLocaleString()}
-                                        //         </div>
-                                        //     </div>
-                                        // </div>
+                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={false} pleaselogin={pleaselogin} question_id={question.question_id} />
                                     )}
                                 </div>
                             </div>

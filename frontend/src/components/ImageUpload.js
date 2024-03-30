@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
 import '../assets/css/cropinfo.css';
+import { Helmet } from 'react-helmet';
 
 const ImageUpload = () => {
   const [result, setResult] = useState(null);
@@ -69,7 +70,7 @@ const ImageUpload = () => {
                   headers: {
                     'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ image_id, solution: result.solution, disease:result.disease }),
+                  body: JSON.stringify({ image_id, solution: result.solution, disease: result.disease }),
                 });
               } catch (error) {
                 console.error(error.message);
@@ -95,6 +96,9 @@ const ImageUpload = () => {
 
   return (
     <div>
+      <Helmet>
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+      </Helmet>
       <Navbar />
       <section className="py-2 py-md-5">
         <div className="container-fluid">
@@ -115,20 +119,20 @@ const ImageUpload = () => {
                 <p className="m-3" style={{ fontSize: '1.2rem' }}>{result}</p>
               </div>
             )}
-              <div className="form-group text-center">
-                <button className="btn btn-primary"
-                  type="submit"
-                  id="submit"
-                  style={{
-                    border: 'none',
-                    backgroundColor: '#799b6e',
-                    outline: 'none',
-                    boxShadow: 'none',
-                    marginTop: '10px'
-                  }}
-                  tabIndex={0}
-                >Upload</button>
-              </div>
+            <div className="form-group text-center">
+              <button className="btn btn-primary"
+                type="submit"
+                id="submit"
+                style={{
+                  border: 'none',
+                  backgroundColor: '#799b6e',
+                  outline: 'none',
+                  boxShadow: 'none',
+                  marginTop: '10px'
+                }}
+                tabIndex={0}
+              >Upload</button>
+            </div>
           </form>
         </div>
       </section>

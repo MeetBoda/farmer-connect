@@ -4,6 +4,7 @@ import Footer from '../Footer';
 import { useToast } from '@chakra-ui/react';
 import Modal from '../../Modal';
 import ResolveComplaintForm from './ResolveComplaintForm';
+import { Helmet } from 'react-helmet';
 
 const ViewComplaints = () => {
     
@@ -92,6 +93,9 @@ const ViewComplaints = () => {
     return (
         <>
         <Navbar />
+        <Helmet>
+                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+            </Helmet>
         {isComplaintSolving && 
             <Modal onClose={handleToggleEdit}>
             <ResolveComplaintForm

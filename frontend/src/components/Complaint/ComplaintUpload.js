@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, useToast } from '@chakra-ui/react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import { Helmet } from 'react-helmet';
 
 const ComplaintUpload = () => {
     const navigate = useNavigate();
@@ -63,6 +64,9 @@ const ComplaintUpload = () => {
 
     return (
         <>
+        <Helmet>
+                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+            </Helmet>
         <Navbar/>
             <section className="vh-100" style={{ ...backgroundStyle }}>
                 <div className="h-100">

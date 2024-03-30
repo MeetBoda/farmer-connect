@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import '../assets/css/cropinfo.css';
 import jsonData from '../assets/district_names.json';
+import { Helmet } from 'react-helmet';
 // require('dotenv').config();
 
 function CropInfo() {
@@ -59,6 +60,9 @@ function CropInfo() {
   return (
     <div>
       <Navbar />
+      <Helmet>
+                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+            </Helmet>
       <section className="light">
         <div className=" py-2">
           <div className="h1 text-center text-dark" id="pageHeaderTitle">{stateName}</div>
