@@ -1,5 +1,5 @@
 # farmer-connect
-#Farmer-Connect or we called it #Krishi-Mitr is a Web Application which aims to help the Farmers in their Farming Practices by providing them Assistance and Guidance and also a strong community of like minded people. 
+<strong>Farmer-Connect</strong> or we called it <strong>Krishi-Mitr</strong> is a Web Application which aims to help the Farmers in their Farming Practices by providing them Assistance and Guidance and also a strong community of like minded people. 
 Our System has 2 types of User : 
 1. Farmer
 2. Expert
