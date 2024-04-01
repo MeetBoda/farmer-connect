@@ -147,6 +147,14 @@ const Navbar = () => {
 
   const role = localStorage.getItem("role");
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    const specificPart = document.getElementById('google_element');
+    if (specificPart) {
+      specificPart.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg">
       <Helmet>
@@ -208,9 +216,20 @@ const Navbar = () => {
             </div>
           </div>
           {!localStorage.getItem("authToken") ? (
-            <button className='login-button' id='login' onClick={handleLogin}>Login</button>
+            <ul className="navbar-nav d-flex flex-row">
+              <li className="nav-item">
+                <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
+              </li>
+              <button onClick={() => navigate("/giveweather")} title='Check weather'>
+                <img src={myimage} alt="check weather"></img>
+              </button> &nbsp;
+              <button className='login-button' id='login' onClick={handleLogin}>Login</button>
+            </ul> 
           ) : (
             <ul className="navbar-nav d-flex flex-row">
+              <li className="nav-item">
+              <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
+              </li>
               <button onClick={() => navigate("/giveweather")} title='Check weather'>
                 <img src={myimage} alt="check weather"></img>
               </button> &nbsp;

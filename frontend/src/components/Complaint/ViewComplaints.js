@@ -5,10 +5,12 @@ import { useToast } from '@chakra-ui/react';
 import Modal from '../../Modal';
 import ResolveComplaintForm from './ResolveComplaintForm';
 import { Helmet } from 'react-helmet';
+import NotFound from '../NotFound';
 
 const ViewComplaints = () => {
     
     // const complaints = useLoaderData();
+    const role = localStorage.getItem("role");
 
     const [complaints, setComplaints] = useState([]);
     const [solveComplaint, setSolveComplaint] = useState({
@@ -90,62 +92,69 @@ const ViewComplaints = () => {
         setComplaintSolving(!isComplaintSolving);
     }
 
-    return (
-        <>
-        <Navbar />
-        <Helmet>
-                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-            </Helmet>
-        {isComplaintSolving && 
-            <Modal onClose={handleToggleEdit}>
-            <ResolveComplaintForm
-            complaints={solveComplaint}
-            handleSteps={HandleSteps}
-            handleSubmit={HandleSubmit}
-          />
-          </Modal>
-        }
-        <div className="container-fluid mt-4">
-                    <h3 style={{ color: 'grey', fontWeight: '500', textAlign: 'center', paddingTop: '30px', paddingBottom: '10px' }}>All Complaints</h3>
-                    <div className="card mb-4" style={{ border: 'none' }}>
-                        <div className="card-body">
-                            <div className="form-group">
-                                {/* <input type="text" className="search form-control" placeholder="What you looking for?" onChange={handleSearch} /> */}
-                                <span className="pull-right">{complaints.length} item(s)</span>
-                                <table className="table table-hover table-bordered results">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th className="col-md-3 col-xs-4">Message</th>
-                                            <th className="col-md-3 col-xs-4">Uploaded By</th>
-                                            <th className="col-md-3 col-xs-3">Status</th>
-                                            <th className="col-md-3 col-xs-3"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {complaints.map((complaint, index) => (
-                                            <tr key={index} className="table-row custom-table-row">
-                                                <td>{index + 1}</td>
-                                                <td>{complaint.message}</td>
-                                                <td>{complaint.posted_by}</td>
-                                                <td>{complaint.status}</td>
-                                                <td><button className='btn btn-sm' onClick={(e) => HandleResolve(e, complaint)} complaint={complaint}>Resolve</button></td>
+    if(role != "Expert"){
+        return(
+            <NotFound />
+        );
+    }
+    else{
+        return (
+            <>
+            <Navbar />
+            <Helmet>
+                    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+                </Helmet>
+            {isComplaintSolving && 
+                <Modal onClose={handleToggleEdit}>
+                <ResolveComplaintForm
+                complaints={solveComplaint}
+                handleSteps={HandleSteps}
+                handleSubmit={HandleSubmit}
+              />
+              </Modal>
+            }
+            <div className="container-fluid mt-4">
+                        <h3 style={{ color: 'grey', fontWeight: '500', textAlign: 'center', paddingTop: '30px', paddingBottom: '10px' }}>All Complaints</h3>
+                        <div className="card mb-4" style={{ border: 'none' }}>
+                            <div className="card-body">
+                                <div className="form-group">
+                                    {/* <input type="text" className="search form-control" placeholder="What you looking for?" onChange={handleSearch} /> */}
+                                    <span className="pull-right">{complaints.length} item(s)</span>
+                                    <table className="table table-hover table-bordered results">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th className="col-md-3 col-xs-4">Message</th>
+                                                <th className="col-md-3 col-xs-4">Uploaded By</th>
+                                                <th className="col-md-3 col-xs-3">Status</th>
+                                                <th className="col-md-3 col-xs-3"></th>
                                             </tr>
-                                        ))}
-                                        {complaints.length === 0 && (
-                                            <tr className="warning no-result">
-                                                <td colSpan="5"><i className="fa fa-warning"></i> No result</td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {complaints.map((complaint, index) => (
+                                                <tr key={index} className="table-row custom-table-row">
+                                                    <td>{index + 1}</td>
+                                                    <td>{complaint.message}</td>
+                                                    <td>{complaint.posted_by}</td>
+                                                    <td>{complaint.status}</td>
+                                                    <td><button className='btn btn-sm' onClick={(e) => HandleResolve(e, complaint)} complaint={complaint}>Resolve</button></td>
+                                                </tr>
+                                            ))}
+                                            {complaints.length === 0 && (
+                                                <tr className="warning no-result">
+                                                    <td colSpan="5"><i className="fa fa-warning"></i> No result</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-        <Footer />
-        </>
-    );
+            <Footer />
+            </>
+        );
+    }
 };
 
 // const fetchallcomplaints = async() => {
