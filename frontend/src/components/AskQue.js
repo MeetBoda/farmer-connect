@@ -6,6 +6,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import { useToast } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet';
+import videoFile from '../assets/images/farmer2.gif'
 
 const AskQue = () => {
     const navigate = useNavigate();
@@ -110,6 +111,7 @@ const AskQue = () => {
                                         <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2" style={{ width: '80%', maxWidth: '500px' }}>
 
                                             <img src={yourImage} alt="" />
+                                            {/* <img src={videoFile} alt="GIF"/> */}
 
                                         </div>
                                     </div>

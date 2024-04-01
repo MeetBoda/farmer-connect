@@ -6,6 +6,7 @@ import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialo
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import { Helmet } from 'react-helmet';
+import videoFile from '../../assets/images/farmer-5.gif'
 
 const ComplaintUpload = () => {
     const navigate = useNavigate();
@@ -74,7 +75,7 @@ const ComplaintUpload = () => {
                         <div className="col-lg-12 col-xl-7">
                             <div className="card text-black" style={{ borderRadius: '25px' }}>
                                 <div className="card-body p-md-5">
-                                    <div className="row justify-content-center">
+                                    <div className="row" style={{ justifyContent : 'space-around'}}>
                                         <div className="col-md-10 col-lg-5 col-xl-4 order-2 order-lg-1">
 
                                             <p className="text-center h3 fw-bold mb-3 mx-1 mt-5">File Your Complaint</p>
@@ -95,7 +96,7 @@ const ComplaintUpload = () => {
                                         <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2" style={{ width: '80%', maxWidth: '400px' }}>
 
                                             <img src={yourImage} alt="" />
-
+                                            {/* <img src={videoFile} alt="GIF"/> */}
                                         </div>
                                     </div>
                                 </div>
