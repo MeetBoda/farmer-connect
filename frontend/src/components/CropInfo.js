@@ -26,6 +26,7 @@ function CropInfo() {
         const responseData = await response.json();
         setData(responseData);
         console.log(responseData.records);
+
       } catch (error) {
         console.error('Error:', error);
       }
@@ -61,13 +62,13 @@ function CropInfo() {
     <div>
       <Navbar />
       <Helmet>
-                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-            </Helmet>
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+      </Helmet>
       <section className="light">
         <div className=" py-2">
           <div className="h1 text-center text-dark" id="pageHeaderTitle">{stateName}</div>
 
-          <div style={{ display: 'flex', margin: '3px'}}>
+          <div style={{ display: 'flex', margin: '3px' }}>
             <select id="city-dropdown" className='form-select' value={city} onChange={(e) => setCity(e.target.value)}>
               {districts.map((district, index) => (
                 <option key={index} value={district}>
@@ -75,11 +76,11 @@ function CropInfo() {
                 </option>
               ))}
             </select>
-                &nbsp;
-            <a className = 'text-secondary m-2' style={{ fontSize : '1.25rem', fontWeight : 'bold'}} onClick={handleCitySelect}>Find</a>
+            &nbsp;
+            <a className='text-secondary m-2' style={{ fontSize: '1.25rem', fontWeight: 'bold' }} onClick={handleCitySelect}>Find</a>
           </div>
-                <br/>
-          {data && data.records.map((record, index) => (
+          <br />
+          {data && data.records && data.records.length > 0 ? (data.records.map((record, index) => (
             <article className={`postcard light ${index % 4 === 0 ? 'blue' : index % 4 === 1 ? 'green' : index % 4 === 2 ? 'red' : 'yellow'}`} key={index}
               style={{ margin: 'auto', marginBottom: '2rem' }}
             >
@@ -100,7 +101,9 @@ function CropInfo() {
                 <div className="postcard__bar"></div>
               </div>
             </article>
-          ))}
+          ))) : (
+            <p style={{ fontSize: "1.5rem", textAlign: "center" }}>No Record Found</p>
+          )}
         </div>
       </section>
     </div>

@@ -316,7 +316,7 @@ const AnswerItem = ({ ans, id, islogin, pleaselogin, user_id, question_id, user_
                         Posted by: {answer.posted_by} {answer.is_expert == 1 && "  (Expert)"}
                     </div>
                     <div>
-                        <a className="text-secondary" onClick={() => setShowComments(!showComments)}>
+                        <a className="text-secondary" onClick={() => setShowComments(!showComments)} title="Comments">
                             <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
                             <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
                         </a> &nbsp; &nbsp;
@@ -374,7 +374,7 @@ const AnswerItem = ({ ans, id, islogin, pleaselogin, user_id, question_id, user_
                         Posted by: {answer.posted_by} {answer.is_expert == 1 && <strong>(Expert)</strong>}
                     </div>
                     <div>
-                        <a className="text-secondary" onClick={() => setShowComments(!showComments)}>
+                        <a className="text-secondary" onClick={() => setShowComments(!showComments)} title="Comments">
                             <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
                             <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
                         </a> &nbsp; &nbsp;

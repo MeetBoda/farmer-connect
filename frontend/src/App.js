@@ -9,7 +9,7 @@ import UserSignup from './screens/UserSignup';
 import {Profile, fetchpersonalinfo} from './screens/Profile';
 import Content from './components/Content';
 import ImageUpload from './components/ImageUpload';
-import Weather from './components/Weather';
+// import Weather from './components/Weather';
 import WeatherDetail from './screens/weather/WeatherDetail';
 import Question from './screens/Question';
 import AskQue from './components/AskQue';
@@ -22,6 +22,7 @@ import CommentsSection from './screens/CommentsSection';
 import CropInfo from './components/CropInfo';
 import { MyImage, fetchmyimages } from './components/Profiles/MyImage';
 import {ViewComplaints} from './components/Complaint/ViewComplaints';
+import NotFound from './components/NotFound';
 
 function App() {
   const router = createBrowserRouter([
@@ -40,10 +41,6 @@ function App() {
     {
       path:"/img",
       element: <ImageUpload />
-    },
-    {
-      path:"/content",
-      element: <Content />
     },
     {
       path:"/giveweather",
@@ -97,10 +94,6 @@ function App() {
       element : <ComplaintUpload />
     },
     {
-      path : '/comments',
-      element : <CommentsSection/>
-    },
-    {
       path : '/my/:stateName',
       element : <CropInfo/>
     },
@@ -113,6 +106,10 @@ function App() {
       path:"/viewcomplaint",
       element:<ViewComplaints/>
       // loader:fetchallcomplaints
+    },
+    {
+      path: "*",
+      element: <NotFound />
     }
   ])
 

@@ -37,8 +37,8 @@ const Login = ({ handleSubmit, credentials, onChange, onSignupClick }) => {
                       </form>
                     </div>
                     <div className="col-md-9 col-lg-6 order-md-2 mt-5">
-                      <img src={videoFile} alt="GIF" style={{ width: '100%', height: '90%' }}/>
-                      {/* <img src={yourImage} alt="" className="img-fluid" /> */}
+                      {/* <img src={videoFile} alt="GIF" style={{ width: '100%', height: '90%' }}/> */}
+                      <img src={yourImage} alt="" className="img-fluid" />
                     </div>
                   </div>
                 </div>

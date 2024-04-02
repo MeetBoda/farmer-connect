@@ -36,7 +36,7 @@ const EditFormQue = ({ editQuestion, handleTitleChange, handleQuestionChange, ha
                 />
                 <i className="fa fa-list-alt icon" style={{ marginLeft : '6px', color: 'black'}}></i>
             </div>
-            <button type='submit' className="btn mt-4">Save</button>
+            <button type='submit' className="btn mt-4" style={{ color : 'black', backgroundColor: '#c4c3ca'}}>Save</button>
           </div>
         </div>
       </div>

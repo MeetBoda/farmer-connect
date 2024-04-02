@@ -216,6 +216,12 @@ const QuestionItem = () => {
         else if (user_id === null) {
             // alert('Please login before adding a comment.');
             onOpen();
+            setcommentDetails({
+                message: "",
+                question_id: question_id,
+                posted_by: user_name,
+                posted_by_id: user_id
+            });
         }
         else {
             const response = await fetch('/api/comment-on-question', {
@@ -319,7 +325,18 @@ const QuestionItem = () => {
         }
         if (details.ans.trim() === '') {
             alert('Please enter your answer before submitting.');
-        } else {
+        } 
+        else if (user_id === null) {
+            // alert('Please login before adding a comment.');
+            onOpen();
+            setDetails({
+                ans: "",
+                question_id: question_id,
+                posted_by: user_name,
+                posted_by_id: user_id
+            });
+        }
+        else {
             const sanitizedContent = DOMPurify.sanitize(details.ans);
             const response = await fetch('/api/upload-answer', {
                 method: 'POST',
@@ -428,11 +445,11 @@ const QuestionItem = () => {
                                         Last Updated : {formatDate(question?.updatedAt)}
                                     </span>
                                     <div>
-                                        <a className="text-secondary" onClick={() => setShowComments(!showComments)}>
+                                        <a className="text-secondary" onClick={() => setShowComments(!showComments)} title='Comments'>
                                             <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
                                             <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
                                         </a> &nbsp; &nbsp;
-                                        <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)}>
+                                        <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)} title='Answers'>
                                             <i className="fa fa-reply-all" style={{ fontSize: '23px' }} aria-hidden="true"></i>&nbsp;
                                             <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span>
                                         </a>
@@ -585,11 +602,11 @@ const QuestionItem = () => {
                                         Last Updated : {formatDate(question?.updatedAt)}
                                     </span>
                                     <div>
-                                        <a className="text-secondary" onClick={() => setShowComments(!showComments)}>
+                                        <a className="text-secondary" onClick={() => setShowComments(!showComments)} title='Comments'>
                                             <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
                                             <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
                                         </a> &nbsp; &nbsp;
-                                        <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)}>
+                                        <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)} title='Answers'>
                                             <i className="fa fa-reply-all" style={{ fontSize: '23px' }} aria-hidden="true"></i>&nbsp;
                                             <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span>
                                         </a>
@@ -649,7 +666,7 @@ const QuestionItem = () => {
                                         border: 'none',
                                         marginBottom: '20px'
                                     }}
-                                    onClick={pleaselogin}
+                                    onClick={handleSubmit}
                                 >
                                     Submit Answer
                                 </button>
