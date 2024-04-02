@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useRef  } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { faThumbsUp, faThumbsDown, faComment } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CommentInput from './CommentInput';
 import AnswerComment from "./AnswerComment";
 import { useDisclosure } from "@chakra-ui/react";
-import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter} from '@chakra-ui/react';
+import { Helmet } from "react-helmet";
+import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
 
-const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_name}) => {
+const AnswerItem = ({ ans, id, islogin, pleaselogin, user_id, question_id, user_name }) => {
 
     const [showComments, setShowComments] = useState(false);
     const [isUpvoted, setIsUpvoted] = useState(false);
@@ -15,11 +16,11 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
     const [answer, setAnswer] = useState(ans);
     const [totalComments, setTotalComments] = useState(0);
     const [voteCount, setvoteCount] = useState(0);
-    
+
     const [commentdetails, setcommentDetails] = useState({
         message: "",
         question_id: question_id,
-        answer_id : 0,
+        answer_id: 0,
         posted_by: user_name,
         posted_by_id: user_id
     });
@@ -34,9 +35,9 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
     useEffect(() => {
         setTotalComments(answer.comments.length);
         setvoteCount(answer.likes);
-        setcommentDetails((prevState) => {return {...prevState, answer_id : answer.answer_id}});
+        setcommentDetails((prevState) => { return { ...prevState, answer_id: answer.answer_id } });
         setAnswer(ans);
-        if(islogin){
+        if (islogin) {
             var value;
             var isvoted = false;
             for (var i of answer.likes_by) {
@@ -53,14 +54,14 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                 else {
                     setIsDownvoted(true);
                 }
-            } 
+            }
         }
     }, [])
 
-    const upvote = async(e) => {
+    const upvote = async (e) => {
         var formData = {
             question_id: question_id,
-            answer_id : e,
+            answer_id: e,
             liked_by_id: user_id
         };
         console.log(formData);
@@ -76,8 +77,8 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
             response.json().then(data => {
                 if (response.ok) {
                     setvoteCount(voteCount + 1);
-                    for(var a of data){
-                        if(a.answer_id == answer.answer_id){
+                    for (var a of data) {
+                        if (a.answer_id == answer.answer_id) {
                             console.log(a);
                             setAnswer(a);
                             break;
@@ -100,8 +101,8 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
             response.json().then(data => {
                 if (response.ok) {
                     setvoteCount(voteCount - 1);
-                    for(var a of data){
-                        if(a.answer_id == answer.answer_id){
+                    for (var a of data) {
+                        if (a.answer_id == answer.answer_id) {
                             console.log(a);
                             setAnswer(a);
                             break;
@@ -125,8 +126,8 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
             response.json().then(data => {
                 if (response.ok) {
                     setvoteCount(voteCount + 2);
-                    for(var a of data){
-                        if(a.answer_id == answer.answer_id){
+                    for (var a of data) {
+                        if (a.answer_id == answer.answer_id) {
                             console.log(a);
                             setAnswer(a);
                             break;
@@ -137,13 +138,13 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                 }
             });
         }
-        
+
     }
 
-    const downvote = async(e) => {
+    const downvote = async (e) => {
         var formData = {
             question_id: question_id,
-            answer_id : e,
+            answer_id: e,
             liked_by_id: user_id
         };
         if (isDownvoted === false && isUpvoted === false) {
@@ -158,8 +159,8 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
             response.json().then(data => {
                 if (response.ok) {
                     setvoteCount(voteCount - 1);
-                    for(var a of data){
-                        if(a.answer_id == answer.answer_id){
+                    for (var a of data) {
+                        if (a.answer_id == answer.answer_id) {
                             console.log(a);
                             setAnswer(a);
                             break;
@@ -182,8 +183,8 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
             response.json().then(data => {
                 if (response.ok) {
                     setvoteCount(voteCount + 1);
-                    for(var a of data){
-                        if(a.answer_id == answer.answer_id){
+                    for (var a of data) {
+                        if (a.answer_id == answer.answer_id) {
                             console.log(a);
                             setAnswer(a);
                             break;
@@ -207,8 +208,8 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
             response.json().then(data => {
                 if (response.ok) {
                     setvoteCount(voteCount - 2);
-                    for(var a of data){
-                        if(a.answer_id == answer.answer_id){
+                    for (var a of data) {
+                        if (a.answer_id == answer.answer_id) {
                             console.log(a);
                             setAnswer(a);
                             break;
@@ -231,7 +232,7 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
         if (commentdetails.message.trim() === '') {
             alert('Please enter your Comment before submitting.'); // Show an error message
         }
-        else if(user_id == null){
+        else if (user_id == null) {
             // alert('Please login before adding a comment.');
             onOpen();
         }
@@ -251,19 +252,19 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                     status: 'warning',
                     duration: 3000,
                     isClosable: true,
-                    position : 'top-right',
+                    position: 'top-right',
                 })
             }
             else {
                 setcommentDetails({
                     message: "",
-                    answer_id : answer.answer_id,
+                    answer_id: answer.answer_id,
                     question_id: question_id,
                     posted_by: user_name,
                     posted_by_id: user_id
                 });
-                for(var a of json){
-                    if(a.answer_id == answer.answer_id){
+                for (var a of json) {
+                    if (a.answer_id == answer.answer_id) {
                         console.log(a);
                         setAnswer(a);
                         break;
@@ -276,7 +277,7 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                         status: 'success',
                         duration: 3000,
                         isClosable: true,
-                        position : 'top-right',
+                        position: 'top-right',
                     })
                 }
             }
@@ -284,32 +285,30 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
         }
     }
 
-    const toggleContainerStyle = {
-        margin: '0 auto',
-        backgroundColor: '#ffffff',
-        borderRadius: '5px',
-        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)'
-    };
-
-    if(islogin){
+    if (islogin) {
         return (
             <div key={id} className="card mb-3">
-                <div className="card-body" dangerouslySetInnerHTML={{ __html: answer.ans }} style={{ backgroundColor: "#e4e3e3" }} />
-                <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <ul className="list-inline mb-0">
-                            <li className="list-inline-item">
-                                <a href="#" className="text-success mr-2" onClick={() => upvote(answer.answer_id)}>
-                                    <FontAwesomeIcon icon={faThumbsUp} />
-                                </a>
-                                <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
-                            </li>
-                            <li className="list-inline-item">
-                                <a href="#" className="text-secondary mr-2" onClick={() => downvote(answer.answer_id)}>
-                                    <FontAwesomeIcon icon={faThumbsDown} />
-                                </a>
-                            </li>
-                        </ul>
+                <Helmet>
+                    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+                </Helmet>
+                <div className="card-body" style={{ backgroundColor: "#e4e3e3" }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                        <div dangerouslySetInnerHTML={{ __html: answer.ans }} />
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <ul className="list-inline mb-0">
+                                <li className="list-inline-item">
+                                    <a href="#" className={`text-success mr-2 ${isUpvoted ? 'disabled' : ''}`} onClick={() => upvote(answer.answer_id)}>
+                                        <FontAwesomeIcon icon={faThumbsUp} />
+                                    </a>
+                                    <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
+                                </li>
+                                <li className="list-inline-item">
+                                    <a href="#" className={`text-secondary mr-2 ${isDownvoted ? 'disabled' : ''}`} onClick={() => downvote(answer.answer_id)}>
+                                        <FontAwesomeIcon icon={faThumbsDown} />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
@@ -317,7 +316,7 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                         Posted by: {answer.posted_by} {answer.is_expert == 1 && "  (Expert)"}
                     </div>
                     <div>
-                        <a className="text-secondary" onClick={() => setShowComments(!showComments)}>
+                        <a className="text-secondary" onClick={() => setShowComments(!showComments)} title="Comments">
                             <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
                             <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
                         </a> &nbsp; &nbsp;
@@ -326,9 +325,8 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                         {new Date(answer.time).toLocaleString()}
                     </div>
                 </div>
-
                 {showComments && (
-                    <div className="toggle-container" style={toggleContainerStyle} >
+                    <div className="toggle mr-3 mt-2">
                         <br />
                         <CommentInput
                             onSubmit={handelCommentSubmit}
@@ -342,13 +340,17 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                         <br></br>
                     </div>
                 )}
-                <br/>
+                <br />
             </div>
         );
+
     }
-    else{
+    else {
         return (
             <div key={id} className="card mb-3">
+                <Helmet>
+                    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+                </Helmet>
                 <div className="card-body" dangerouslySetInnerHTML={{ __html: answer.ans }} style={{ backgroundColor: "#e4e3e3" }} />
                 <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -369,10 +371,10 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                 </div>
                 <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
                     <div>
-                        Posted by: {answer.posted_by} {answer.is_expert == 1 &&  <strong>(Expert)</strong>}
+                        Posted by: {answer.posted_by} {answer.is_expert == 1 && <strong>(Expert)</strong>}
                     </div>
                     <div>
-                        <a className="text-secondary" onClick={() => setShowComments(!showComments)}>
+                        <a className="text-secondary" onClick={() => setShowComments(!showComments)} title="Comments">
                             <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
                             <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
                         </a> &nbsp; &nbsp;
@@ -383,14 +385,7 @@ const AnswerItem = ({ans, id, islogin, pleaselogin, user_id, question_id, user_n
                 </div>
 
                 {showComments && (
-                    <div className="toggle-container" style={toggleContainerStyle} >
-                        <br />
-                        <CommentInput
-                            onSubmit={handelCommentSubmit}
-                            value={commentdetails.message}
-                            onChange={handelCommentChange}
-                            className="flex-grow-2 mr-1"
-                        ></CommentInput>
+                    <div className="toggle mr-3 mt-2">
                         {totalComments > 0 && answer.comments.map((comment) => (
                             <AnswerComment key={comment.comment_id} comment={comment} />
                         ))}

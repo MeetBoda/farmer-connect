@@ -3,6 +3,7 @@ import { useState } from 'react'
 import '../assets/css/style.css'
 import yourImage from '../assets/images/asian_farmers_03.jpg'
 import { Link, useNavigate } from 'react-router-dom'
+import videoFile from '../assets/images/farmer4.gif'
 
 export default function UserSignup({ handleSubmit, credentials, onChange, onLoginClick }) {
     return (
@@ -59,6 +60,7 @@ export default function UserSignup({ handleSubmit, credentials, onChange, onLogi
                                             <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2" style={{ width: '80%', maxWidth: '500px' }}>
 
                                                 <img src={yourImage} alt="" />
+                                                {/* <img src={videoFile} alt="GIF"/> */}
 
                                             </div>
                                         </div>

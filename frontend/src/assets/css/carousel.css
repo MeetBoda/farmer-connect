@@ -14,14 +14,38 @@
 
 .carousel-item {
   position: relative;
+  display: flex; /* Ensure the images are displayed in a flex container */
+  justify-content: center; /* Center the images horizontally */
 }
 
-.carousel-item::before {
-  content: "";
+.carousel-item img {
+  width: 100%; /* Ensure the images take up the full width of the Carousel */
+  height: 50%; /* Maintain the aspect ratio of the images */
+}
+
+.carousel-caption {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* RGBA color for transparent black */
+  text-align: center;
+}
+
+.carousel-caption h4,
+.carousel-caption p {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.carousel-caption .title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.carousel-caption .subtitle {
+  font-size: 1rem;
+  color: #ccc;
+}
+
+@media (max-width: 767.98px) {
+  .carousel-caption .title-container {
+    width: 90%;
+  }
 }

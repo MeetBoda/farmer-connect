@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/images/logo.png';
+import logo from '../assets/images/logo1.png';
 import '../assets/css/navbar.css'
 import { Dropdown, initMDB } from 'mdb-ui-kit';
 import { Helmet } from 'react-helmet';
@@ -147,10 +147,20 @@ const Navbar = () => {
 
   const role = localStorage.getItem("role");
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    const specificPart = document.getElementById('google_element');
+    if (specificPart) {
+      specificPart.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
+    <>
     <nav className="navbar navbar-expand-lg">
       <Helmet>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        {/* <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" /> */}
       </Helmet>
       {isLogin ? (
         <Modal_login onClose={handleLogin}>
@@ -208,9 +218,20 @@ const Navbar = () => {
             </div>
           </div>
           {!localStorage.getItem("authToken") ? (
-            <button className='login-button' id='login' onClick={handleLogin}>Login</button>
+            <ul className="navbar-nav d-flex flex-row">
+              <li className="nav-item">
+                <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
+              </li>
+              <button onClick={() => navigate("/giveweather")} title='Check weather'>
+                <img src={myimage} alt="check weather"></img>
+              </button> &nbsp;
+              <button className='login-button' id='login' onClick={handleLogin}>Login</button>
+            </ul> 
           ) : (
             <ul className="navbar-nav d-flex flex-row">
+              <li className="nav-item">
+              <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
+              </li>
               <button onClick={() => navigate("/giveweather")} title='Check weather'>
                 <img src={myimage} alt="check weather"></img>
               </button> &nbsp;
@@ -244,6 +265,171 @@ const Navbar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
         </div>
+
+        // <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{ height: '80px' }}>
+        //   <Link className="navbar-brand me-auto" to="/" style={{ width: '210px'}}>
+        //     <img src={logo} alt="Logo" className="logo" />
+        //   </Link>
+        //   <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        //     <span className="navbar-toggler-icon"></span>
+        //   </button>
+
+        //   <div className="collapse navbar-collapse" tabIndex="-1" id="navbarTogglerDemo02">
+        //     <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+        //       <li className="nav-item">
+        //         <Link className="nav-link mx-lg-2" aria-current="page" to='/'>Home</Link>
+        //       </li>
+        //       <li className="nav-item">
+        //         <Link className="nav-link mx-lg-2" to='/question' name="question-link">Question</Link>
+        //       </li>
+        //       {role === "Farmer" &&
+        //         <li className="nav-item">
+        //           <Link className="nav-link mx-lg-2" to='/img' name="image-link">ImageUpload</Link>
+        //         </li>
+        //       }
+        //       {role === "Farmer" &&
+        //           <li className="nav-item">
+        //             <Link className="nav-link mx-lg-2" to='/complaint' name="complaint-link">Complaint</Link>
+        //           </li>
+        //         }
+        //         {role === "Expert" &&
+        //           <li className="nav-item">
+        //             <Link className="nav-link mx-lg-2" to='/viewcomplaint'>View Complaints</Link>
+        //           </li>
+        //         }
+        //     </ul>
+        //     {!localStorage.getItem("authToken") ? (
+        //     <ul className="navbar-nav d-flex flex-row">
+        //       <li className="nav-item">
+        //         <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
+        //       </li>
+        //       <button onClick={() => navigate("/giveweather")} title='Check weather'>
+        //         <img src={myimage} alt="check weather"></img>
+        //       </button> &nbsp;
+        //       <button className='login-button' id='login' onClick={handleLogin}>Login</button>
+        //     </ul> 
+        //   ) : (
+        //     <ul className="navbar-nav d-flex flex-row">
+        //       <li className="nav-item">
+        //       <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
+        //       </li>
+        //       <button onClick={() => navigate("/giveweather")} title='Check weather'>
+        //         <img src={myimage} alt="check weather"></img>
+        //       </button> &nbsp;
+        //       <li className="nav-item me-3 me-lg-0 dropdown">
+        //         <a
+        //           data-mdb-dropdown-init
+        //           className="nav-link dropdown-toggle"
+        //           href="/"
+        //           id="navbarDropdown"
+        //           role="button"
+        //           aria-expanded="false"
+        //         >
+        //           <i className="fa fa-user"></i>&nbsp;
+        //           {localStorage.getItem("username")}
+        //         </a>
+        //         <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+        //           <li>
+        //             <a className="dropdown-item" href="/profile">Profile</a>
+        //           </li>
+        //           <li>
+        //             <hr className="dropdown-divider" />
+        //           </li>
+        //           <li>
+        //             <a className="dropdown-item" href="/" onClick={handleLogout}>Logout</a>
+        //           </li>
+        //         </ul>
+        //       </li>
+        //     </ul>
+        //   )}
+        //   </div>
+        // </nav>
+
+        // <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{ height: '80px', zIndex: '1000', backgroundColor: 'white' }}>
+        //   <a className="navbar-brand" href="/">
+        //     <img src={logo} alt="Logo" height="40" width="210px" />
+        //   </a>
+        //   <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        //     <span className="navbar-toggler-icon"></span>
+        //   </button>
+
+        //   <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+        //     <ul className="navbar-nav mr-auto mt-2 mt-lg-0" style={{ backgroundColor: 'white' }}>
+        //       <li className="nav-item">
+        //         <Link className="nav-link mx-lg-2" aria-current="page" to='/'>Home</Link>
+        //       </li>
+        //       <li className="nav-item">
+        //         <Link className="nav-link mx-lg-2" to='/question' name="question-link">Question</Link>
+        //       </li>
+        //       {role === "Farmer" &&
+        //         <li className="nav-item">
+        //           <Link className="nav-link mx-lg-2" to='/img' name="image-link">ImageUpload</Link>
+        //         </li>
+        //       }
+        //       {role === "Farmer" &&
+        //         <li className="nav-item">
+        //           <Link className="nav-link mx-lg-2" to='/complaint' name="complaint-link">Complaint</Link>
+        //         </li>
+        //       }
+        //       {role === "Expert" &&
+        //         <li className="nav-item">
+        //           <Link className="nav-link mx-lg-2" to='/viewcomplaint'>View Complaints</Link>
+        //         </li>
+        //       }
+        //     </ul>
+
+        //     {!localStorage.getItem("authToken") ? (
+        //       <ul className="navbar-nav ms-auto">
+        //         <li className="nav-item">
+        //           <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i className="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
+        //         </li>
+        //         <li className="nav-item">
+        //           <button onClick={() => navigate("/giveweather")} title='Check weather'>
+        //             <img src={myimage} alt="check weather"></img>
+        //           </button> &nbsp;
+        //         </li>
+        //         <li className="nav-item">
+        //           <button className='login-button' id='login' onClick={handleLogin}>Login</button>
+        //         </li>
+        //       </ul>
+        //     ) : (
+        //       <ul className="navbar-nav ms-auto" style={{ backgroundColor: 'white' }}>
+        //         <li className="nav-item">
+        //           <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i className="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
+        //         </li>
+        //         <li className="nav-item">
+        //           <button onClick={() => navigate("/giveweather")} title='Check weather'>
+        //             <img src={myimage} alt="check weather"></img>
+        //           </button> &nbsp;
+        //         </li>
+        //         <li className="nav-item me-3 me-lg-0 dropdown">
+        //           <a
+        //             data-mdb-dropdown-init
+        //             className="nav-link dropdown-toggle"
+        //             href="/"
+        //             id="navbarDropdown"
+        //             role="button"
+        //             aria-expanded="false"
+        //           >
+        //             <i className="fa fa-user"></i>&nbsp;
+        //             {localStorage.getItem("username")}
+        //           </a>
+        //           <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+        //             <li>
+        //               <a className="dropdown-item" href="/profile">Profile</a>
+        //             </li>
+        //             <li>
+        //               <hr className="dropdown-divider" />
+        //             </li>
+        //             <li>
+        //               <a className="dropdown-item" href="/" onClick={handleLogout}>Logout</a>
+        //             </li>
+        //           </ul>
+        //         </li>
+        //       </ul>
+        //     )}
+        //   </div>
+        // </nav>
       )}
       <AlertDialog
         isOpen={isOpen}
@@ -298,7 +484,8 @@ const Navbar = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </nav>
+      </nav>
+    </>
   );
 };
 

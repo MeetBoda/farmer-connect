@@ -56,7 +56,8 @@ router.post("/update-status", async(req, res) => {
     try{
         const resolve = await Complaint.findOneAndUpdate({complaint_id:complaint_id}, {$set : {"status" : "Resolved", "steps_taken" : steps_taken}});
         const {email} = await User.findOne({user_id:resolve.posted_by_id});
-        const updatepoints = await User.findOneAndUpdate({user_id:user_id}, {$inc : {rating:complaint_resolved_points}});
+        // const updatepoints = await User.findOneAndUpdate({user_id:user_id}, {"$inc" : {rating:complaint_resolved_points}});
+        const rating = await User.findOneAndUpdate({user_id:user_id},{"$inc":{"rating":complaint_resolved_points}});
         let mailOptions = {
             from: 'krushimitra1123@gmail.com',
             to: email,

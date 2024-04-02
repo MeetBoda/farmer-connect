@@ -68,7 +68,7 @@
 //                         </div>
 //                     </div>
 //                 </div>
-                
+
 //                 {role == "Farmer" &&
 //                     <div style={{ position: 'relative' }}>
 //                         <button
@@ -101,6 +101,7 @@ import Navbar from '../components/Navbar';
 import AskQue from '../components/AskQue';
 import AllQuestions from '../components/Questions/AllQuestions';
 import Footer from '../components/Footer';
+import { Helmet } from 'react-helmet';
 
 export default function Question() {
     const navigate = useNavigate();
@@ -150,6 +151,9 @@ export default function Question() {
 
     return (
         <>
+            <Helmet>
+                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+            </Helmet>
             <Navbar />
             <div style={backgroundStyle}>
                 <div style={{ maxWidth: '900px', margin: 'auto' }}>
