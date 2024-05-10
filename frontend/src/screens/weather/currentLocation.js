@@ -87,16 +87,6 @@ class Weather extends React.Component {
     clearInterval(this.timerID);
   }
 
-  // tick = () => {
-  //   this.getPosition()
-  //   .then((position) => {
-  //     this.getWeather(position.coords.latitude, position.coords.longitude)
-  //   })
-  //   .catch((err) => {
-  //     this.setState({ errorMessage: err.message });
-  //   });
-  // }
-
   getPosition = (options) => {
     return new Promise(function (resolve, reject) {
       navigator.geolocation.getCurrentPosition(resolve, reject, options);
@@ -175,10 +165,10 @@ class Weather extends React.Component {
             <div className="date-time">
               <div className="dmy">
                 <div id="txt"></div>
-                <div className="current-time">
+                {/* <div className="current-time">
                   <Clock format="HH:mm:ss" interval={1000} ticking={true} />
-                </div>
-                <div className="current-date">{dateBuilder(new Date())}</div>
+                </div> */}
+                {/* <div className="current-date">{dateBuilder(new Date())}</div> */}
               </div>
               <div className="temperature">
                 <p>

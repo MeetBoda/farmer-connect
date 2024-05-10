@@ -10,7 +10,8 @@ const MODAL_STYLES = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  zIndex: 1000,
+  zIndex: 9999,
+  paddingTop: '20px'
 };
 
 const OVERLAY_STYLES = {
@@ -20,7 +21,7 @@ const OVERLAY_STYLES = {
   width: '100%',
   height: '100%',
   backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  zIndex: 1000,
+  zIndex: 9999,
 };
 
 export default function Modal_login({ children, onClose, handleSubmit }) {

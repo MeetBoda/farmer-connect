@@ -8,8 +8,6 @@ import { Helmet } from 'react-helmet';
 import Footer from '../Footer';
 import { useToast } from '@chakra-ui/react'
 import CommentInput from './CommentInput';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faThumbsDown, faComment } from '@fortawesome/free-solid-svg-icons';
 import { Button, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter, useDisclosure } from '@chakra-ui/react';
 import AnswerItem from './AnswerItem';
 
@@ -235,11 +233,11 @@ const QuestionItem = () => {
             const json = await response.json();
             if (!response.ok) {
                 toast({
-                    title: 'Error Occured while Uploading Comment',
+                    title: 'Error Occured while Adding Comment',
                     status: 'warning',
                     duration: 3000,
                     isClosable: true,
-                    position: 'top-right',
+                    position: 'bottom-right',
                 })
             }
             else {
@@ -252,11 +250,11 @@ const QuestionItem = () => {
                 msg = json;
                 if (msg !== '') {
                     toast({
-                        title: 'Comment Uploaded',
+                        title: 'Comment Added',
                         status: 'success',
                         duration: 3000,
                         isClosable: true,
-                        position: 'top-right',
+                        position: 'bottom-right',
                     })
                 }
             }
@@ -325,7 +323,7 @@ const QuestionItem = () => {
         }
         if (details.ans.trim() === '') {
             alert('Please enter your answer before submitting.');
-        } 
+        }
         else if (user_id === null) {
             // alert('Please login before adding a comment.');
             onOpen();
@@ -353,7 +351,7 @@ const QuestionItem = () => {
                     status: 'warning',
                     duration: 3000,
                     isClosable: true,
-                    position: 'top-right',
+                    position: 'bottom-right',
                 })
             }
             else {
@@ -370,7 +368,7 @@ const QuestionItem = () => {
                         status: 'success',
                         duration: 3000,
                         isClosable: true,
-                        position: 'top-right',
+                        position: 'bottom-right',
                     })
                 }
             }
@@ -407,146 +405,119 @@ const QuestionItem = () => {
                     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
                 </Helmet>
                 <Navbar />
-                <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
-                    <div className="card-group-control card-group-control-right">
-                        <div className="card mb-2 w-100">
-                            <div className="card-header" style={{ borderBottom: '1px solid #ccc' }}>
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="text-muted text-uppercase">
-                                        <h6 className="card-title" style={{ fontSize: '20px', marginBottom: '0' }}>
-                                            <i className="fa fa-question-circle-o mr-2 mt-0-20 pull-left"></i>
-                                            {question.question_title}
-                                        </h6>
-                                    </div>
-                                    <ul className="list-inline mb-0">
-                                        <li className="list-inline-item">
-                                            <a href="#" className="text-success mr-2" onClick={upvote}>
-                                                <i className="fa fa-thumbs-up" style={{ fontSize: '26px' }}></i>
-                                            </a>
-                                            <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="#" className="text-muted mr-2" onClick={downvote}>
-                                                <i className="fa fa-thumbs-down" style={{ fontSize: '26px' }}></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="collapse show">
-                                <div className="card-body">
-                                    {question.question}
-                                </div>
-                                <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
-                                    <span className="text-muted">Posted By : {question.posted_by}</span>
-                                </div>
-                                <div className="card-footer mt-3" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                    <span className='text-muted'>
-                                        Last Updated : {formatDate(question?.updatedAt)}
-                                    </span>
-                                    <div>
-                                        <a className="text-secondary" onClick={() => setShowComments(!showComments)} title='Comments'>
-                                            <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
-                                            <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
-                                        </a> &nbsp; &nbsp;
-                                        <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)} title='Answers'>
-                                            <i className="fa fa-reply-all" style={{ fontSize: '23px' }} aria-hidden="true"></i>&nbsp;
-                                            <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span>
-                                        </a>
+                <div style={{ paddingTop: '80px' }}>
+                    <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
+                        <div className="card-group-control card-group-control-right">
+                            <div className="card mb-2 w-100">
+                                <div className="card-header" style={{ borderBottom: '1px solid #ccc' }}>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div className="text-muted text-uppercase">
+                                            <h6 className="card-title" style={{ fontSize: '20px', marginBottom: '0' }}>
+                                                <i className="fa fa-question-circle-o mr-2 mt-0-20 pull-left"></i>
+                                                {question.question_title}
+                                            </h6>
+                                        </div>
+                                        <ul className="list-inline mb-0">
+                                            <li className="list-inline-item">
+                                                <a href="#" className="text-success mr-2" onClick={upvote}>
+                                                    <i className="fa fa-thumbs-up" style={{ fontSize: '26px' }}></i>
+                                                </a>
+                                                <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
+                                            </li>
+                                            <li className="list-inline-item">
+                                                <a href="#" className="text-muted mr-2" onClick={downvote}>
+                                                    <i className="fa fa-thumbs-down" style={{ fontSize: '26px' }}></i>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {showComments && (
-                        <div className="toggle-container" style={toggleContainerStyle} >
-                            <br />
-                            <CommentInput
-                                onSubmit={handelCommentSubmit}
-                                value={commentdetails.message}
-                                onChange={handelCommentChange}
-                                className="flex-grow-2 mr-1"
-                            ></CommentInput>
-                            {question.comments.map((comment) => (
-                                <QuestionComment key={comment.comment_id} comment={comment} />
-                            ))}
-                            <br></br>
-                        </div>
-                    )}
-                    <br />
-                    {showAnswers && (
-                        <div className="toggle-container" style={toggleContainerStyle}>
-                            <button className="toggle-button" style={toggleButtonStyle}>
-                                Answers
-                            </button>
-                            <div className="answers" style={answersStyle}>
-                                <div className='mt-2'>
-                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={true} user_id={user_id} user_name={user_name} question_id={question.question_id} />
-                                        // <div key={index} className="card mb-3">
-                                        //     <div className="card-body" dangerouslySetInnerHTML={{ __html: val.ans }} style={{ backgroundColor: "#e4e3e3" }} />
-                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                        //         <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        //             <ul className="list-inline mb-0">
-                                        //                 <li className="list-inline-item">
-                                        //                     <a href="#" className="text-success mr-2" onClick={upvote}>
-                                        //                         <FontAwesomeIcon icon={faThumbsUp} />
-                                        //                     </a>
-                                        //                     <span style={{ fontSize: '22px', fontWeight: '400' }}>{val.likes}</span>
-                                        //                 </li>
-                                        //                 <li className="list-inline-item">
-                                        //                     <a href="#" className="text-secondary mr-2" onClick={downvote}>
-                                        //                         <FontAwesomeIcon icon={faThumbsDown} />
-                                        //                     </a>
-                                        //                 </li>
-                                        //             </ul>
-                                        //         </div>
-                                        //     </div>
-                                        //     <div className="card-footer text-muted" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                        //         <div>
-                                        //             Posted by: {val.posted_by}
-                                        //         </div>
-                                        //         <div>
-                                        //             {new Date(val.time).toLocaleString()}
-                                        //         </div>
-                                        //     </div>
-                                        // </div>
-                                    )}
+                                <div className="collapse show">
+                                    <div className="card-body">
+                                        {question.question}
+                                    </div>
+                                    <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
+                                        <span className="text-muted">Posted By : {question.posted_by}</span>
+                                    </div>
+                                    <div className="card-footer mt-3" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                        <span className='text-muted'>
+                                            Last Updated : {formatDate(question?.updatedAt)}
+                                        </span>
+                                        <div>
+                                            <a className="text-secondary" onClick={() => setShowComments(!showComments)} title='Comments'>
+                                                <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
+                                                <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
+                                            </a> &nbsp; &nbsp;
+                                            <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)} title='Answers'>
+                                                <i className="fa fa-reply-all" style={{ fontSize: '23px' }} aria-hidden="true"></i>&nbsp;
+                                                <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    )}
 
-                    <div className="jodit-editor-container mt-5">
-                        <form>
-                            <JoditEditor
-                                value={details.ans}
-                                config={config}
-                                ref={editor}
-                                id="jdt-editor"
-                                onChange={handelAnswerChange}
-                            />
-
-                            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                                <button
-                                    className="btn btn-floating"
-                                    type="submit"
-                                    id="submit"
-                                    style={{
-                                        backgroundColor: '#799b6e',
-                                        color: '#ffffff',
-                                        borderRadius: '5px',
-                                        placeItems: 'center',
-                                        display: 'grid',
-                                        border: 'none',
-                                        marginBottom: '20px'
-                                    }}
-                                    onClick={handleSubmit}
-                                >
-                                    Submit Answer
+                        {showComments && (
+                            <div className="toggle-container" style={toggleContainerStyle} >
+                                <br />
+                                <CommentInput
+                                    onSubmit={handelCommentSubmit}
+                                    value={commentdetails.message}
+                                    onChange={handelCommentChange}
+                                    className="flex-grow-2 mr-1"
+                                ></CommentInput>
+                                {question.comments.map((comment) => (
+                                    <QuestionComment key={comment.comment_id} comment={comment} />
+                                ))}
+                                <br></br>
+                            </div>
+                        )}
+                        <br />
+                        {showAnswers && (
+                            <div className="toggle-container" style={toggleContainerStyle}>
+                                <button className="toggle-button" style={toggleButtonStyle}>
+                                    Answers
                                 </button>
+                                <div className="answers" style={answersStyle}>
+                                    <div className='mt-2'>
+                                        {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={true} user_id={user_id} user_name={user_name} question_id={question.question_id} />)}
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                        )}
+
+                        <div className="jodit-editor-container mt-5">
+                            <form>
+                                <JoditEditor
+                                    value={details.ans}
+                                    config={config}
+                                    ref={editor}
+                                    id="jdt-editor"
+                                    onChange={handelAnswerChange}
+                                />
+
+                                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                                    <button
+                                        className="btn btn-floating"
+                                        type="submit"
+                                        id="submit"
+                                        style={{
+                                            backgroundColor: '#799b6e',
+                                            color: '#ffffff',
+                                            borderRadius: '5px',
+                                            placeItems: 'center',
+                                            display: 'grid',
+                                            border: 'none',
+                                            marginBottom: '20px'
+                                        }}
+                                        onClick={handleSubmit}
+                                    >
+                                        Submit Answer
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <Footer />
@@ -561,137 +532,139 @@ const QuestionItem = () => {
                     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" />
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-                <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+                    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
                 </Helmet>
                 <Navbar />
-                <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
-                    <div className="card-group-control card-group-control-right">
-                        <div className="card mb-2 w-100">
-                            <div className="card-header" style={{ borderBottom: '1px solid #ccc' }}>
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="text-muted text-uppercase">
-                                        <h6 className="card-title" style={{ fontSize: '20px', marginBottom: '0' }}>
-                                            <i className="fa fa-question-circle-o mr-2 mt-0-20 pull-left"></i>
-                                            {question.question_title}
-                                        </h6>
-                                    </div>
-                                    <ul className="list-inline mb-0">
-                                        <li className="list-inline-item">
-                                            <a href="#" className="text-success mr-2" onClick={() => pleaselogin()}>
-                                                <i className="fa fa-thumbs-up" style={{ fontSize: '26px' }}></i>
-                                            </a>
-                                            <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="#" className="text-muted mr-2" onClick={() => pleaselogin()}>
-                                                <i className="fa fa-thumbs-down" style={{ fontSize: '26px' }}></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="collapse show">
-                                <div className="card-body">
-                                    {question.question}
-                                </div>
-                                <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
-                                    <span className="text-muted">Posted By : {question.posted_by}</span>
-                                </div>
-                                <div className="card-footer mt-3" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
-                                    <span className='text-muted'>
-                                        Last Updated : {formatDate(question?.updatedAt)}
-                                    </span>
-                                    <div>
-                                        <a className="text-secondary" onClick={() => setShowComments(!showComments)} title='Comments'>
-                                            <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
-                                            <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
-                                        </a> &nbsp; &nbsp;
-                                        <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)} title='Answers'>
-                                            <i className="fa fa-reply-all" style={{ fontSize: '23px' }} aria-hidden="true"></i>&nbsp;
-                                            <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span>
-                                        </a>
+                <div style={{ paddingTop: '80px' }}>
+                    <div style={{ maxWidth: '900px', margin: 'auto', paddingTop: '55px' }}>
+                        <div className="card-group-control card-group-control-right">
+                            <div className="card mb-2 w-100">
+                                <div className="card-header" style={{ borderBottom: '1px solid #ccc' }}>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div className="text-muted text-uppercase">
+                                            <h6 className="card-title" style={{ fontSize: '20px', marginBottom: '0' }}>
+                                                <i className="fa fa-question-circle-o mr-2 mt-0-20 pull-left"></i>
+                                                {question.question_title}
+                                            </h6>
+                                        </div>
+                                        <ul className="list-inline mb-0">
+                                            <li className="list-inline-item">
+                                                <a href="#" className="text-success mr-2" onClick={() => pleaselogin()}>
+                                                    <i className="fa fa-thumbs-up" style={{ fontSize: '26px' }}></i>
+                                                </a>
+                                                <span style={{ fontSize: '22px', fontWeight: '400' }}>{voteCount}</span>
+                                            </li>
+                                            <li className="list-inline-item">
+                                                <a href="#" className="text-muted mr-2" onClick={() => pleaselogin()}>
+                                                    <i className="fa fa-thumbs-down" style={{ fontSize: '26px' }}></i>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    {showComments && (
-                        <div className="toggle-container" style={toggleContainerStyle} >
-                            <br />
-                            {question.comments.map((comment) => (
-                                <QuestionComment key={comment.comment_id} comment={comment} />
-                            ))}
-                            <br></br>
-                        </div>
-                    )}
-                    <br />
-
-                    {showAnswers && (
-                        <div className="toggle-container" style={toggleContainerStyle}>
-                            <button className="toggle-button" style={toggleButtonStyle}>
-                                Answers
-                            </button>
-                            <div className="answers" style={answersStyle}>
-                                <div className='mt-2'>
-                                    {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={false} pleaselogin={pleaselogin} question_id={question.question_id} />
-                                    )}
+                                <div className="collapse show">
+                                    <div className="card-body">
+                                        {question.question}
+                                    </div>
+                                    <div className="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
+                                        <span className="text-muted">Posted By : {question.posted_by}</span>
+                                    </div>
+                                    <div className="card-footer mt-3" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '10px' }}>
+                                        <span className='text-muted'>
+                                            Last Updated : {formatDate(question?.updatedAt)}
+                                        </span>
+                                        <div>
+                                            <a className="text-secondary" onClick={() => setShowComments(!showComments)} title='Comments'>
+                                                <i className="fa fa-comments" style={{ fontSize: '24px' }} aria-hidden="true"></i>&nbsp;
+                                                <span style={{ fontSize: '1.25rem' }}>{totalComments}</span>
+                                            </a> &nbsp; &nbsp;
+                                            <a className="text-secondary" onClick={() => setShowAnswers(!showAnswers)} title='Answers'>
+                                                <i className="fa fa-reply-all" style={{ fontSize: '23px' }} aria-hidden="true"></i>&nbsp;
+                                                <span style={{ fontSize: '1.25rem' }}>{totalAnswers}</span>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
-                    )}
 
-                    <div className="jodit-editor-container mt-5">
-                        <form>
-                            <JoditEditor
-                                value={details.ans}
-                                config={config}
-                                ref={editor}
-                                id='jdt-editor'
-                                onChange={handelAnswerChange}
-                            />
+                        {showComments && (
+                            <div className="toggle-container" style={toggleContainerStyle} >
+                                <br />
+                                {question.comments.map((comment) => (
+                                    <QuestionComment key={comment.comment_id} comment={comment} />
+                                ))}
+                                <br></br>
+                            </div>
+                        )}
+                        <br />
 
-                            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                                <button
-                                    className="btn btn-floating"
-                                    type="submit"
-                                    id='submit'
-                                    style={{
-                                        backgroundColor: '#799b6e',
-                                        color: '#ffffff',
-                                        borderRadius: '5px',
-                                        placeItems: 'center',
-                                        display: 'grid',
-                                        border: 'none',
-                                        marginBottom: '20px'
-                                    }}
-                                    onClick={handleSubmit}
-                                >
-                                    Submit Answer
+                        {showAnswers && (
+                            <div className="toggle-container" style={toggleContainerStyle}>
+                                <button className="toggle-button" style={toggleButtonStyle}>
+                                    Answers
                                 </button>
+                                <div className="answers" style={answersStyle}>
+                                    <div className='mt-2'>
+                                        {question.answer && question.answer.map((val, index) => <AnswerItem id={index} ans={val} islogin={false} pleaselogin={pleaselogin} question_id={question.question_id} />
+                                        )}
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                        )}
+
+                        <div className="jodit-editor-container mt-5">
+                            <form>
+                                <JoditEditor
+                                    value={details.ans}
+                                    config={config}
+                                    ref={editor}
+                                    id='jdt-editor'
+                                    onChange={handelAnswerChange}
+                                />
+
+                                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                                    <button
+                                        className="btn btn-floating"
+                                        type="submit"
+                                        id='submit'
+                                        style={{
+                                            backgroundColor: '#799b6e',
+                                            color: '#ffffff',
+                                            borderRadius: '5px',
+                                            placeItems: 'center',
+                                            display: 'grid',
+                                            border: 'none',
+                                            marginBottom: '20px'
+                                        }}
+                                        onClick={handleSubmit}
+                                    >
+                                        Submit Answer
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+                    <Footer />
+                    <AlertDialog
+                        isOpen={isOpen}
+                        leastDestructiveRef={cancelRef}
+                        onClose={onClose}
+                    >
+                        <AlertDialogOverlay />
+                        <AlertDialogContent>
+                            <AlertDialogHeader>Error</AlertDialogHeader>
+                            <AlertDialogCloseButton />
+                            <AlertDialogBody>
+                                Please login first.
+                            </AlertDialogBody>
+                            <AlertDialogFooter>
+                                <Button colorScheme="green" onClick={handleClose}>OK</Button>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
-                <Footer />
-                <AlertDialog
-                    isOpen={isOpen}
-                    leastDestructiveRef={cancelRef}
-                    onClose={onClose}
-                >
-                    <AlertDialogOverlay />
-                    <AlertDialogContent>
-                        <AlertDialogHeader>Error</AlertDialogHeader>
-                        <AlertDialogCloseButton />
-                        <AlertDialogBody>
-                            Please login first.
-                        </AlertDialogBody>
-                        <AlertDialogFooter>
-                            <Button colorScheme="green" onClick={handleClose}>OK</Button>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
             </div>
         );
     }
