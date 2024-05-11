@@ -7,7 +7,6 @@ import Home from './screens/Home'
 import UserLogin from './screens/UserLogin'
 import UserSignup from './screens/UserSignup';
 import {Profile, fetchpersonalinfo} from './screens/Profile';
-import Content from './components/Content';
 import ImageUpload from './components/ImageUpload';
 // import Weather from './components/Weather';
 import WeatherDetail from './screens/weather/WeatherDetail';
@@ -18,7 +17,6 @@ import { MyQuestions, fetchmyquestions} from './components/Questions/MyQuestions
 import { MyAnswers, fetchmyanswers } from './components/Profiles/MyAnswers';
 import ComplaintUpload from './components/Complaint/ComplaintUpload';
 import MyComplaints from './components/Complaint/MyComplaints';
-import CommentsSection from './screens/CommentsSection';
 import CropInfo from './components/CropInfo';
 import { MyImage, fetchmyimages } from './components/Profiles/MyImage';
 import {ViewComplaints} from './components/Complaint/ViewComplaints';
@@ -46,17 +44,6 @@ function App() {
       path:"/giveweather",
       element:<WeatherDetail />,
     },
-    // {
-    //   path:"/question",
-    //   element:<Question />,
-    //   children : [
-    //     {
-    //       path:":question_id",
-    //       element:<QuestionItem />,
-    //       // loader: fetchquestion
-    //     }
-    //   ]
-    // },
     {
       path:"/question",
       element:<Question />,

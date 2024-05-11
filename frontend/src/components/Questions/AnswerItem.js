@@ -248,11 +248,11 @@ const AnswerItem = ({ ans, id, islogin, pleaselogin, user_id, question_id, user_
             const json = await response.json();
             if (!response.ok) {
                 toast({
-                    title: 'Error Occured while Uploading Comment',
+                    title: 'Error Occured while Adding Comment',
                     status: 'warning',
                     duration: 3000,
                     isClosable: true,
-                    position: 'top-right',
+                    position: 'bottom-right',
                 })
             }
             else {
@@ -273,11 +273,11 @@ const AnswerItem = ({ ans, id, islogin, pleaselogin, user_id, question_id, user_
                 msg = json;
                 if (msg !== '') {
                     toast({
-                        title: 'Comment Uploaded',
+                        title: 'Comment Added',
                         status: 'success',
                         duration: 3000,
                         isClosable: true,
-                        position: 'top-right',
+                        position: 'bottom-right',
                     })
                 }
             }
@@ -326,7 +326,8 @@ const AnswerItem = ({ ans, id, islogin, pleaselogin, user_id, question_id, user_
                     </div>
                 </div>
                 {showComments && (
-                    <div className="toggle mr-3 mt-2">
+                    <div className="toggle mr-3 mt-2"
+                    >
                         <br />
                         <CommentInput
                             onSubmit={handelCommentSubmit}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
-import '../../assets/css/profile.css'
+import '../../assets/css/profile.css'; // Import the CSS file
 import Modal from '../../Modal';
 import { Helmet } from 'react-helmet';
 import EditFormAns from './EditFormAns';
@@ -61,13 +61,6 @@ const EachAnswerItem = ({ question, answer }) => {
       {valid &&
         <div className="question-item" value={question.question_id}>
           {isEditing ? (
-            // <form onSubmit={handleSubmit}>
-            //   <label>
-            //     New Answer:
-            //     <textarea value={editAnswer.ans} onChange={handleAnswerChange} />
-            //   </label>
-            //   <button Style="margin-left:0px" type="submit">Save</button>
-            // </form>
             <Modal onClose={handleToggleEdit}>
               <EditFormAns
                 editAnswer={editAnswer}

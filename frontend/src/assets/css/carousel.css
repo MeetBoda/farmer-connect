@@ -49,3 +49,23 @@
     width: 90%;
   }
 }
+
+@media (max-width: 767.98px) {
+  .carousel-caption .title {
+    font-size: 1.5rem; /* Adjust the font size for mobile screens */
+  }
+
+  .carousel-caption .subtitle {
+    font-size: 0.8rem; /* Adjust the font size for mobile screens */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .carousel-caption .title {
+    font-size: 1.8rem; /* Adjust the font size for tablet screens */
+  }
+
+  .carousel-caption .subtitle {
+    font-size: 0.9rem; /* Adjust the font size for tablet screens */
+  }
+}

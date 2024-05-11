@@ -21,7 +21,7 @@ const upload = multer({ storage: storage });
 // Express route for uploading images
 router.post('/upload', upload.single('image'), async (req, res) => {
 
-    const {posted_by_id} = req.body; // Example user ID, replace with your actual logic to get the user ID
+    const {posted_by_id} = req.body; 
     const { curr_id } = await ImgCounter.findOne({ counter: "id" });
     const image_id = curr_id;
 
