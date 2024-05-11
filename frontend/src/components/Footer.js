@@ -3,7 +3,7 @@ import {Helmet} from 'react-helmet';
 
 const Footer = () => {
   return (
-    <footer className="text-center text-white align-items-center mb-3 mt-4" style={{ backgroundColor: '#f1f1f1', height: '148px' }}>
+    <footer className="text-center text-white align-items-center mt-4" style={{ backgroundColor: '#f1f1f1', height: '148px', width: '100%' }}>
       <Helmet>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
       </Helmet>

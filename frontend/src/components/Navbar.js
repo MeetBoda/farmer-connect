@@ -53,7 +53,7 @@ const Navbar = () => {
         status: 'success',
         duration: 5000,
         isClosable: true,
-        position: 'top-right',
+        position: 'bottom-right',
       })
       setIsLogin(false);
       navigate('/')
@@ -157,333 +157,167 @@ const Navbar = () => {
 
   return (
     <>
-    <nav className="navbar navbar-expand-lg">
-      <Helmet>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-        {/* <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" /> */}
-      </Helmet>
-      {isLogin ? (
-        <Modal_login onClose={handleLogin}>
-          {showLogin ? (
-            <Login
-              handleSubmit={handleSubmit}
-              credentials={credentials}
-              onChange={onChange}
-              onSignupClick={handleSignupClick}
-            />
-          ) : (
-            <UserSignup
-              handleSubmit={handleSubmitSignup}
-              credentials={credentialsSignup}
-              onChange={onChangeSignup}
-              onLoginClick={handleLoginClick}
-            />
-          )}
+      <nav className="navbar navbar-expand-lg" style={{ position: 'fixed', zIndex: '9999', width: '100%'}}>
+        <Helmet>
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+          {/* <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" /> */}
+        </Helmet>
+        {isLogin ? (
+          <Modal_login onClose={handleLogin}>
+            {showLogin ? (
+              <Login
+                handleSubmit={handleSubmit}
+                credentials={credentials}
+                onChange={onChange}
+                onSignupClick={handleSignupClick}
+              />
+            ) : (
+              <UserSignup
+                handleSubmit={handleSubmitSignup}
+                credentials={credentialsSignup}
+                onChange={onChangeSignup}
+                onLoginClick={handleLoginClick}
+              />
+            )}
 
-        </Modal_login>
-      ) : (
-        <div className="container-fluid">
-          <Link className="navbar-brand me-auto" to="/">
-            <img src={logo} alt="Logo" className="logo" />
-          </Link>
-          <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div className="offcanvas-header">
+          </Modal_login>
+        ) : (
+          <div className="container-fluid">
+            <Link className="navbar-brand me-auto" to="/">
               <img src={logo} alt="Logo" className="logo" />
-              <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div className="offcanvas-body">
-              <ul className="navbar-nav me-auto">
-                <li className="nav-item">
-                  <Link className="nav-link mx-lg-2" aria-current="page" to='/'>Home</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link mx-lg-2" to='/question' name="question-link">Question</Link>
-                </li>
-                {role === "Farmer" &&
+            </Link>
+            <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+              <div className="offcanvas-header">
+                <img src={logo} alt="Logo" className="logo" />
+                <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div className="offcanvas-body">
+                <ul className="navbar-nav me-auto">
                   <li className="nav-item">
-                    <Link className="nav-link mx-lg-2" to='/img' name="image-link">ImageUpload</Link>
+                    <Link className="nav-link mx-lg-2" aria-current="page" to='/'>Home</Link>
                   </li>
-                }
-                {role === "Farmer" &&
+                  {role === "Farmer" &&
+                    <li className="nav-item">
+                      <Link className="nav-link mx-lg-2" to='/img' name="image-link">Disease Detection</Link>
+                    </li>
+                  }
+                  {role === "Farmer" &&
+                    <li className="nav-item">
+                      <Link className="nav-link mx-lg-2" to='/complaint' name="complaint-link">Complaint</Link>
+                    </li>
+                  }
                   <li className="nav-item">
-                    <Link className="nav-link mx-lg-2" to='/complaint' name="complaint-link">Complaint</Link>
+                    <Link className="nav-link mx-lg-2" to='/question' name="question-link">Questions</Link>
                   </li>
-                }
-                {role === "Expert" &&
-                  <li className="nav-item">
-                    <Link className="nav-link mx-lg-2" to='/viewcomplaint'>View Complaints</Link>
-                  </li>
-                }
-              </ul>
-            </div>
-          </div>
-          {!localStorage.getItem("authToken") ? (
-            <ul className="navbar-nav d-flex flex-row">
-              <li className="nav-item">
-                <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
-              </li>
-              <button onClick={() => navigate("/giveweather")} title='Check weather'>
-                <img src={myimage} alt="check weather"></img>
-              </button> &nbsp;
-              <button className='login-button' id='login' onClick={handleLogin}>Login</button>
-            </ul> 
-          ) : (
-            <ul className="navbar-nav d-flex flex-row">
-              <li className="nav-item">
-              <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
-              </li>
-              <button onClick={() => navigate("/giveweather")} title='Check weather'>
-                <img src={myimage} alt="check weather"></img>
-              </button> &nbsp;
-              <li className="nav-item me-3 me-lg-0 dropdown">
-                <a
-                  data-mdb-dropdown-init
-                  className="nav-link dropdown-toggle"
-                  href="/"
-                  id="navbarDropdown"
-                  role="button"
-                  aria-expanded="false"
-                >
-                  <i className="fa fa-user"></i>&nbsp;
-                  {localStorage.getItem("username")}
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <a className="dropdown-item" href="/profile">Profile</a>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="/" onClick={handleLogout}>Logout</a>
-                  </li>
+                  {role === "Expert" &&
+                    <li className="nav-item">
+                      <Link className="nav-link mx-lg-2" to='/viewcomplaint'>View Complaints</Link>
+                    </li>
+                  }
                 </ul>
-              </li>
-            </ul>
-          )}
-          <button className="navbar-toggler pe-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-        </div>
+                <ul className='navbar-nav d-flex flex-row'>
+                  <li className="nav-item">
+                    <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
+                  </li>
+                  <button onClick={() => navigate("/giveweather")} title='Check weather'>
+                    <img src={myimage} alt="check weather"></img>
+                  </button>
+                </ul>
+              </div>
+            </div>
+            {!localStorage.getItem("authToken") ? (
+              <ul className="navbar-nav d-flex flex-row">
+                {/* <li className="nav-item">
+                  <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
+                </li> */}
+                <button className='login-button' id='login' onClick={handleLogin}>Login</button>
+              </ul>
+            ) : (
+              <ul className="navbar-nav d-flex flex-row">
+                <li className="nav-item me-3 me-lg-0 dropdown">
+                  <a
+                    data-mdb-dropdown-init
+                    className="nav-link dropdown-toggle"
+                    href="/"
+                    id="navbarDropdown"
+                    role="button"
+                    aria-expanded="false"
+                  >
+                    <i className="fa fa-user"></i>&nbsp;
+                    {localStorage.getItem("username")}
+                  </a>
+                  <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li>
+                      <a className="dropdown-item" href="/profile">Profile</a>
+                    </li>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="/" onClick={handleLogout}>Logout</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            )}
+            <button className="navbar-toggler pe-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon"></span>
+            </button>
+          </div>
+        )}
+        <AlertDialog
+          isOpen={isOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+        >
+          <AlertDialogOverlay />
+          <AlertDialogContent>
+            <AlertDialogHeader>Error</AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody>
+              Invalid credentials. Please try again.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button colorScheme="green" onClick={handleClose}>OK</Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
-        // <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{ height: '80px' }}>
-        //   <Link className="navbar-brand me-auto" to="/" style={{ width: '210px'}}>
-        //     <img src={logo} alt="Logo" className="logo" />
-        //   </Link>
-        //   <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-        //     <span className="navbar-toggler-icon"></span>
-        //   </button>
+        <AlertDialog
+          isOpen={isOpenValidCredentials}
+          leastDestructiveRef={cancelRef}
+          onClose={onCloseValidCredentials}
+        >
+          <AlertDialogOverlay />
+          <AlertDialogContent>
+            <AlertDialogHeader>Error</AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody>
+              Please enter valid credentials.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button colorScheme="green" onClick={handleCloseValidCredentials}>OK</Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
-        //   <div className="collapse navbar-collapse" tabIndex="-1" id="navbarTogglerDemo02">
-        //     <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-        //       <li className="nav-item">
-        //         <Link className="nav-link mx-lg-2" aria-current="page" to='/'>Home</Link>
-        //       </li>
-        //       <li className="nav-item">
-        //         <Link className="nav-link mx-lg-2" to='/question' name="question-link">Question</Link>
-        //       </li>
-        //       {role === "Farmer" &&
-        //         <li className="nav-item">
-        //           <Link className="nav-link mx-lg-2" to='/img' name="image-link">ImageUpload</Link>
-        //         </li>
-        //       }
-        //       {role === "Farmer" &&
-        //           <li className="nav-item">
-        //             <Link className="nav-link mx-lg-2" to='/complaint' name="complaint-link">Complaint</Link>
-        //           </li>
-        //         }
-        //         {role === "Expert" &&
-        //           <li className="nav-item">
-        //             <Link className="nav-link mx-lg-2" to='/viewcomplaint'>View Complaints</Link>
-        //           </li>
-        //         }
-        //     </ul>
-        //     {!localStorage.getItem("authToken") ? (
-        //     <ul className="navbar-nav d-flex flex-row">
-        //       <li className="nav-item">
-        //         <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
-        //       </li>
-        //       <button onClick={() => navigate("/giveweather")} title='Check weather'>
-        //         <img src={myimage} alt="check weather"></img>
-        //       </button> &nbsp;
-        //       <button className='login-button' id='login' onClick={handleLogin}>Login</button>
-        //     </ul> 
-        //   ) : (
-        //     <ul className="navbar-nav d-flex flex-row">
-        //       <li className="nav-item">
-        //       <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i class="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
-        //       </li>
-        //       <button onClick={() => navigate("/giveweather")} title='Check weather'>
-        //         <img src={myimage} alt="check weather"></img>
-        //       </button> &nbsp;
-        //       <li className="nav-item me-3 me-lg-0 dropdown">
-        //         <a
-        //           data-mdb-dropdown-init
-        //           className="nav-link dropdown-toggle"
-        //           href="/"
-        //           id="navbarDropdown"
-        //           role="button"
-        //           aria-expanded="false"
-        //         >
-        //           <i className="fa fa-user"></i>&nbsp;
-        //           {localStorage.getItem("username")}
-        //         </a>
-        //         <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-        //           <li>
-        //             <a className="dropdown-item" href="/profile">Profile</a>
-        //           </li>
-        //           <li>
-        //             <hr className="dropdown-divider" />
-        //           </li>
-        //           <li>
-        //             <a className="dropdown-item" href="/" onClick={handleLogout}>Logout</a>
-        //           </li>
-        //         </ul>
-        //       </li>
-        //     </ul>
-        //   )}
-        //   </div>
-        // </nav>
-
-        // <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{ height: '80px', zIndex: '1000', backgroundColor: 'white' }}>
-        //   <a className="navbar-brand" href="/">
-        //     <img src={logo} alt="Logo" height="40" width="210px" />
-        //   </a>
-        //   <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-        //     <span className="navbar-toggler-icon"></span>
-        //   </button>
-
-        //   <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-        //     <ul className="navbar-nav mr-auto mt-2 mt-lg-0" style={{ backgroundColor: 'white' }}>
-        //       <li className="nav-item">
-        //         <Link className="nav-link mx-lg-2" aria-current="page" to='/'>Home</Link>
-        //       </li>
-        //       <li className="nav-item">
-        //         <Link className="nav-link mx-lg-2" to='/question' name="question-link">Question</Link>
-        //       </li>
-        //       {role === "Farmer" &&
-        //         <li className="nav-item">
-        //           <Link className="nav-link mx-lg-2" to='/img' name="image-link">ImageUpload</Link>
-        //         </li>
-        //       }
-        //       {role === "Farmer" &&
-        //         <li className="nav-item">
-        //           <Link className="nav-link mx-lg-2" to='/complaint' name="complaint-link">Complaint</Link>
-        //         </li>
-        //       }
-        //       {role === "Expert" &&
-        //         <li className="nav-item">
-        //           <Link className="nav-link mx-lg-2" to='/viewcomplaint'>View Complaints</Link>
-        //         </li>
-        //       }
-        //     </ul>
-
-        //     {!localStorage.getItem("authToken") ? (
-        //       <ul className="navbar-nav ms-auto">
-        //         <li className="nav-item">
-        //           <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i className="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
-        //         </li>
-        //         <li className="nav-item">
-        //           <button onClick={() => navigate("/giveweather")} title='Check weather'>
-        //             <img src={myimage} alt="check weather"></img>
-        //           </button> &nbsp;
-        //         </li>
-        //         <li className="nav-item">
-        //           <button className='login-button' id='login' onClick={handleLogin}>Login</button>
-        //         </li>
-        //       </ul>
-        //     ) : (
-        //       <ul className="navbar-nav ms-auto" style={{ backgroundColor: 'white' }}>
-        //         <li className="nav-item">
-        //           <a className="nav-link mx-lg-2" to='#google_element' onClick={handleClick}><i className="fa fa-2x fa-language" aria-hidden="true" title='Language Translator'></i></a>
-        //         </li>
-        //         <li className="nav-item">
-        //           <button onClick={() => navigate("/giveweather")} title='Check weather'>
-        //             <img src={myimage} alt="check weather"></img>
-        //           </button> &nbsp;
-        //         </li>
-        //         <li className="nav-item me-3 me-lg-0 dropdown">
-        //           <a
-        //             data-mdb-dropdown-init
-        //             className="nav-link dropdown-toggle"
-        //             href="/"
-        //             id="navbarDropdown"
-        //             role="button"
-        //             aria-expanded="false"
-        //           >
-        //             <i className="fa fa-user"></i>&nbsp;
-        //             {localStorage.getItem("username")}
-        //           </a>
-        //           <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-        //             <li>
-        //               <a className="dropdown-item" href="/profile">Profile</a>
-        //             </li>
-        //             <li>
-        //               <hr className="dropdown-divider" />
-        //             </li>
-        //             <li>
-        //               <a className="dropdown-item" href="/" onClick={handleLogout}>Logout</a>
-        //             </li>
-        //           </ul>
-        //         </li>
-        //       </ul>
-        //     )}
-        //   </div>
-        // </nav>
-      )}
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-      >
-        <AlertDialogOverlay />
-        <AlertDialogContent>
-          <AlertDialogHeader>Error</AlertDialogHeader>
-          <AlertDialogCloseButton />
-          <AlertDialogBody>
-            Invalid credentials. Please try again.
-          </AlertDialogBody>
-          <AlertDialogFooter>
-            <Button colorScheme="green" onClick={handleClose}>OK</Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog
-        isOpen={isOpenValidCredentials}
-        leastDestructiveRef={cancelRef}
-        onClose={onCloseValidCredentials}
-      >
-        <AlertDialogOverlay />
-        <AlertDialogContent>
-          <AlertDialogHeader>Error</AlertDialogHeader>
-          <AlertDialogCloseButton />
-          <AlertDialogBody>
-            Please enter valid credentials.
-          </AlertDialogBody>
-          <AlertDialogFooter>
-            <Button colorScheme="green" onClick={handleCloseValidCredentials}>OK</Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog
-        isOpen={isOpenEmail}
-        leastDestructiveRef={cancelRef}
-        onClose={onCloseEmail}
-      >
-        <AlertDialogOverlay />
-        <AlertDialogContent>
-          <AlertDialogHeader>Error</AlertDialogHeader>
-          <AlertDialogCloseButton />
-          <AlertDialogBody>
-            Email is already registered. Please use different email.
-          </AlertDialogBody>
-          <AlertDialogFooter>
-            <Button colorScheme="green" onClick={handleCloseEmail}>OK</Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        <AlertDialog
+          isOpen={isOpenEmail}
+          leastDestructiveRef={cancelRef}
+          onClose={onCloseEmail}
+        >
+          <AlertDialogOverlay />
+          <AlertDialogContent>
+            <AlertDialogHeader>Error</AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody>
+              Email is already registered. Please use different email.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button colorScheme="green" onClick={handleCloseEmail}>OK</Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </nav>
     </>
   );

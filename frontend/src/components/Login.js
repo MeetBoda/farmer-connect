@@ -1,9 +1,5 @@
 import React from 'react';
-// import '../assets/css/style.css'
-// import '../assets/css/editform.css'
 import yourImage from '../assets/images/3456178.jpg'
-import { Link } from 'react-router-dom'
-import videoFile from '../assets/images/vecteezy-a-man-is-driving-a-tr-unscreen.gif'
 
 const Login = ({ handleSubmit, credentials, onChange, onSignupClick }) => {
   return (

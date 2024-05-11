@@ -3,9 +3,9 @@ const router = express.Router()
 const User = require('../models/User')
 const UserCounter = require('../models/UserCounter')
 const { body, validationResult } = require('express-validator')
-const jwt = require('jsonwebtoken')//login ke time pe generate karna hai
+const jwt = require('jsonwebtoken')
 const bcrypt = require("bcryptjs")
-const jwtSecret = "ThisIsMyFirstMernProject$$$$$$$$"//secret for user
+const jwtSecret = "ThisIsMyFirstMernProject$$$$$$$$"
 
 router.post("/createuser", [
 
@@ -52,9 +52,6 @@ router.post("/createuser", [
     })
 
 router.post("/loginuser", 
-    //validation
-    // body("email", "Incorrect Email").isEmail(),
-    // body("password", "Incorrect Password").isLength({ min: 5 })],
 
     async (req, res) => {                         //endpoint
         const errors = validationResult(req);

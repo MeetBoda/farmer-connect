@@ -1,44 +1,47 @@
 import React from "react";
 import Navbar from "../Navbar";
-import ProfileSidebar from "../Profiles/ProfileSidebar";
+import Sidebar from "../Profiles/Sidebar";
 import { useLoaderData } from "react-router-dom";
 import MyQuestionItem from "./MyQuestionItem";
 import '../../assets/css/profile.css'
 import { Helmet } from "react-helmet";
 import NotFound from "../NotFound";
+import '../../assets/css/myitem.css'
 
 const MyQuestions = () => {
 
     const questions = useLoaderData();
     const token = localStorage.getItem("authToken");
 
-    if(token === null){
-        return(
+    if (token === null) {
+        return (
             <NotFound />
         );
     }
-    else{
+    else {
         return (
             <>
                 <Navbar />
                 <Helmet>
                     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
                 </Helmet>
-                <div className="d-flex" style={{ marginTop: '0vh' }}>
-                    <ProfileSidebar />
-                    <div style={{ width: '100%', marginTop: '25px', backgroundColor: 'white' }}>
-                        {questions && questions.length > 0 ? (
-                            <>
-                                <h3 style={{ color: 'grey', fontWeight: '500', textAlign: 'center', paddingTop: '30px', paddingBottom: '10px' }}>Your Questions</h3>
-                                <div className='mygrid'>
-                                    {questions.map((question) => (
-                                        <MyQuestionItem key={question.question_id} question={question} />
-                                    ))}
-                                </div>
-                            </>
-                        ) : (
-                            <h3>No Questions have been asked</h3>
-                        )}
+                <div style={{ paddingTop: '80px' }}>
+                    <Sidebar />
+                    <div className="d-flex" style={{ marginTop: '0vh' }}>
+                        <div className="mainContainer">
+                            {questions && questions.length > 0 ? (
+                                <>
+                                    <h3 className="heading">Your Questions</h3>
+                                    <div className='mygrid' style={{ margin: '10px' }}>
+                                        {questions.map((question) => (
+                                            <MyQuestionItem key={question.question_id} question={question} />
+                                        ))}
+                                    </div>
+                                </>
+                            ) : (
+                                <h3>No Questions have been asked</h3>
+                            )}
+                        </div>
                     </div>
                 </div>
             </>
@@ -48,10 +51,10 @@ const MyQuestions = () => {
 
 const fetchmyquestions = async () => {
     const id = localStorage.getItem("userid");
-    if(id === null){
+    if (id === null) {
         return null;
     }
-    else{
+    else {
         const response = await fetch('/api/profile/myques?user_id=' + id);
         // console.log("Hi");
         // console.log(response);
